@@ -2548,3 +2548,141 @@ section,
 .starter-section {
   /* Add your styles here */
 }
+
+/* Estilo para información estática (sin caja) */
+.info-item-static {
+  display: flex;
+  align-items: center;
+  padding: 10px 5px;
+  margin-bottom: 10px;
+  background: transparent !important; /* Sin fondo */
+  border: none !important; /* Sin bordes */
+}
+
+.info-item-static .icon-simple {
+  min-width: 30px;
+  display: flex;
+  justify-content: center;
+  color: #888; /* Color suave para el icono */
+  font-size: 20px;
+}
+
+.info-item-static .divider-simple {
+  width: 1px;
+  height: 25px;
+  background: #444;
+  margin: 0 15px;
+}
+
+.info-item-static .content h5 {
+  margin: 0;
+  color: #888;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.info-item-static .content p {
+  margin: 0;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* seccion de otros servicios */
+
+  .service-item-horizontal {
+    /* Color de fondo sutilmente más claro que el de la página */
+    background: #252525 !important; 
+    /* Borde para que se note dónde empieza el cuadro */
+    border: 1px solid #3d3d3d !important; 
+    padding: 12px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none !important;
+  }
+
+  /* Cuando pasas el mouse, se ilumina un poco más */
+  .service-item-horizontal:hover {
+    background: #2a2a2a !important;
+    border-color: #ffffff !important; /* El borde se vuelve blanco */
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.1); /* Resplandor suave */
+    transform: translateY(-2px);
+  }
+
+  .service-item-horizontal .icon-box {
+    background: #333 !important; /* Fondo del icono */
+    color: #ffffff !important;
+  }
+
+  .service-item-horizontal .divider-v {
+    background: #444 !important; /* Color de la línea | */
+  }
+
+  .service-item-horizontal h6 {
+    color: #ffffff !important; /* Título en blanco puro */
+  }
+
+  .service-item-horizontal p {
+    color: #aaaaaa !important; /* Descripción en gris claro */
+  }
+
+
+ 
+    .info-item-static {
+      display: flex;
+      align-items: center;
+      padding: 10px 5px;
+      margin-bottom: 10px;
+    }
+    .info-item-static .divider-simple {
+      width: 1px;
+      height: 25px;
+      background: #444;
+      margin: 0 15px;
+    }
+    .service-item-horizontal:hover {
+      background: #252525 !important;
+      border-color: #ffffff !important;
+      box-shadow: 0px 8px 15px -5px rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+/* Estilo base del botón */
+.btn-animado {
+  background: #ececec;
+  color: #1a1a1a !important;
+  font-weight: 700;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease; /* Transición suave para todo */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra inicial suave */
+}
+
+/* Efecto al pasar el mouse (Hover) */
+.btn-animado:hover {
+  background: #ffffff; /* Se aclara un poco */
+  transform: translateY(-5px); /* El botón se eleva */
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Sombra más profunda abajo */
+}
+
+/* Animación de la manito */
+.btn-animado:hover .icon-mano {
+  display: inline-block;
+  animation: alzarMano 0.5s ease infinite alternate;
+}
+
+@keyframes alzarMano {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px) rotate(-10deg); /* La mano sube y se inclina */
+  }
+}
