@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiAnalytics PRO | Dashboard de Decisiones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #121418;
+            --card-bg: #1e2227;
+            --accent: #00c875;
+            --danger: #ff4d4d;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --input-border: #333b44;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Ubuntu', sans-serif;
+            /* SOLUCIÓN AL SOLAPAMIENTO DEL MENÚ */
+            padding-top: 100px; 
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* Estilos del Menú */
+        .custom-nav {
+            background: rgba(18, 18, 18, 0.8) !important;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 18px 0;
+        }
+
+        .logo-symbol { background: var(--accent); color: #1a1a1a; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 800; border-radius: 6px; }
+        .logo-text { font-weight: 700; letter-spacing: 1.5px; font-size: 1.1rem; color: #fff !important; text-decoration: none; }
+        .nav-link { color: var(--text-dim) !important; margin: 0 15px; }
+        .nav-link.active { color: var(--accent) !important; font-weight: bold; }
+        .nav-cta { background: rgba(236, 236, 236, 0.05); border: 1px solid rgba(236, 236, 236, 0.1); color: var(--accent); text-decoration: none; padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; }
+
+        /* Dashboard & Cards */
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 1px solid var(--input-border);
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .instruction-banner {
+            background: rgba(0, 200, 117, 0.05);
+            border: 1px dashed var(--accent);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--input-border);
+        }
+
+        .stat-val { font-size: 1.4rem; font-weight: bold; display: block; color: var(--accent); }
+        .stat-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; }
+
+        .form-control { background-color: #2a2f36; border: 1px solid var(--input-border); color: white; border-radius: 10px; }
+        .btn-action { background: var(--accent); color: #000; font-weight: bold; border-radius: 12px; padding: 15px; width: 100%; border: none; transition: 0.3s; }
+        .btn-action:hover { transform: translateY(-3px); background: #00e686; }
+
+        .chart-container { height: 300px; width: 100%; margin-top: 20px; }
+
+        .analysis-box {
+            background: #16191d;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid var(--accent);
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Footer Styles */
+        /* Estilos del Footer Dinámico */
+.footer-interactivo {
+    background-color: var(--bg);
+    padding: 100px 0 40px;
+    border-top: 1px solid #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-glow {
+    position: absolute;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(236, 236, 236, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 10px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    margin-right: 10px;
+    box-shadow: 0 0 10px #00ff88;
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0, 255, 136, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+}
+
+.status-text {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+}
+
+.social-links-container {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.social-btn {
+    width: 45px;
+    height: 45px;
+    background: var(--card);
+    border: 1px solid #333;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.social-btn:hover {
+    background: var(--accent);
+    color: #1a1a1a;
+    transform: translateY(-5px) rotate(8deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.footer-title {
+    font-family: 'Ubuntu', sans-serif;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+.footer-nav-list {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-nav-list li { margin-bottom: 12px; }
+
+.footer-nav-list a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: 0.3s ease;
+    display: inline-block;
+}
+
+.footer-nav-list a:hover {
+    color: #fff;
+    transform: translateX(8px);
+}
+
+.active-footer { color: var(--accent) !important; font-weight: 700; }
+
+.cta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+@media (min-width: 992px) { .cta-stack { align-items: flex-end; } }
+
+.btn-interactivo-main {
+    background: var(--accent);
+    color: #1a1a1a !important;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.4s;
+    width: fit-content;
+}
+
+.btn-interactivo-main:hover {
+    background: #fff;
+    transform: scale(1.03);
+    box-shadow: 0 10px 25px rgba(255,255,255,0.1);
+}
+
+.btn-interactivo-outline {
+    background: transparent;
+    color: var(--accent) !important;
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: 2px solid rgba(236, 236, 236, 0.2);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+    width: fit-content;
+}
+
+.footer-bottom {
+    margin-top: 80px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.tech-stack-tag {
+    background: rgba(255,255,255,0.03);
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-left: 10px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-nav">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <span class="logo-symbol">M</span>
+            <span class="logo-text ms-2">CARRASQUILLA</span>
+        </a>
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Perfil</a></li>
+                <li class="nav-item"><a class="nav-link active" href="hub-logistica.html">LogiTools Hub</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Proyectos</a></li>
+            </ul>
+            <div class="d-none d-lg-flex align-items-center">
+                <a href="https://wa.me/tu-numero" class="nav-cta"><i class="bi bi-chat-dots-fill me-2"></i>CONSULTA</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="dashboard-card">
+        
+        <div class="row align-items-center mb-4 text-center text-md-start">
+            <div class="col-md-8">
+                <h2 class="fw-bold mb-1"><i class="bi bi-pie-chart-fill me-2 text-success"></i>LogiAnalytics PRO</h2>
+                <p class="text-muted">Simulador de Toma de Decisiones y Análisis de Mermas</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-dark border border-secondary p-2">v2.5 - DATA VISUALIZATION</span>
+            </div>
+        </div>
+
+        <div class="instruction-banner">
+            <h6 class="fw-bold text-white mb-3"><i class="bi bi-info-circle-fill me-2 text-accent"></i>¿Cómo utilizar este simulador?</h6>
+            <div class="row g-3 text-dim small">
+                <div class="col-md-4">
+                    <strong>1. Ingresa Datos:</strong> Define el valor total de tu inventario, el monto de la merma detectada y tu margen de ganancia esperado.
+                </div>
+                <div class="col-md-4">
+                    <strong>2. Analiza el Impacto:</strong> El sistema calculará automáticamente la pérdida real, incluyendo el costo de oportunidad (lo que dejaste de ganar).
+                </div>
+                <div class="col-md-4">
+                    <strong>3. Toma Acción:</strong> Revisa el informe gráfico y el diagnóstico del sistema para justificar inversiones en seguridad o procesos.
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="p-4 rounded-4" style="background: rgba(0,0,0,0.2);">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">VALOR INVENTARIO ($)</label>
+                        <input type="number" id="v_total" class="form-control" value="1000000">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">VALOR MERMA ($)</label>
+                        <input type="number" id="v_merma" class="form-control" value="15000">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">MARGEN UTILIDAD (%)</label>
+                        <input type="number" id="v_margen" class="form-control" value="35">
+                    </div>
+                    <button onclick="generarAnalisis()" class="btn-action">ACTUALIZAR DASHBOARD</button>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row g-3 mb-4 text-center">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Merma Actual</span>
+                            <span class="stat-val" id="res_indice">0%</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Impacto Anual</span>
+                            <span class="stat-val text-danger" id="res_anual">$0</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Costo Oportunidad</span>
+                            <span class="stat-val text-warning" id="res_oportunidad">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="mermaChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="analysis_box" class="analysis-box">
+            <h5 class="fw-bold"><i class="bi bi-cpu me-2"></i>Informe del Sistema:</h5>
+            <p id="diag_text" class="mb-0 text-white-50 small"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+let myChart;
+function generarAnalisis() {
+    const total = parseFloat(document.getElementById('v_total').value);
+    const merma = parseFloat(document.getElementById('v_merma').value);
+    const margen = parseFloat(document.getElementById('v_margen').value) / 100;
+
+    if (!total || !merma) return;
+
+    const indice = (merma / total) * 100;
+    const anual = merma * 12;
+    const utilidadPerdida = merma * margen;
+    const costoOportunidad = merma + utilidadPerdida;
+
+    document.getElementById('res_indice').innerText = indice.toFixed(2) + '%';
+    document.getElementById('res_anual').innerText = '$' + anual.toLocaleString();
+    document.getElementById('res_oportunidad').innerText = '$' + costoOportunidad.toLocaleString();
+
+    const box = document.getElementById('analysis_box');
+    box.style.display = 'block';
+    document.getElementById('diag_text').innerText = `Análisis crítico: Al perder $${merma.toLocaleString()} en costo directo, la empresa realmente deja de percibir $${costoOportunidad.toLocaleString()} considerando el margen de utilidad del ${document.getElementById('v_margen').value}%.`;
+
+    const ctx = document.getElementById('mermaChart').getContext('2d');
+    if (myChart) { myChart.destroy(); }
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Inv. Sano', 'Merma Mensual', 'Pérdida Utilidad'],
+            datasets: [{
+                data: [total - merma, merma, utilidadPerdida],
+                backgroundColor: ['#00c875', '#ff4d4d', '#ffcc00'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#333' }, ticks: { color: '#aaa' } },
+                x: { ticks: { color: '#fff' } }
+            }
+        }
+    });
+}
+window.onload = generarAnalisis;
+</script>
+
+<footer class="footer-interactivo">
+    <div class="footer-glow"></div>
+
+    <div class="container">
+        <div class="row g-5">
+            
+            <div class="col-lg-4 text-center text-lg-start">
+                <div class="footer-brand mb-4">
+                    <h2 class="fw-bold mb-1 logo-text">M. <span style="color: var(--accent);">CARRASQUILLA</span></h2>
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        <span class="status-text">DISPONIBLE PARA PROYECTOS</span>
+                    </div>
+                </div>
+                <p class="footer-description">
+                    Especialista en Operaciones Portuarias. Transformando la complejidad logística en eficiencia digital mediante herramientas a medida.
+                </p>
+                <div class="social-links-container">
+                    <a href="#" class="social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="social-btn" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="social-btn" title="GitHub"><i class="bi bi-github"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-6">
+                        <h6 class="footer-title">Ecosistema</h6>
+                        <ul class="footer-nav-list">
+                            <li><a href="index.html">Mi Perfil</a></li>
+                            <li><a href="hub-logistica.html" class="active-footer">LogiTools</a></li>
+                            <li><a href="#">Proyectos</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-6">
+                        <h6 class="footer-title">Herramientas</h6>
+                        <ul class="footer-nav-list">
+                            <li><a href="merma-app.html">Mermas DSS</a></li>
+                            <li><a href="cubicaje-app.html">LogiLoad</a></li>
+                            <li><a href="logitransit-app.html">Transit App</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-center text-lg-end">
+                <h6 class="footer-title">¿Hablamos de logística?</h6>
+                <div class="cta-stack">
+                    <a href="https://wa.me/tu-numero" class="btn-interactivo-main">
+                        <span>INICIAR CONSULTA</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="cv-miguel.pdf" class="btn-interactivo-outline">
+                        <i class="bi bi-download"></i>
+                        <span>DESCARGAR CV FULL</span>
+                    </a>
+                </div>
+                <div class="footer-info-meta mt-4">
+                    <span><i class="bi bi-geo-alt"></i> Mendoza, Argentina</span>
+                    <br>
+                    <span><i class="bi bi-lightning"></i> Respuesta rápida (GMT-3)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">© 2026 <span class="fw-bold">Miguel Carrasquilla</span>. Operaciones & Supply Chain.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <span class="tech-stack-tag">Logística 4.0</span>
+                    <span class="tech-stack-tag">Data Driven</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiLoad PRO | Intelligence Suite</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root {
+            --brand-blue: #0d6efd;
+            --brand-dark: #0d1117;
+            --panel-bg: #161b22;
+            --text-light: #f4f4f4;
+            --accent-gold: #f1c40f;
+        }
+
+        @keyframes revealPage {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        body { 
+            background-color: var(--brand-dark); 
+            color: var(--text-light); 
+            font-family: 'Inter', sans-serif; 
+            padding-top: 100px;
+            animation: revealPage 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- NAVBAR DINÁMICO --- */
+        .navbar-custom { 
+            background: rgba(13, 17, 23, 0.7); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255,255,255,0.05); 
+            transition: all 0.4s ease;
+            padding: 15px 0;
+        }
+        .navbar-scrolled { padding: 8px 0; background: rgba(13, 17, 23, 0.95); }
+
+        .nav-link-pro {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin: 0 15px;
+            position: relative;
+            transition: 0.3s;
+        }
+        .nav-link-pro:hover { color: var(--brand-blue); }
+        .nav-link-pro::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background: var(--brand-blue); transition: 0.3s;
+        }
+        .nav-link-pro:hover::after { width: 100%; }
+
+        /* --- INTRO & CARDS --- */
+        .intro-box { background: rgba(13, 110, 253, 0.03); border: 1px dashed rgba(13, 110, 253, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
+        .intro-box:hover { border-style: solid; background: rgba(13, 110, 253, 0.06); }
+
+        .app-container { background: var(--panel-bg); border-radius: 24px; border: 1px solid #30363d; padding: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+        .section-card { background: rgba(0,0,0,0.2); padding: 25px; border-radius: 18px; border: 1px solid #30363d; }
+        
+        .form-control, .form-select { background: #0d1117; border: 1px solid #30363d; color: white; border-radius: 10px; }
+        .form-control:focus { background: #0d1117; color: white; border-color: var(--brand-blue); box-shadow: none; }
+
+        /* --- BOTONES --- */
+        .btn-pro { border-radius: 12px; font-weight: 700; transition: 0.4s; padding: 12px; }
+        .btn-pro:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn-support-nav { border: 1px solid var(--brand-blue); color: var(--brand-blue); background: transparent; padding: 6px 18px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; transition: 0.3s; text-decoration: none; }
+        .btn-support-nav:hover { background: var(--brand-blue); color: white; }
+
+        /* --- FOOTER DINÁMICO --- */
+        .footer-minimal { background: #090c10; border-top: 1px solid #30363d; padding: 80px 0 40px; margin-top: 100px; position: relative; }
+        .footer-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 1px; background: linear-gradient(90deg, transparent, var(--brand-blue), transparent); }
+        .footer-link { color: #8b949e; text-decoration: none; transition: 0.3s; font-size: 0.85rem; }
+        .footer-link:hover { color: var(--brand-blue); transform: translateX(5px); display: inline-block; }
+
+        .result-val { font-family: 'Ubuntu', sans-serif; color: var(--brand-blue); font-size: 1.8rem; text-shadow: 0 0 20px rgba(13, 110, 253, 0.2); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-custom" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="bi bi-box-seam-fill text-primary me-2 fs-4"></i>
+            <span style="font-family:'Ubuntu'; color:white; letter-spacing: 1px;">LOGI<span class="text-primary">LOAD</span> PRO</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="mx-auto">
+                <a href="#" class="nav-link-pro">SIMULADOR</a>
+                <a href="#" class="nav-link-pro">EQUIPOS</a>
+                <a href="#" class="nav-link-pro">REPORTES</a>
+            </div>
+            <div class="d-flex">
+                <a href="mailto:soporte@logiload.com" class="btn-support-nav">
+                    <i class="bi bi-headset me-2"></i>SOPORTE TÉCNICO
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-5">
+    <div class="intro-box">
+        <div class="row align-items-center">
+            <div class="col-md-11">
+                <h6 class="fw-bold text-white mb-1"><i class="bi bi-journal-text text-primary me-2"></i>Protocolo de Optimización</h6>
+                <p class="small text-white-50 mb-0">
+                    Defina las dimensiones brutas del bulto y seleccione las variables de entorno. El sistema recalculará la <strong>estiba neta</strong> considerando factores de mermas técnicas.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="row g-4">
+            <div class="col-lg-5">
+                <div class="section-card">
+                    <h6 class="text-primary fw-bold mb-4 small"><i class="bi bi-sliders me-2"></i>PARÁMETROS DE CARGA</h6>
+                    
+                    <label class="small fw-bold text-white-50 mb-1">Tipo de Unidad</label>
+                    <select id="v_unidad" class="form-select mb-3" onchange="calcularCubicaje()">
+                        <option value="28000|67|40 HC">Contenedor 40' HC (28t / 67m³)</option>
+                        <option value="26000|33|20 ST">Contenedor 20' ST (26t / 33m³)</option>
+                        <option value="24000|90|Sider">Sider / Full Truck (24t / 90m³)</option>
+                    </select>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6"><label class="small fw-bold text-white-50">Cant. Bultos</label><input type="number" id="v_cant" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                        <div class="col-6"><label class="small fw-bold text-white-50">Peso Unit. (kg)</label><input type="number" id="v_peso" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                    </div>
+
+                    <div class="row g-2 mb-4">
+                        <div class="col-4"><label class="small fw-bold text-white-50">Largo (m)</label><input type="number" id="v_l" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                        <div class="col-4"><label class="small fw-bold text-white-50">Ancho (m)</label><input type="number" id="v_w" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                        <div class="col-4"><label class="small fw-bold text-white-50">Alto (m)</label><input type="number" id="v_h" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                    </div>
+
+                    <h6 class="text-primary fw-bold mb-3 small"><i class="bi bi-layers-half me-2"></i>AJUSTES OPERATIVOS</h6>
+                    <div class="p-3 bg-dark rounded-3 border border-secondary mb-4">
+                        <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="check_pallet" onchange="calcularCubicaje()"><label class="small">Peso de Pallets (+25kg)</label></div>
+                        <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="check_seguridad" onchange="calcularCubicaje()"><label class="small">Holgura de Seguridad (5%)</label></div>
+                        <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="check_estiba" onchange="calcularCubicaje()"><label class="small">Pérdida por Estiba (10%)</label></div>
+                    </div>
+
+                    <button onclick="generarPDF()" class="btn btn-pro btn-primary w-100">
+                        <i class="bi bi-cloud-download me-2"></i>GENERAR ANALÍTICA PRO
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="section-card h-100">
+                    <div class="row text-center mb-5">
+                        <div class="col-6 border-end border-secondary">
+                            <span class="small text-white-50 d-block mb-1">VOLUMEN OCUPADO</span>
+                            <span class="result-val" id="res_vol">0 m³</span>
+                        </div>
+                        <div class="col-6">
+                            <span class="small text-white-50 d-block mb-1">MASA BRUTA TOTAL</span>
+                            <span class="result-val" id="res_peso">0 kg</span>
+                        </div>
+                    </div>
+
+                    <div style="height: 320px;">
+                        <canvas id="loadChart"></canvas>
+                    </div>
+
+                    <div id="alert_box" class="mt-4 p-3 rounded-3 d-none">
+                        <div class="d-flex align-items-center">
+                            <i id="alert_icon" class="bi fs-4 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0 small" id="alert_title"></h6>
+                                <p class="extra-small mb-0 opacity-75" id="alert_msg" style="font-size: 0.75rem;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-minimal">
+    <div class="footer-glow"></div>
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h5 class="fw-bold text-white mb-3" style="font-family:'Ubuntu';">M. <span class="text-primary">CARRASQUILLA</span></h5>
+                <p class="small text-white-50 pe-lg-5">Especialista en Transformación Digital Logística. Desarrollando soluciones de precisión para el corredor bioceánico.</p>
+                <div class="d-flex gap-3 mt-4">
+                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-whatsapp"></i></a>
+                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-github"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6 class="text-primary small fw-bold mb-4">SISTEMA</h6>
+                <a href="#" class="footer-link d-block mb-2">Simulador</a>
+                <a href="#" class="footer-link d-block mb-2">KPIs 2026</a>
+                <a href="#" class="footer-link d-block">Configuración</a>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6 class="text-primary small fw-bold mb-4">RECURSOS</h6>
+                <a href="#" class="footer-link d-block mb-2">Documentación</a>
+                <a href="#" class="footer-link d-block mb-2">Límites Legales</a>
+                <a href="#" class="footer-link d-block">Ayuda</a>
+            </div>
+            <div class="col-lg-3">
+                <h6 class="text-primary small fw-bold mb-4">SUSCRIPCIÓN TÉCNICA</h6>
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm" placeholder="Email...">
+                    <button class="btn btn-primary btn-sm"><i class="bi bi-send"></i></button>
+                </div>
+                <p class="extra-small text-white-50 mt-3" style="font-size: 0.7rem;">Reciba actualizaciones de tarifas y normativas internacionales.</p>
+            </div>
+        </div>
+        <div class="mt-5 pt-4 border-top border-secondary text-center">
+            <p class="small text-white-50 mb-0">© 2026 <b>Miguel Carrasquilla</b>. <span class="badge bg-dark border border-secondary ms-2">V 1.0.5 STABLE</span></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Dinámica del Navbar al Scroll
+    window.onscroll = function() {
+        const nav = document.getElementById('mainNav');
+        if (window.scrollY > 50) {
+            nav.classList.add('navbar-scrolled');
+        } else {
+            nav.classList.remove('navbar-scrolled');
+        }
+    };
+
+    let loadChart;
+
+    function calcularCubicaje() {
+        const unidadRaw = document.getElementById('v_unidad').value.split('|');
+        const capPeso = parseFloat(unidadRaw[0]);
+        const capVol = parseFloat(unidadRaw[1]);
+
+        let cant = parseFloat(document.getElementById('v_cant').value) || 0;
+        let pUnit = parseFloat(document.getElementById('v_peso').value) || 0;
+        let l = parseFloat(document.getElementById('v_l').value) || 0;
+        let w = parseFloat(document.getElementById('v_w').value) || 0;
+        let h = parseFloat(document.getElementById('v_h').value) || 0;
+
+        if (document.getElementById('check_pallet').checked) pUnit += 25;
+        
+        let volTotal = cant * (l * w * h);
+        let pesoTotal = cant * pUnit;
+
+        if (document.getElementById('check_seguridad').checked) volTotal *= 1.05;
+        if (document.getElementById('check_estiba').checked) volTotal *= 1.10;
+
+        document.getElementById('res_vol').innerText = volTotal.toFixed(2) + ' m³';
+        document.getElementById('res_peso').innerText = pesoTotal.toLocaleString() + ' kg';
+
+        const porcVol = (volTotal / capVol) * 100;
+        const porcPeso = (pesoTotal / capPeso) * 100;
+
+        const ctx = document.getElementById('loadChart').getContext('2d');
+        if (loadChart) loadChart.destroy();
+
+        loadChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Espacio %', 'Peso %'],
+                datasets: [{
+                    data: [porcVol, porcPeso],
+                    backgroundColor: [porcVol > 100 ? '#ff4d4d' : '#0d6efd', porcPeso > 100 ? '#ff4d4d' : '#00c875'],
+                    borderRadius: 8,
+                    barThickness: 35
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    x: { max: 120, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } },
+                    y: { ticks: { color: '#fff' } }
+                }
+            }
+        });
+
+        const abox = document.getElementById('alert_box');
+        abox.classList.remove('d-none', 'bg-success', 'bg-danger', 'bg-warning', 'text-dark', 'text-white');
+
+        if (porcPeso > 100 || porcVol > 100) {
+            abox.className = 'mt-4 p-3 rounded-3 bg-danger text-white d-flex align-items-center';
+            document.getElementById('alert_icon').className = 'bi bi-x-octagon-fill fs-4 me-3';
+            document.getElementById('alert_title').innerText = "CAPACIDAD EXCEDIDA";
+            document.getElementById('alert_msg').innerText = "Riesgo estructural y legal detectado.";
+        } else {
+            abox.className = 'mt-4 p-3 rounded-3 bg-success text-white d-flex align-items-center';
+            document.getElementById('alert_icon').className = 'bi bi-check-circle-fill fs-4 me-3';
+            document.getElementById('alert_title').innerText = "DATOS DENTRO DE NORMA";
+            document.getElementById('alert_msg').innerText = "La unidad soporta la configuración de carga actual.";
+        }
+    }
+
+    function generarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const fecha = new Date().toLocaleString();
+    const unidad = document.getElementById('v_unidad').selectedOptions[0].text;
+    
+    // --- ENCABEZADO CORPORATIVO ---
+    doc.setFillColor(13, 110, 253); // Azul LogiLoad
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text("LOGILOAD PRO | REPORT", 15, 20);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Análisis Técnico de Cubicaje y Optimización de Carga", 15, 28);
+
+    // --- METADATOS ---
+    doc.setTextColor(40, 40, 40);
+    doc.text(`Fecha de emisión: ${fecha}`, 140, 50);
+    doc.text(`Unidad analizada: ${unidad}`, 15, 50);
+
+    // --- TABLA DE DATOS TÉCNICOS ---
+    const rows = [
+        ["Cantidad de Bultos", document.getElementById('v_cant').value + " Unidades"],
+        ["Dimensiones Unitarias", `${document.getElementById('v_l').value}m x ${document.getElementById('v_w').value}m x ${document.getElementById('v_h').value}m`],
+        ["Peso de Pallets incluido", document.getElementById('check_pallet').checked ? "SÍ (+25kg/u)" : "NO"],
+        ["Margen de Seguridad (5%)", document.getElementById('check_seguridad').checked ? "APLICADO" : "N/A"],
+        ["Merma por Estiba (10%)", document.getElementById('check_estiba').checked ? "APLICADA" : "N/A"],
+        ["VOLUMEN TOTAL FINAL", document.getElementById('res_vol').innerText],
+        ["PESO BRUTO TOTAL", document.getElementById('res_peso').innerText]
+    ];
+
+    doc.autoTable({
+        startY: 60,
+        head: [['Parámetro Operativo', 'Valor Resultante']],
+        body: rows,
+        theme: 'striped',
+        headStyles: { fillStyle: [13, 17, 23], textColor: [255, 255, 255] },
+        styles: { fontSize: 10, cellPadding: 4 }
+    });
+
+    // --- SOPORTE Y FIRMA ---
+    const finalY = doc.lastAutoTable.finalY + 15;
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.text("SOPORTE TÉCNICO:", 15, finalY);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("Analista: Miguel Carrasquilla", 15, finalY + 7);
+    doc.text("Email: soporte@logiload.com", 15, finalY + 12);
+
+    // --- DESCARGO DE RESPONSABILIDAD (DISCLAIMER) ---
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    const disclaimer = "AVISO LEGAL: Este documento es una simulación basada en cálculos matemáticos de cubicaje. Los valores finales pueden variar dependiendo de la distribución física real, el centro de gravedad de la carga y las normativas viales vigentes en cada jurisdicción. LogiLoad Pro no se hace responsable por daños en la mercancía o multas por exceso de peso resultantes de una estiba incorrecta.";
+    const splitDisclaimer = doc.splitTextToSize(disclaimer, 180);
+    doc.text(splitDisclaimer, 15, finalY + 30);
+
+    // --- GUARDAR ---
+    doc.save(`Reporte_LogiLoad_${Math.floor(Math.random() * 1000)}.pdf`);
+}
+
+    window.onload = calcularCubicaje;
+</script>
+
+</body>
+</html>

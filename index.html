@@ -37,27 +37,23 @@
 
     <div class="header-container d-flex flex-column align-items-start">
       <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Inicio</a></li>
-          <li><a href="#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
-          <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
-          <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
-          <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Descargas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">CV Completo (PDF)</a></li>
-              <li><a href="#">Certificados Académicos</a></li>
-              <li><a href="#">Plantillas Excel</a></li>
-              <li><a href="descargas.html">Otros</a></li>
-               <!-- <li class="dropdown"><a href="#"><span>Licencia</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a> -->
-                <ul>
-                  <li><a href="#">Certificados Académicos</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
-        </ul>
-      </nav>
+    <ul>
+        <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Inicio</a></li>
+        <li><a href="#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
+        <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
+        <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Servicios</a>
+        <li><a href="hub-logistica.html"><i class="bi bi-cpu navicon"></i> Herramientas</a>
+
+        <li>
+            <a href="descargas.html">
+                <i class="bi bi-download navicon"></i> 
+                <span>Descargas</span>
+            </a>
+        </li>
+
+        <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
+    </ul>
+</nav>
 
       <div class="social-links text-center">
         <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
@@ -91,12 +87,14 @@
                 <h1>Miguel Carrasquilla<span class="accent-text"></span></h1>
                 <h2>Logística & Operaciones</h2>
                 <p class="lead">Soy <span class="typed" data-typed-items="Estudiante de Logística, Operador Logístico, Analista de Operaciones, Gestor de Inventarios"></span></p>
-                <p class="description"> Con más de 2 años de experiencia en gestión y control de inventario,
-además de una sólida formación en la gestión integral de
-operaciones marítimas y portuarias. Poseo una combinación de
-habilidades técnicas y conocimientos especializados, mi enfoque se
-centra en optimizar los procesos logísticos, asegurando la eficiencia
-y la rentabilidad en entornos portuarios y marítimos.</p>
+                <p class="description"> Analista de Operaciones Logísticas con más de 2 años de 
+                  trayectoria en gestión portuaria y control de inventarios. Mi enfoque combina la 
+                  rigurosidad operativa con la innovación digital: desarrollo un ecosistema de herramientas 
+                  de software personalizadas diseñadas para resolver desafíos críticos en la cadena de suministro.
+                   Desde la optimización de cubicaje hasta el análisis predictivo de mermas, transformo datos en soluciones 
+                   interactivas que maximizan la eficiencia y rentabilidad. Mi objetivo es liderar la transición hacia una logística
+                    4.0, donde la 
+                  tecnología y la operativa de campo trabajen en total sincronía..</p>
 
                 <div class="hero-actions">
                   <a href="#resume" class="btn btn-primary">Experiencia</a>
@@ -703,9 +701,211 @@ Formación en gestión naviera y portuaria. Orientado a resultados, con capacida
 
       </div>
 
-    </section><!-- /Sección de Servicios -->
+    </section> <!-- /Fin de Sección de Servicios -->
+
+<!-- /inicio de Sección de Herramientas -->
+
+<section id="herramientas-pasarela" class="services section light-background">
+
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Ecosistema Digital PRO</h2>
+    <p>Deslice para explorar mis soluciones de software especializado. Diseñadas para la optimización logística de alto nivel.</p>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="swiper init-swiper">
+      <script type="application/json" class="swiper-config">
+        {
+          "loop": true,
+          "speed": 600,
+          "autoplay": { "delay": 5000 },
+          "slidesPerView": "auto",
+          "pagination": { "el": ".swiper-pagination", "type": "bullets", "clickable": true },
+          "breakpoints": {
+            "320": { "slidesPerView": 1, "spaceBetween": 40 },
+            "1200": { "slidesPerView": 2, "spaceBetween": 20 }
+          }
+        }
+      </script>
+      
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <div class="app-slide-item">
+            <div class="row align-items-center">
+              <div class="col-md-5">
+                <div class="app-visual">
+                  <i class="bi bi-box-seam-fill"></i>
+                  <span class="app-tag">Cubicaje</span>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="app-details">
+                  <h3>LogiLoad PRO</h3>
+                  <ul class="app-features">
+                    <li><i class="bi bi-check-circle"></i> Optimización de espacio 3D.</li>
+                    <li><i class="bi bi-check-circle"></i> Cálculo de peso por eje.</li>
+                    <li><i class="bi bi-check-circle"></i> Exportación de manifiesto PDF.</li>
+                  </ul>
+                  <a href="cubicaje-app.html" target="_blank" class="btn-app-launch">Lanzar Aplicación <i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="app-slide-item">
+            <div class="row align-items-center">
+              <div class="col-md-5">
+                <div class="app-visual" style="background: #252525;">
+                  <i class="bi bi-truck-flatbed" style="color: #f1c40f;"></i>
+                  <span class="app-tag">Tránsito</span>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="app-details">
+                  <h3>LogiTransit PRO</h3>
+                  <ul class="app-features">
+                    <li><i class="bi bi-check-circle"></i> Simulador de costos de flete.</li>
+                    <li><i class="bi bi-check-circle"></i> Gestión de tiempos en puerto.</li>
+                    <li><i class="bi bi-check-circle"></i> Análisis de rutas críticas.</li>
+                  </ul>
+                  <a href="logitransit-app.html" target="_blank" class="btn-app-launch">Lanzar Aplicación <i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="app-slide-item">
+            <div class="row align-items-center">
+              <div class="col-md-5">
+                <div class="app-visual" style="background: #1a1a1a;">
+                  <i class="bi bi-graph-up-arrow" style="color: #00c875;"></i>
+                  <span class="app-tag">Analytics</span>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <div class="app-details">
+                  <h3>LogiAnalytics PRO</h3>
+                  <ul class="app-features">
+                    <li><i class="bi bi-check-circle"></i> Auditoría de mermas real.</li>
+                    <li><i class="bi bi-check-circle"></i> KPIs de rentabilidad bruta.</li>
+                    <li><i class="bi bi-check-circle"></i> Control de stock predictivo.</li>
+                  </ul>
+                  <a href="merma-app.html" target="_blank" class="btn-app-launch">Lanzar Aplicación <i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</section>
+
+<!-- /estilos Sección de Herramientas -->
+
+<style> 
+
+/* --- PASARELA DE APPS --- */
+.app-slide-item {
+  background: #232323;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 20px 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.4s;
+}
+
+.app-visual {
+  background: #1f1f1f;
+  height: 200px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.app-visual i {
+  font-size: 4rem;
+  color: #ececec;
+}
+
+.app-tag {
+  position: absolute;
+  bottom: 15px;
+  background: rgba(255,255,255,0.05);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.app-details h3 {
+  font-family: 'Ubuntu';
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.app-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 25px;
+}
+
+.app-features li {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-features li i {
+  color: #ececec;
+  font-size: 16px;
+}
+
+.btn-app-launch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ececec;
+  color: #1a1a1a !important;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
 
 
+.btn-app-launch:hover {
+  transform: scale(1.05);
+  background: #ffffff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* Ajustes del carrusel */
+.swiper-pagination-bullet {
+  background: #ececec !important;
+}
+</style>
+
+
+<!-- /Fin de Sección de Herramientas -->
 
     </section><!-- /Sección de testimonios -->
 
