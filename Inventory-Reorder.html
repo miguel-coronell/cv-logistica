@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogiInventory PRO | Miguel Carrasquilla</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #121418;
+            --card-bg: #1e2227;
+            --accent: #00c875;
+            --warning: #ffcc00;
+            --danger: #ff4d4d;
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --input-border: #333b44;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Ubuntu', sans-serif;
+            padding-top: 100px; 
+            padding-bottom: 20px;
+        }
+
+        /* Nav & Logo */
+        .custom-nav { background: rgba(18, 18, 18, 0.8) !important; backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 18px 0; }
+        .logo-symbol { background: var(--accent); color: #1a1a1a; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 800; border-radius: 6px; }
+        .logo-text { font-weight: 700; letter-spacing: 1.5px; font-size: 1.1rem; color: #fff !important; text-decoration: none; }
+        .nav-link { color: var(--text-dim) !important; margin: 0 15px; }
+        .nav-link.active { color: var(--accent) !important; font-weight: bold; }
+
+        /* Dashboard Cards */
+        .dashboard-card { background: var(--card-bg); border-radius: 25px; border: 1px solid var(--input-border); padding: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .instruction-banner { background: rgba(0, 200, 117, 0.05); border: 1px dashed var(--accent); border-radius: 15px; padding: 20px; margin-bottom: 30px; }
+
+        .stat-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 15px; text-align: center; border: 1px solid var(--input-border); height: 100%; }
+        .stat-val { font-size: 1.3rem; font-weight: bold; display: block; color: var(--accent); }
+        .stat-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+        .form-control { background-color: #2a2f36; border: 1px solid var(--input-border); color: white; border-radius: 10px; padding: 12px; }
+        .form-control:focus { background-color: #323841; border-color: var(--accent); color: white; box-shadow: none; }
+        .btn-action { background: var(--accent); color: #1a1a1a; font-weight: bold; border-radius: 12px; padding: 15px; width: 100%; border: none; transition: 0.3s; margin-top: 10px; }
+        .btn-action:hover { transform: translateY(-3px); background: #00e686; box-shadow: 0 10px 20px rgba(0,200,117,0.2); }
+
+        .chart-container { height: 350px; width: 100%; margin-top: 20px; background: rgba(0,0,0,0.1); border-radius: 20px; padding: 20px; }
+        
+        /* Analysis Box */
+        .analysis-box { background: #16191d; border-radius: 20px; padding: 25px; border-left: 6px solid var(--accent); margin-top: 30px; display: none; }
+        .label-logi { color: var(--accent); letter-spacing: 1px; font-weight: 700; }
+
+        /* Footer */
+        .footer-interactivo { background-color: #0d0f12; padding: 80px 0 40px; border-top: 1px solid #333; position: relative; margin-top: 80px;}
+        .footer-title { color: var(--accent); text-transform: uppercase; font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 25px; }
+        .status-badge { display: inline-flex; align-items: center; background: rgba(255, 255, 255, 0.05); padding: 6px 14px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 10px; box-shadow: 0 0 10px #00ff88; }
+        .social-btn { width: 40px; height: 40px; background: #252a30; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-dim); margin-right: 10px; text-decoration: none; transition: 0.3s; }
+        .social-btn:hover { background: var(--accent); color: #1a1a1a; transform: translateY(-3px); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-nav">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <span class="logo-symbol">M</span>
+            <span class="logo-text ms-2">CARRASQUILLA</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Perfil</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">LogiTools Hub</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Proyectos</a></li>
+            </ul>
+            <div class="d-none d-lg-flex">
+                <a href="#" class="nav-link small"><i class="bi bi-shield-check me-1"></i> LIC. LOGÍSTICA</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="dashboard-card">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-8 text-center text-md-start">
+                <h2 class="fw-bold mb-1"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Inventory ROP Analytics</h2>
+                <p class="text-muted">Optimizador de Reabastecimiento Crítico y Niveles de Servicio</p>
+            </div>
+            <div class="col-md-4 text-md-end d-none d-md-block">
+                <span class="badge bg-dark border border-secondary p-2 px-3">S&OP PLANNING MODEL 2026</span>
+            </div>
+        </div>
+
+        <div class="instruction-banner">
+            <h6 class="text-white fw-bold mb-3 small"><i class="bi bi-info-circle me-2"></i>VARIABLES DE ENTRADA</h6>
+            <div class="row g-3 text-dim small">
+                <div class="col-md-4"><strong>Lead Time:</strong> Días desde la orden hasta la recepción.</div>
+                <div class="col-md-4"><strong>Variación:</strong> Desviación estándar de la demanda diaria.</div>
+                <div class="col-md-4"><strong>Z-Score:</strong> Factor de confianza (95% para este modelo).</div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="p-4 rounded-4 shadow-inner" style="background: rgba(0,0,0,0.2);">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dim">DEMANDA DIARIA (PROMEDIO)</label>
+                        <input type="number" id="demanda" class="form-control" value="60">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dim">LEAD TIME (DÍAS)</label>
+                        <input type="number" id="leadtime" class="form-control" value="12">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dim">VAR. DEMANDA (± UNID.)</label>
+                        <input type="number" id="desviacion" class="form-control" value="20">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-dim">STOCK ACTUAL EN DEPÓSITO</label>
+                        <input type="number" id="stock_actual" class="form-control" value="950">
+                    </div>
+                    <button onclick="calcularReorder()" class="btn-action">ANALIZAR INVENTARIO</button>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="row g-3 mb-4 text-center">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Stock de Seguridad</span>
+                            <span class="stat-val" id="res_ss">0</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Punto de Reorden (ROP)</span>
+                            <span class="stat-val text-warning" id="res_rop">0</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <span class="stat-label">Estado Operativo</span>
+                            <span class="stat-val" id="res_status" style="font-size:1.1rem;">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="analysis_box" class="analysis-box">
+            <div class="d-flex align-items-center mb-4">
+                <div id="status_icon" class="me-3 fs-2"></div>
+                <div>
+                    <h5 class="fw-bold mb-0">Informe de Consultoría Logística</h5>
+                    <small id="risk_level" class="text-uppercase fw-800" style="letter-spacing: 1.5px;"></small>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 bg-black bg-opacity-25 border border-white border-opacity-10">
+                        <label class="label-logi small d-block mb-1">ANÁLISIS DE SITUACIÓN</label>
+                        <p id="diag_text" class="mb-0 text-white-50 small" style="line-height: 1.6;"></p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 bg-black bg-opacity-25 border border-white border-opacity-10">
+                        <label class="label-logi small d-block mb-1">HOJA DE RUTA / ACCIÓN</label>
+                        <p id="action_text" class="mb-0 text-white-50 small" style="line-height: 1.6;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* --- Estilos Avanzados para el Nuevo Footer --- */
+    .footer-evolved {
+        background: linear-gradient(to bottom, #0d0f12 0%, #050505 100%);
+        padding: 100px 0 40px;
+        border-top: 1px solid rgba(0, 200, 117, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Efecto de Luz Ambiental en las esquinas */
+    .footer-evolved::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(0, 200, 117, 0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .footer-title-main {
+        font-family: 'Ubuntu', sans-serif;
+        font-size: 1.8rem;
+        background: linear-gradient(45deg, #fff 30%, var(--accent) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Botones de Acción Animados */
+    .btn-footer-action {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 12px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .btn-footer-action:hover {
+        background: var(--accent);
+        color: #000 !important;
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 10px 30px rgba(0, 200, 117, 0.3);
+    }
+
+    .btn-footer-action i {
+        font-size: 1.2rem;
+    }
+
+    /* Redes Sociales con Tooltip Simple */
+    .social-pill {
+        width: 45px;
+        height: 45px;
+        background: #1e2227;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-dim);
+        font-size: 1.2rem;
+        transition: 0.3s;
+        border: 1px solid rgba(255,255,255,0.05);
+        text-decoration: none;
+    }
+
+    .social-pill:hover {
+        transform: rotate(360deg) scale(1.1);
+        color: #fff;
+        border-color: var(--accent);
+        box-shadow: 0 0 15px rgba(0, 200, 117, 0.4);
+    }
+
+    /* Contador de Status */
+    .live-status {
+        background: rgba(0, 0, 0, 0.4);
+        padding: 15px;
+        border-radius: 15px;
+        border-left: 3px solid var(--accent);
+    }
+
+    .pulse-mini {
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+        box-shadow: 0 0 0 rgba(0, 200, 117, 0.4);
+        animation: pulse-animation 2s infinite;
+    }
+
+    @keyframes pulse-animation {
+        0% { box-shadow: 0 0 0 0px rgba(0, 200, 117, 0.7); }
+        100% { box-shadow: 0 0 0 10px rgba(0, 200, 117, 0); }
+    }
+
+    .tech-pill {
+        font-size: 0.65rem;
+        background: rgba(255,255,255,0.05);
+        padding: 3px 10px;
+        border-radius: 5px;
+        margin-right: 5px;
+        color: var(--text-dim);
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+</style>
+
+<footer class="footer-evolved">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h2 class="fw-bold mb-3 footer-title-main">M. CARRASQUILLA</h2>
+                <p class="text-dim small mb-4 pe-lg-5">
+                    Impulsando la eficiencia en la cadena de suministro mediante <span class="text-white">Logística 4.0</span>. 
+                    Diseño de algoritmos de optimización y gestión de operaciones internacionales.
+                </p>
+                <div class="live-status mb-4">
+                    <div class="d-flex align-items-center mb-1">
+                        <span class="pulse-mini"></span>
+                        <span class="small fw-bold text-white">SISTEMAS ONLINE</span>
+                    </div>
+                    <p class="text-dim small mb-0">Disponibilidad para consultoría: <span class="text-accent">Inmediata</span></p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="https://linkedin.com" class="social-pill"><i class="bi bi-linkedin"></i></a>
+                    <a href="https://github.com" class="social-pill"><i class="bi bi-github"></i></a>
+                    <a href="https://wa.me/tunúmero" class="social-pill"><i class="bi bi-whatsapp"></i></a>
+                    <a href="mailto:tu@email.com" class="social-pill"><i class="bi bi-envelope-at"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="footer-title small mb-4">ACCIONES RÁPIDAS</h6>
+                <div class="d-flex flex-column">
+                    <a href="#" class="btn-footer-action">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        <span>Descargar CV Full</span>
+                    </a>
+                    <a href="https://wa.me/tunúmero" class="btn-footer-action">
+                        <i class="bi bi-chat-left-dots"></i>
+                        <span>Agendar Reunión</span>
+                    </a>
+                    <a href="#" class="btn-footer-action">
+                        <i class="bi bi-code-slash"></i>
+                        <span>Ver Código en GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 text-lg-end">
+                <h6 class="footer-title small mb-4">ESPECIFICACIONES DEL PORTAFOLIO</h6>
+                <div class="mb-4">
+                    <span class="tech-pill">HTML5</span>
+                    <span class="tech-pill">Bootstrap 5</span>
+                    <span class="tech-pill">Chart.js</span>
+                    <span class="tech-pill">JS ES6</span>
+                </div>
+                <p class="text-dim small mb-1"><i class="bi bi-geo-alt-fill text-accent me-2"></i>Mendoza, Argentina</p>
+                <p class="text-dim small mb-1"><i class="bi bi-cpu-fill text-accent me-2"></i>Stack: Operaciones Portuarias</p>
+                <p class="text-dim small"><i class="bi bi-translate text-accent me-2"></i>ES | EN | PT (Intermedio)</p>
+                
+                <div class="mt-4 p-3 rounded-3" style="background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.03);">
+                    <div class="row text-center">
+                        <div class="col-6 border-end border-secondary border-opacity-25">
+                            <div class="fw-bold text-white fs-5">2026</div>
+                            <div class="text-dim small" style="font-size: 10px;">VERSION APP</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="fw-bold text-accent fs-5">98%</div>
+                            <div class="text-dim small" style="font-size: 10px;">EFICIENCIA ROP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-top border-secondary border-opacity-10 d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <p class="small text-secondary mb-0">© 2026 Desarrollado por Miguel Carrasquilla - Estratega Logístico.</p>
+            <p class="small text-secondary mb-0 mt-2 mt-md-0">
+                <i class="bi bi-lightning-fill text-accent"></i> Built with AI Collaboration
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script>
+let invChart;
+
+function calcularReorder() {
+    const demanda = parseFloat(document.getElementById('demanda').value);
+    const leadtime = parseFloat(document.getElementById('leadtime').value);
+    const desviacion = parseFloat(document.getElementById('desviacion').value);
+    const stockActual = parseFloat(document.getElementById('stock_actual').value);
+
+    // Fórmulas Profesionales
+    const ss = Math.round(1.65 * desviacion * Math.sqrt(leadtime));
+    const rop = Math.round((demanda * leadtime) + ss);
+
+    document.getElementById('res_ss').innerText = ss + " unid.";
+    document.getElementById('res_rop').innerText = rop + " unid.";
+
+    const box = document.getElementById('analysis_box');
+    const statusEl = document.getElementById('res_status');
+    const diagText = document.getElementById('diag_text');
+    const actionText = document.getElementById('action_text');
+    const riskLevel = document.getElementById('risk_level');
+    const statusIcon = document.getElementById('status_icon');
+    
+    box.style.display = 'block';
+
+    if (stockActual <= ss) {
+        statusEl.innerText = "ALERTA: QUIEBRE";
+        statusEl.style.color = "var(--danger)";
+        riskLevel.innerText = "CRÍTICO: STOCK DE SEGURIDAD VULNERADO";
+        riskLevel.style.color = "var(--danger)";
+        statusIcon.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-danger"></i>';
+        diagText.innerText = `El stock actual (${stockActual}) es insuficiente. Estás operando bajo el umbral de seguridad, lo que garantiza faltantes ante cualquier mínima variación de la demanda o retraso del proveedor.`;
+        actionText.innerText = "Ejecutar compra de emergencia. Considerar flete expreso. Notificar al área comercial sobre posibles quiebres de servicio.";
+        box.style.borderLeftColor = "var(--danger)";
+    } 
+    else if (stockActual <= rop) {
+        statusEl.innerText = "SOLICITAR PEDIDO";
+        statusEl.style.color = "var(--warning)";
+        riskLevel.innerText = "ADVERTENCIA: PUNTO DE REORDEN ALCANZADO";
+        riskLevel.style.color = "var(--warning)";
+        statusIcon.innerHTML = '<i class="bi bi-hourglass-split text-warning"></i>';
+        diagText.innerText = `Has entrado en el periodo de cobertura del Lead Time. El inventario remanente está destinado a cubrir la demanda de los próximos ${leadtime} días mientras llega el nuevo lote.`;
+        actionText.innerText = "Emitir Orden de Compra (OC) hoy. Verificar con el proveedor el cumplimiento de la ventana de entrega.";
+        box.style.borderLeftColor = "var(--warning)";
+    } 
+    else {
+        statusEl.innerText = "STOCK ÓPTIMO";
+        statusEl.style.color = "var(--accent)";
+        riskLevel.innerText = "NORMAL: OPERACIÓN SEGURA";
+        riskLevel.style.color = "var(--accent)";
+        statusIcon.innerHTML = '<i class="bi bi-shield-check-fill text-accent"></i>';
+        diagText.innerText = `Nivel de inventario saludable. Cuentas con un excedente estratégico de ${stockActual - rop} unidades sobre el punto de pedido, optimizando los costos de almacenamiento.`;
+        actionText.innerText = "No requiere acción inmediata. Continuar monitoreando el consumo diario para ajustar el pronóstico de demanda.";
+        box.style.borderLeftColor = "var(--accent)";
+    }
+
+    renderChart(stockActual, rop, ss, demanda, leadtime);
+}
+
+function renderChart(actual, rop, ss, demanda, lt) {
+    const ctx = document.getElementById('inventoryChart').getContext('2d');
+    if (invChart) { invChart.destroy(); }
+    
+    // Simulación de proyección de inventario a 30 días
+    let labels = [];
+    let stockLine = [];
+    let tempStock = actual;
+    for(let i=0; i<=25; i++) {
+        labels.push('Día ' + i);
+        stockLine.push(tempStock);
+        tempStock -= demanda;
+        if(i == lt) tempStock += (demanda * lt * 1.5); // Simulación de llegada de pedido
+    }
+
+    invChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Proyección Stock',
+                    data: stockLine,
+                    borderColor: '#00c875',
+                    backgroundColor: 'rgba(0, 200, 117, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: 'Línea ROP',
+                    data: Array(26).fill(rop),
+                    borderColor: '#ffcc00',
+                    borderDash: [5, 5],
+                    pointRadius: 0
+                },
+                {
+                    label: 'Stock Seguridad (SS)',
+                    data: Array(26).fill(ss),
+                    borderColor: '#ff4d4d',
+                    borderDash: [2, 2],
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#a0a0a0', font: { size: 10 } } } },
+            scales: {
+                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#666' } },
+                x: { grid: { display: false }, ticks: { color: '#666', font: { size: 9 } } }
+            }
+        }
+    });
+}
+
+window.onload = calcularReorder;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
