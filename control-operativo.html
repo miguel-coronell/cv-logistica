@@ -86,6 +86,13 @@
       width: 11px; height: 11px; background: #121212;
       border: 1px solid rgba(255,255,255,0.4); border-radius: 50%;
     }
+
+    #footer {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
   </style>
 </head>
 
@@ -97,20 +104,22 @@
     <i class="header-toggle d-xl-none bi bi-list"></i>
     <div class="header-container d-flex flex-column align-items-start">
       <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html#hero"><i class="bi bi-house navicon"></i>Inicio</a></li>
-          <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
-          <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
-          <li><a href="index.html#services" class="active"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
-          <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Descargas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">CV Completo (PDF)</a></li>
-              <li><a href="#">Plantillas Excel</a></li>
-            </ul>
-          </li>
-          <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
-        </ul>
-      </nav>
+    <ul>
+        <li><a href="index.html#hero" class="active"><i class="bi bi-house navicon"></i>Inicio</a></li>
+        <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
+        <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
+        <li><a href="index.html#services"><i class="bi bi-hdd-stack navicon"></i> Servicios</a>
+        <li><a href="index.html#herramientas-pasarela"><i class="bi bi-pc-display-horizontal navicon"></i> Herramientas</a>
+          <li>
+            <a href="descargas.html">
+                <i class="bi bi-download navicon"></i> 
+                <span>Descargas</span>
+            </a>
+        </li>
+
+        <li><a href="index.html#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
+    </ul>
+</nav>
       <div class="social-links text-center">
         <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
@@ -229,6 +238,17 @@
       </div>
     </div>
   </main>
+<footer id="footer" class="footer position-relative" style="background: transparent; border: none; box-shadow: none;">
+  <div class="container">
+    <div class="copyright text-center ">
+      <p>© <span>Copyright 2026</span> <strong class="px-1 sitename">Miguel Carrasquilla |</strong> <span>Todos los derechos reservados</span></p>
+    </div>
+    <div class="credits">
+      Diseñado por <a href="https://www.miguelcarrasquilla.com">Miguel carrasquilla</a> | <a href="https://miguelcarrasquilla.com">Herramientas de desarrollo</a>
+    </div>
+  </div>
+</footer>
+
 
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
