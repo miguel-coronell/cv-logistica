@@ -4,345 +4,266 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Servicios | Miguel Carrasquilla</title>
-  <meta name="description" content="Detalles del servicio de Gestión de Inventarios y Logística">
+  <title>Optimización de Procesos | Miguel Carrasquilla</title>
 
-  <link href="assets/img/icono-pagina.ico" rel="icon">
-  <link href="assets/img/icono-pagina.ico" rel="apple-touch-icon">
-
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1a1a1a;
+      --neon-white: #ffffff;
+      --text-gray: #a1a1a1;
+      --accent-glow: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--neon-white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* --- CANVAS DINÁMICO DE FONDO --- */
+    #hero-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* --- ESTILOS DE CONTENIDO REFINADOS --- */
+    .main { margin-left: 300px; } 
+    @media (max-width: 1199px) { .main { margin-left: 0; } }
+
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 25px;
+      padding: 40px;
+      transition: 0.4s;
+    }
+
+    .glass-card:hover {
+      border-color: var(--neon-white);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .neon-text {
+      color: var(--neon-white);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .kpi-box {
+      background: rgba(255,255,255,0.02);
+      border-left: 2px solid var(--neon-white);
+      padding: 20px;
+      border-radius: 0 15px 15px 0;
+    }
+
+    .btn-neon-fill {
+      background: #f0f0f0; color: #000; border-radius: 50px;
+      padding: 12px 30px; font-weight: 700; border: none; transition: 0.3s;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
+    }
+
+    .btn-neon-fill:hover { background: #fff; transform: translateY(-3px); }
+
+    .step-box {
+      border-left: 1px solid rgba(255,255,255,0.1);
+      padding-left: 25px; margin-bottom: 30px; position: relative;
+    }
+
+    .step-box:hover { border-left-color: #fff; }
+
+    .step-circle {
+      position: absolute; left: -6px; top: 0;
+      width: 11px; height: 11px; background: #121212;
+      border: 1px solid rgba(255,255,255,0.4); border-radius: 50%;
+    }
+  </style>
 </head>
 
 <body class="service-details-page">
 
+  <canvas id="hero-canvas"></canvas>
+
   <header id="header" class="header dark-background d-flex flex-column justify-content-center">
     <i class="header-toggle d-xl-none bi bi-list"></i>
-
     <div class="header-container d-flex flex-column align-items-start">
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html#hero" class="active"><i class="bi bi-house navicon"></i>Inicio</a></li>
+          <li><a href="index.html#hero"><i class="bi bi-house navicon"></i>Inicio</a></li>
           <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
           <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
-          <li><a href="index.html#services"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
+          <li><a href="index.html#services" class="active"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
           <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Descargas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">CV Completo (PDF)</a></li>
-              <li><a href="#">Certificados Académicos</a></li>
               <li><a href="#">Plantillas Excel</a></li>
-               <!-- <li class="dropdown"><a href="#"><span>Licencia</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a> -->
-                <ul>
-                  <li><a href="#">Certificados Académicos</a></li>
-                </ul>
-              </li>
             </ul>
           </li>
           <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
         </ul>
       </nav>
-
-       <div class="social-links text-center">
+      <div class="social-links text-center">
         <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
         <a href="https://www.instagram.com/miguel.coronell" class="instagram"><i class="bi bi-instagram"></i></a>
         <a href="https://www.linkedin.com/in/miguelcoronell/" class="linkedin"><i class="bi bi-linkedin"></i></a>
         <a href="https://github.com/miguel-coronell" class="github" target="_blank"><i class="bi bi-github"></i></a>
       </div>
-
     </div>
   </header>
 
   <main class="main">
 
-    <div class="page-title dark-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Optimizacion De Procesos</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Inicio</a></li>
-            <li class="current">Gestión de Inventarios</li>
-          </ol>
-        </nav>
-      </div>
-    </div>
-
-    <section id="service-details" class="service-details section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row gy-4">
-
-          <div class="col-lg-8">
-            <div class="service-details-slider swiper init-swiper">
-              <script type="application/json" class="swiper-config">
-                {
-                  "loop": true,
-                  "speed": 600,
-                  "autoplay": { "delay": 5000 },
-                  "slidesPerView": 1,
-                  "pagination": { "el": ".swiper-pagination", "type": "bullets", "clickable": true }
-                }
-              </script>
-              <div class="swiper-wrapper align-items-center">
-                <div class="swiper-slide">
-                  <img src="assets/img/services/services-1.webp" alt="Almacén de logística" class="img-fluid" loading="lazy">
-                </div>
-                <div class="swiper-slide">
-                  <img src="assets/img/services/services-2.webp" alt="Control de stock" class="img-fluid" loading="lazy">
-                </div>
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-
-            <div class="content mt-5">
-              <h3>Optimización de Procesos y Mejora Continua</h3>
-              <p>
-                En un entorno logístico competitivo, la eficiencia no es una opción, sino una necesidad. Mi servicio
-                 de Optimización de Procesos se enfoca en analizar profundamente cada etapa de la cadena operativa para 
-                 identificar desperdicios de tiempo, movimientos innecesarios y redundancias que elevan los costos. Utilizo
-                  un enfoque basado en datos y observación directa para rediseñar flujos 
-                de trabajo que permitan hacer más con menos recursos, manteniendo siempre la calidad del servicio
-              </p>
-              
-
-              <div class="features mt-4">
-                <div class="row gy-4">
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Análisis de Cuellos de Botella</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Rediseño de Flujos (Workflow)</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Estandarización de Tareas</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Reducción de Tiempos de Ciclo</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p class="mt-4">
-                Mi experiencia me ha demostrado que la optimización real no termina con un cambio en el papel, 
-                sino con la correcta adopción por parte del equipo operativo. Por ello, acompaño la reingeniería de 
-                procesos con una capacitación práctica, asegurando que las nuevas metodologías se conviertan en hábitos. 
-                El resultado final es una estructura logística ágil, capaz de absorber picos de demanda sin aumentar
-                 proporcionalmente los costos operativos, garantizando una rentabilidad sostenible para la organización
-              </p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-
-
-<div class="service-info" style="background: transparent; border: none; padding: 0;">
-  <h4 class="mb-4" style="color: white; font-weight: 700; border-bottom: 2px solid #333; padding-bottom: 10px;">Información del Perfil</h4>
-
-<div class="info-item-static">
-  <div class="icon-simple">
-    <i class="bi bi-graph-up-arrow"></i>
-  </div>
-  <div class="divider-simple"></div>
-  <div class="content">
-    <h5>Especialidad</h5>
-    <p>Eficiencia y Reducción de Costos</p>
-  </div>
-</div>
-
-
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-geo-alt"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Ubicación</h5>
-      <p>Mendoza, Argentina</p>
-    </div>
-  </div>
-
-
-<div class="info-item-static">
-  <div class="icon-simple">
-    <i class="bi bi-lightning-charge"></i>
-  </div>
-  <div class="divider-simple"></div>
-  <div class="content">
-    <h5>Enfoque</h5>
-    <p>Agilidad y Flujo Continuo</p>
-  </div>
-</div>
-
-<div class="info-item-static">
-  <div class="icon-simple">
-    <i class="bi bi-star"></i>
-  </div>
-  <div class="divider-simple"></div>
-  <div class="content">
-    <h5>Experiencia Destacada</h5>
-    <p>Logística Portuaria (Cartagena, CO)</p>
-  </div>
-</div>
-
-
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-person-badge"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Especialista</h5>
-      <p>Miguel Carrasquilla</p>
-    </div>
-  </div>
-
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-whatsapp"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Contacto</h5>
-      <p>+54 9 261 386 3563</p>
-    </div>
-  </div>
-</div>
-
-<!-- secion de servicios otros-->
-
-<div class="related-services mt-5">
-  <h4 class="mb-4" style="color: white; font-weight: 700; border-bottom: 2px solid #333; padding-bottom: 10px;">Otros Servicios</h4>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-box-seam" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Gestion de Invetarios</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;"> Control de stock y auditoría de mermas.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-truck" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Recepcion y Despacho</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Verificación y flujo de mercancías.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-house-gear" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Gestión de Bodegas</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Optimización y control de espacios.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi bi-tsunami" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Operativa Portuaria</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Gestión de contenedores y tarja.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-diagram-3" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Optimizacion de Procesos</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Gestión de contenedores y tarja.</p>
-    </div>
-  </div>
-
-</div>
-          </div>
-
+    <div class="container py-5 mt-5">
+      <div class="row align-items-center mb-5" data-aos="fade-up">
+        <div class="col-lg-8">
+          <span class="text-secondary fw-bold" style="letter-spacing: 2px;">PROCESS ENGINEERING</span>
+          <h1 class="display-3 fw-bold neon-text mt-2">Optimización de <br>Procesos Logísticos</h1>
         </div>
       </div>
-    </section>
 
-  </main>
+      <div class="row gy-5">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+          
+          <div class="glass-card mb-5">
+            <h3 class="mb-4 text-white">Reingeniería de Flujos</h3>
+            <p class="fs-5 text-secondary">
+              Optimizar no es trabajar más duro, sino trabajar de forma más inteligente. Analizo cada eslabón de la cadena operativa para eliminar el "desperdicio" (muda), reducir los tiempos de ciclo y maximizar la rentabilidad de los recursos existentes mediante metodologías Lean y Six Sigma.
+            </p>
+            
+            <div class="row mt-5">
+              <div class="col-md-6 mb-4">
+                <div class="kpi-box">
+                  <h6 class="fw-bold mb-1">Lead Time de Proceso</h6>
+                  <p class="small text-secondary m-0">Reducción del tiempo total desde la orden hasta el despacho final.</p>
+                </div>
+              </div>
+              <div class="col-md-6 mb-4">
+                <div class="kpi-box">
+                  <h6 class="fw-bold mb-1">Reducción de Costos Op.</h6>
+                  <p class="small text-secondary m-0">Detección y eliminación de gastos ocultos por ineficiencia física.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <footer id="footer" class="footer position-relative">
+          <div class="row mb-5">
+            <div class="col-12">
+              <h4 class="mb-4">Ingeniería Aplicada</h4>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="p-4 border border-secondary rounded-4 h-100">
+                <i class="bi bi-diagram-2 fs-2 text-white"></i>
+                <h5 class="mt-3">Mapeo de Procesos (VSM)</h5>
+                <p class="small text-secondary">Visualización del flujo de valor para identificar actividades que no aportan al cliente final.</p>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="p-4 border border-secondary rounded-4 h-100">
+                <i class="bi bi-gear-wide-connected fs-2 text-white"></i>
+                <h5 class="mt-3">Automatización Táctica</h5>
+                <p class="small text-secondary">Implementación de macros, scripts y herramientas digitales para agilizar tareas manuales repetitivas.</p>
+              </div>
+            </div>
+          </div>
 
-    <div class="container">
-      <div class="copyright text-center ">
-        <p>© <span>Copyright 2026</span> <strong class="px-1 sitename">Miguel Carrasquilla |</strong> <span>Todos los derechos reservados</span></p>
-      </div>
-      <div class="credits">
+          <h4 class="mb-4">Hoja de Ruta de Mejora</h4>
+          <div class="ps-2">
+            <div class="step-box" data-aos="fade-left">
+              <div class="step-circle"></div>
+              <h5 class="text-white">Análisis de Cuellos de Botella</h5>
+              <p class="text-secondary small">Localización de los puntos de restricción que limitan la capacidad de la bodega o transporte.</p>
+            </div>
+            <div class="step-box" data-aos="fade-left" data-aos-delay="100">
+              <div class="step-circle"></div>
+              <h5 class="text-white">Diseño del "To-Be"</h5>
+              <p class="text-secondary small">Modelado de procesos ideales simplificados, eliminando pasos redundantes y esperas.</p>
+            </div>
+            <div class="step-box" data-aos="fade-left" data-aos-delay="200">
+              <div class="step-circle"></div>
+              <h5 class="text-white">Estandarización y Seguimiento</h5>
+              <p class="text-secondary small">Implementación de controles visuales y auditorías para sostener las mejoras en el tiempo.</p>
+            </div>
+          </div>
+        </div>
 
-        Diseñado por <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">Herramientas de desarrollo</a>
+        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="glass-card sticky-top" style="top: 20px;">
+            <h5 class="mb-4 fw-bold">Perfil Estratégico</h5>
+            
+            <div class="mb-4">
+              <small class="text-secondary d-block">METODOLOGÍA</small>
+              <span class="fw-bold">Lean Logistics & Kaizen</span>
+            </div>
+
+            <div class="mb-4">
+              <small class="text-secondary d-block">IMPACTO</small>
+              <span class="fw-bold">Eficiencia Global de Cadena</span>
+            </div>
+
+            <div class="mb-4">
+              <small class="text-secondary d-block">RECURSOS TÉCNICOS</small>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <span class="badge border border-secondary text-secondary">VSM Mapping</span>
+                <span class="badge border border-secondary text-secondary">Six Sigma</span>
+                <span class="badge border border-secondary text-secondary">Optimización de Rutas</span>
+              </div>
+            </div>
+
+            <hr class="border-secondary opacity-25">
+
+            <a href="https://wa.me/5492613863563" class="btn-neon-fill w-100 justify-content-center">
+              Optimizar mi Planta <i class="bi bi-whatsapp"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
-
-  </footer>
-
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  </main>
 
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
+
+    // CANVAS DINÁMICO
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, mouseX = 0, mouseY = 0;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+    resize();
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 0.3;
+      for (let i = 0; i < 25; i++) {
+        ctx.beginPath();
+        let offset = (mouseX - width/2) * (i * 0.005);
+        ctx.moveTo(100 + i * 60 + offset, 0);
+        ctx.lineTo(i * 20 + offset, height);
+        ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 
 </body>
 </html>

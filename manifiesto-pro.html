@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CARRASQUILLA | TMS ARGENTINA 2026</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        
+        :root {
+            --neon-green: #00ff9d;
+            --dark-deep: #0a0a0b;
+            --card-gray: #161618;
+            --border-gray: #262629;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--dark-deep);
+            color: #ffffff;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-group {
+            background: var(--card-gray);
+            border: 1px solid var(--border-gray);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            background: #000 !important;
+            border: 1.5px solid var(--border-gray) !important;
+            color: #fff !important;
+            border-radius: 14px !important;
+            padding: 14px 16px !important;
+            width: 100%;
+            margin-top: 8px;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .input-field:focus {
+            border-color: var(--neon-green) !important;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
+            outline: none;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-print {
+            background: #fff;
+            color: #000;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 20px;
+            border-radius: 18px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+        }
+
+        .nav-bar {
+            position: fixed;
+            bottom: 25px; left: 25px; right: 25px;
+            height: 75px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 28px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .app-section { display: none; padding-bottom: 120px; }
+        .active-section { display: block; animation: fadeInUp 0.4s ease; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="p-6 border-b border-white/5 flex justify-between items-center sticky top-0 bg-black/90 z-50">
+        <div>
+            <h1 class="font-black text-xl tracking-tighter">CARRASQUILLA <span class="text-green-500">TMS</span></h1>
+            <p class="text-[9px] mono text-white/40 uppercase">Manifest System v2.6.4</p>
+        </div>
+        <div class="bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-full text-right">
+            <span class="text-[10px] font-black text-green-400 uppercase">En Línea AFIP/CNRT</span>
+        </div>
+    </header>
+
+    <main class="p-5 max-w-xl mx-auto">
+
+        <section id="sec-general" class="app-section active-section">
+            <h2 class="text-2xl font-black mb-6">Emisión de Manifiesto</h2>
+            
+            <div class="glass-group">
+                <p class="text-[10px] font-black text-green-500 mb-4 tracking-widest uppercase italic">01. Identificación y Referencias</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>Nro. Manifiesto</label><input type="text" id="m_nro" value="MAN-2026-00452" class="input-field mono"></div>
+                    <div class="input-box"><label>Fecha Emisión</label><input type="date" id="m_fecha" class="input-field"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>Orden de Transporte</label><input type="text" id="m_ot" value="OT-9922" class="input-field"></div>
+                    <div class="input-box"><label>Remito / Factura</label><input type="text" id="m_remito" value="R-0001-22334" class="input-field"></div>
+                </div>
+                <div class="input-box"><label>Tipo de Transporte</label><input type="text" id="m_tipo" value="Transporte de carga general" class="input-field"></div>
+            </div>
+
+            <div class="glass-group">
+                <p class="text-[10px] font-black text-green-500 mb-4 tracking-widest uppercase italic">02. Unidades y Conductor</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>Dominio Tractor</label><input type="text" id="v_tractor" value="AF455GT" class="input-field mono"></div>
+                    <div class="input-box"><label>Dominio Semi</label><input type="text" id="v_semi" value="AE789XZ" class="input-field mono"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>Marca Vehículo</label><input type="text" id="v_marca" value="Scania R500" class="input-field"></div>
+                    <div class="input-box"><label>Nro Póliza</label><input type="text" id="v_poliza" value="RC-992200-1" class="input-field"></div>
+                </div>
+                <div class="input-box"><label>Nombre Conductor</label><input type="text" id="c_nombre" value="JUAN PABLO RODRIGUEZ" class="input-field"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>DNI / Licencia</label><input type="text" id="c_dni" value="28.445.102" class="input-field"></div>
+                    <div class="input-box"><label>Cargo Responsable</label><input type="text" id="c_cargo" value="Chofer Larga Distancia" class="input-field"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-carga" class="app-section">
+            <h2 class="text-2xl font-black mb-6">Detalle de Operación</h2>
+            
+            <div class="glass-group">
+                <p class="text-[10px] font-black text-green-500 mb-4 tracking-widest uppercase italic">03. Remitente y Lugar de Carga</p>
+                <input type="text" id="r_nombre" value="VINEDOS DEL SOL S.A." class="input-field mb-2" placeholder="Nombre/Razón Social">
+                <input type="text" id="r_cuit" value="30-71452290-9" class="input-field mb-2" placeholder="CUIT">
+                <input type="text" id="r_dir" value="Ruta Nac. 7 Km 10 - Luján de Cuyo, Mendoza" class="input-field mb-2" placeholder="Dirección Completa">
+                <div class="grid grid-cols-1 gap-4 mt-2">
+                    <div class="input-box"><label>Fecha/Hora Carga</label><input type="datetime-local" id="r_hora" class="input-field"></div>
+                </div>
+            </div>
+
+            <div class="glass-group">
+                <p class="text-[10px] font-black text-green-500 mb-4 tracking-widest uppercase italic">04. Destinatario y Entrega</p>
+                <input type="text" id="d_nombre" value="LOGISTICA CENTRAL PUERTO" class="input-field mb-2" placeholder="Nombre/Razón Social">
+                <input type="text" id="d_cuit" value="30-55882210-2" class="input-field mb-2" placeholder="CUIT">
+                <input type="text" id="d_dir" value="Av. Comodoro Py 1900 - Retiro, Buenos Aires" class="input-field mb-2" placeholder="Dirección Completa">
+                <div class="grid grid-cols-1 gap-4 mt-2">
+                    <div class="input-box"><label>Fecha Estimada Entrega</label><input type="datetime-local" id="d_hora" class="input-field"></div>
+                </div>
+            </div>
+
+            <div class="glass-group">
+                <p class="text-[10px] font-black text-green-500 mb-4 tracking-widest uppercase italic">05. Pesos y Mercancía</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="input-box"><label>Neto (Kg)</label><input type="number" id="p_neto" value="26500" class="input-field"></div>
+                    <div class="input-box"><label>Tara (Kg)</label><input type="number" id="p_tara" value="14200" class="input-field"></div>
+                    <div class="input-box"><label>Bruto (Kg)</label><input type="number" id="p_bruto" value="40700" class="input-field"></div>
+                </div>
+                <div class="input-box"><label>Descripción</label><textarea id="desc_carga" class="input-field h-20">32 PALLETS DE VINO TINTO (FRÁGIL)</textarea></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="input-box"><label>Bultos</label><input type="number" id="bultos" value="32" class="input-field"></div>
+                    <div class="input-box"><label>Precintos</label><input type="text" id="precintos" value="Z-8829" class="input-field"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="sec-print" class="app-section">
+            <div class="py-12 text-center">
+                <div class="w-24 h-24 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i data-lucide="file-check-2" class="text-white w-10 h-10"></i>
+                </div>
+                <button onclick="generarManifiestoReal()" class="btn-print active:scale-95 transition-all">
+                    <i data-lucide="printer"></i> IMPRIMIR MANIFIESTO 2026
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="nav-bar">
+        <button onclick="nav('general', this)" class="nav-item active text-green-500"><i data-lucide="info"></i></button>
+        <button onclick="nav('carga', this)" class="nav-item text-white/30"><i data-lucide="package-search"></i></button>
+        <button onclick="nav('print', this)" class="nav-item text-white/30"><i data-lucide="printer"></i></button>
+    </nav>
+
+    <script>
+        document.getElementById('m_fecha').valueAsDate = new Date();
+        lucide.createIcons();
+
+        function nav(id, btn) {
+            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById('sec-' + id).classList.add('active-section');
+            document.querySelectorAll('.nav-bar button').forEach(b => b.classList.replace('text-green-500', 'text-white/30'));
+            btn.classList.replace('text-white/30', 'text-green-500');
+            lucide.createIcons();
+        }
+
+        function generarManifiestoReal() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const margin = 15;
+            const pageWidth = 210;
+
+            // ENCABEZADO
+            doc.setFillColor(245, 245, 245);
+            doc.rect(margin, 10, pageWidth - (margin*2), 35, 'F');
+            doc.setTextColor(0);
+            doc.setFontSize(14); doc.setFont("helvetica", "bold");
+            doc.text("MANIFIESTO DE CARGA TERRESTRE NACIONAL", margin + 5, 22);
+            doc.setFontSize(8); doc.setFont("helvetica", "normal");
+            doc.text(`NRO CONTROL: ${document.getElementById('m_nro').value} | FECHA: ${document.getElementById('m_fecha').value}`, margin + 5, 28);
+            doc.text(`TIPO: ${document.getElementById('m_tipo').value} | MODALIDAD: Transporte terrestre nacional`, margin + 5, 33);
+            doc.text(`REF: OT# ${document.getElementById('m_ot').value} | REMITO: ${document.getElementById('m_remito').value}`, margin + 5, 38);
+
+            // EMPRESA TRANSPORTADORA
+            doc.setFontSize(10); doc.setFont(undefined, 'bold');
+            doc.text("LOGÍSTICA M. CARRASQUILLA S.A.", 195, 22, {align: 'right'});
+            doc.setFontSize(7); doc.text("CUIT: 30-71452290-9 | Parque Industrial Luján, Mza", 195, 27, {align: 'right'});
+
+            // TABLA 1: VEHÍCULO Y CONDUCTOR
+            doc.autoTable({
+                startY: 50, margin: { left: margin },
+                head: [['IDENTIFICACIÓN DEL EQUIPO Y PERSONAL']],
+                body: [
+                    [`DOMINIO TRACTOR: ${document.getElementById('v_tractor').value} | DOMINIO SEMI: ${document.getElementById('v_semi').value} | MARCA: ${document.getElementById('v_marca').value}`],
+                    [`PÓLIZA SEGURO: ${document.getElementById('v_poliza').value}`],
+                    [`CONDUCTOR: ${document.getElementById('c_nombre').value} | DNI: ${document.getElementById('c_dni').value} | CARGO: ${document.getElementById('c_cargo').value}`]
+                ],
+                theme: 'grid', headStyles: { fillColor: 40 }, styles: { fontSize: 8 }
+            });
+
+            // TABLA 2: REMITENTE Y DESTINATARIO
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 5, margin: { left: margin },
+                head: [['REMITENTE / LUGAR DE CARGA', 'DESTINATARIO / LUGAR DE DESCARGA']],
+                body: [[
+                    `${document.getElementById('r_nombre').value}\nCUIT: ${document.getElementById('r_cuit').value}\n${document.getElementById('r_dir').value}\nCARGA: ${document.getElementById('r_hora').value}`,
+                    `${document.getElementById('d_nombre').value}\nCUIT: ${document.getElementById('d_cuit').value}\n${document.getElementById('d_dir').value}\nESTIMADO: ${document.getElementById('d_hora').value}`
+                ]],
+                theme: 'grid', headStyles: { fillColor: 80 }, styles: { fontSize: 7 }
+            });
+
+            // TABLA 3: PESOS Y CARGA
+            doc.autoTable({
+                startY: doc.lastAutoTable.finalY + 5, margin: { left: margin },
+                head: [['DESCRIPCIÓN DE MERCANCÍA', 'PESO NETO', 'TARA', 'BRUTO TOTAL']],
+                body: [[
+                    `${document.getElementById('desc_carga').value}\nBULTOS: ${document.getElementById('bultos').value} | PRECINTOS: ${document.getElementById('precintos').value}`,
+                    `${document.getElementById('p_neto').value} Kg`,
+                    `${document.getElementById('p_tara').value} Kg`,
+                    `${document.getElementById('p_bruto').value} Kg`
+                ]],
+                theme: 'grid', headStyles: { fillColor: 40 }, styles: { fontSize: 8 }
+            });
+
+            // FIRMAS
+            const fY = doc.lastAutoTable.finalY + 35;
+            doc.line(margin, fY, margin + 60, fY);
+            doc.setFontSize(7); doc.text("FIRMA CONDUCTOR", margin, fY + 5);
+            doc.text("ACLARACIÓN:", margin, fY + 10);
+            
+            doc.line(135, fY, 195, fY);
+            doc.text("FIRMA RESPONSABLE EMPRESA", 135, fY + 5);
+            doc.text("CARGO / DNI:", 135, fY + 10);
+
+            // LEGAL
+            doc.setTextColor(100);
+            doc.text("Documento oficial para fiscalización de CNRT y Seguridad Vial. Argentina 2026.", pageWidth/2, 285, {align: 'center'});
+
+            doc.save(`MANIFIESTO_${document.getElementById('m_nro').value}.pdf`);
+        }
+    </script>
+</body>
+</html>

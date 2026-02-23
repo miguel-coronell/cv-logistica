@@ -4,335 +4,496 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Servicios | Miguel Carrasquilla</title>
-  <meta name="description" content="Detalles del servicio de Gestión de Inventarios y Logística">
+  <title>Gestión de Inventarios | Miguel Carrasquilla</title>
 
-  <link href="assets/img/icono-pagina.ico" rel="icon">
-  <link href="assets/img/icono-pagina.ico" rel="apple-touch-icon">
-
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --card-bg: #1a1a1a;
+      --neon-white: #ffffff;
+      --text-gray: #a1a1a1;
+      --accent-glow: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--neon-white);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    #hero-canvas {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* --- LAYOUT REFINADO --- */
+    .main { margin-left: 300px; } 
+    @media (max-width: 1199px) { .main { margin-left: 0; } }
+
+    /* --- COMPONENTES DE CONTENIDO --- */
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 25px;
+      padding: 40px;
+      margin-bottom: 30px;
+      transition: 0.4s;
+    }
+    .glass-card:hover { border-color: var(--neon-white); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
+
+    .neon-text { color: var(--neon-white); text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+
+    .kpi-box {
+      background: rgba(255,255,255,0.02);
+      border-left: 2px solid var(--neon-white);
+      padding: 25px;
+      border-radius: 0 15px 15px 0;
+      height: 100%;
+    }
+
+    .kpi-number { font-size: 2.5rem; font-weight: 800; display: block; }
+
+    /* Estilos de Tabla Pro */
+    .table-dark-custom {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+    .table-dark-custom th { color: var(--text-gray); font-weight: 500; padding: 15px; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+    .table-dark-custom td { background: rgba(255,255,255,0.03); padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .table-dark-custom tr td:first-child { border-radius: 15px 0 0 15px; }
+    .table-dark-custom tr td:last-child { border-radius: 0 15px 15px 0; }
+
+    /* Acordeón Estilo Miguel */
+    .accordion-button { background: transparent !important; color: #fff !important; box-shadow: none !important; padding: 25px; }
+    .accordion-button:not(.collapsed) { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .accordion-item { background: rgba(255,255,255,0.02) !important; border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 15px !important; overflow: hidden; margin-bottom: 15px; }
+
+    .btn-neon-fill {
+      background: #f0f0f0; color: #000; border-radius: 50px;
+      padding: 18px 45px; font-weight: 800; border: none; transition: 0.3s;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .btn-neon-fill:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+  </style>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
 </head>
 
 <body class="service-details-page">
 
+  <canvas id="hero-canvas"></canvas>
+
   <header id="header" class="header dark-background d-flex flex-column justify-content-center">
     <i class="header-toggle d-xl-none bi bi-list"></i>
-
     <div class="header-container d-flex flex-column align-items-start">
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="index.html#hero" class="active"><i class="bi bi-house navicon"></i>Inicio</a></li>
+          <li><a href="index.html#hero"><i class="bi bi-house navicon"></i>Inicio</a></li>
           <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
           <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i> Trayectoria</a></li>
-          <li><a href="index.html#services"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
+          <li><a href="index.html#services" class="active"><i class="bi bi-hdd-stack navicon"></i> Servicios</a></li>
           <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Descargas</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">CV Completo (PDF)</a></li>
-              <li><a href="#">Certificados Académicos</a></li>
               <li><a href="#">Plantillas Excel</a></li>
-               <!-- <li class="dropdown"><a href="#"><span>Licencia</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a> -->
-                <ul>
-                  <li><a href="#">Certificados Académicos</a></li>
-                </ul>
-              </li>
             </ul>
           </li>
           <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contacto</a></li>
         </ul>
       </nav>
-
-       <div class="social-links text-center">
+      <div class="social-links text-center">
         <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
         <a href="https://www.instagram.com/miguel.coronell" class="instagram"><i class="bi bi-instagram"></i></a>
         <a href="https://www.linkedin.com/in/miguelcoronell/" class="linkedin"><i class="bi bi-linkedin"></i></a>
         <a href="https://github.com/miguel-coronell" class="github" target="_blank"><i class="bi bi-github"></i></a>
       </div>
-
     </div>
   </header>
 
   <main class="main">
 
-    <div class="page-title dark-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Gestión de Inventarios</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Inicio</a></li>
-            <li class="current">Gestión de Inventarios</li>
-          </ol>
-        </nav>
+    <div class="container py-5 mt-5">
+      
+      <div class="row align-items-center mb-5" data-aos="fade-up">
+        <div class="col-lg-12">
+          <span class="text-secondary fw-bold" style="letter-spacing: 4px; font-size: 0.8rem;">INVENTORY ARCHITECTURE</span>
+          <h1 class="display-2 fw-bold neon-text mt-2">Gestión de Inventarios <br>& Inteligencia de Stock</h1>
+          <p class="fs-4 text-secondary mt-3 col-lg-9">Control absoluto del capital inmovilizado. Transformo su bodega en un centro de flujo constante mediante algoritmos de reposición y auditoría técnica.</p>
+        </div>
       </div>
-    </div>
 
-    <section id="service-details" class="service-details section">
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row gy-4">
+      <div class="row g-4 mb-5" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-3 col-md-6">
+          <div class="kpi-box">
+            <span class="kpi-number text-white">99.8%</span>
+            <span class="small text-secondary fw-bold">ERI (Exactitud)</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="kpi-box">
+            <span class="kpi-number text-white">-25%</span>
+            <span class="small text-secondary fw-bold">Capital Liberado</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="kpi-box">
+            <span class="kpi-number text-white">100%</span>
+            <span class="small text-secondary fw-bold">Trazabilidad SKU</span>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <div class="kpi-box">
+            <span class="kpi-number text-white">0</span>
+            <span class="small text-secondary fw-bold">Quiebres de Stock</span>
+          </div>
+        </div>
+      </div>
 
-          <div class="col-lg-8">
-            <div class="service-details-slider swiper init-swiper">
-              <script type="application/json" class="swiper-config">
-                {
-                  "loop": true,
-                  "speed": 600,
-                  "autoplay": { "delay": 5000 },
-                  "slidesPerView": 1,
-                  "pagination": { "el": ".swiper-pagination", "type": "bullets", "clickable": true }
-                }
-              </script>
-              <div class="swiper-wrapper align-items-center">
-                <div class="swiper-slide">
-                  <img src="assets/img/services/services-1.webp" alt="Almacén de logística" class="img-fluid" loading="lazy">
-                </div>
-                <div class="swiper-slide">
-                  <img src="assets/img/services/services-2.webp" alt="Control de stock" class="img-fluid" loading="lazy">
-                </div>
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-
-            <div class="content mt-5">
-              <h3>Gestión de Inventarios y Control de Stock</h3>
-              <p>
-                Como especialista en logística con experiencia en entornos de alta exigencia, como el Puerto de Cartagena, 
-                mi enfoque se centra en garantizar la precisión total de las existencias. No se trata solo de contar productos,
-                 sino de asegurar que la información digital 
-                coincida exactamente con la realidad física para evitar quiebres de stock y pérdidas financieras.
-              </p>
-              <h3>Descripción del Servicio:</h3>
-              <p>
-                Implemento sistemas de control rigurosos que abarcan desde la recepción de la mercancía hasta 
-                su despacho final. Mi metodología incluye auditorías preventivas, control de mermas y la organización
-                 estratégica del almacén (Layout) para reducir los tiempos de búsqueda y movimiento de materiales.
-              </p>
-
-              <div class="features mt-4">
-                <div class="row gy-4">
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Análisis de Rotación</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Prevención de Pérdidas</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Auditorías Cíclicas</h4>
-                    </div>
-                  </div>
-                  <div class="col-md-6" data-aos="fade-up" data-aos-delay="400">
-                    <div class="feature-box d-flex align-items-center">
-                      <i class="bi bi-check"></i>
-                      <h4>Exactitud de Inventario</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p class="mt-4">
-                Mi experiencia en operativa portuaria me ha enseñado que el tiempo es el recurso más 
-                valioso en logística. Por ello, diseño procesos que permiten una trazabilidad completa de cada unidad,
-                 asegurando que el flujo de información sea tan ágil como el flujo de la mercancía.
-              </p>
+      <div class="row gy-5">
+        <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+          
+          <div class="glass-card mb-5">
+            <h3 class="mb-4 text-white">Clasificación ABC Dinámica</h3>
+            <p class="text-secondary mb-5">Implemento la metodología de Pareto para segmentar su inventario según su impacto financiero y frecuencia de rotación. No todos los productos se gestionan igual; optimizamos el esfuerzo donde está el dinero.</p>
+            
+            <div class="table-responsive">
+              <table class="table-dark-custom">
+                <thead>
+                  <tr><th>Categoría</th><th>Inversión</th><th>Rotación</th><th>Acción</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="badge border border-white">Clase A</span></td>
+                    <td>80% del valor</td>
+                    <td>Alta</td>
+                    <td>Conteos diarios / JIT</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge border border-secondary text-secondary">Clase B</span></td>
+                    <td>15% del valor</td>
+                    <td>Media</td>
+                    <td>Control quincenal</td>
+                  </tr>
+                  <tr>
+                    <td><span class="badge border border-secondary text-secondary">Clase C</span></td>
+                    <td>5% del valor</td>
+                    <td>Baja</td>
+                    <td>Stock de seguridad</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div class="col-lg-4">
-
-
-<div class="service-info" style="background: transparent; border: none; padding: 0;">
-  <h4 class="mb-4" style="color: white; font-weight: 700; border-bottom: 2px solid #333; padding-bottom: 10px;">Información del Perfil</h4>
-
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-person-badge"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Especialista</h5>
-      <p>Miguel Carrasquilla</p>
-    </div>
-  </div>
-  
-  
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-geo-alt"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Ubicación</h5>
-      <p>Mendoza, Argentina</p>
-    </div>
-  </div>
-
-  
-
-<div class="info-item-static">
-  <div class="icon-simple">
-    <i class="bi bi-star"></i>
-  </div>
-  <div class="divider-simple"></div>
-  <div class="content">
-    <h5>Experiencia Destacada</h5>
-    <p>Logística Portuaria (Cartagena, CO)</p>
-  </div>
+          <div class="row mb-5">
+            <div class="col-md-12">
+              <h4 class="mb-4">Ingeniería de Reposición</h4>
+              <p class="text-secondary">Utilizo modelos matemáticos para determinar el momento exacto de compra, evitando el exceso de stock y el desabastecimiento:</p>
+              <div class="p-4 rounded-4 my-4 text-center" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1);">
+                <span class="text-secondary small d-block mb-2">CÁLCULO DE STOCK DE SEGURIDAD (SS)</span>
+                <div class="py-3">
+  <p style="font-size: 1.5rem; color: #fff;">
+    $$SS = Z \cdot \sigma_d \cdot \sqrt{L}$$
+  </p>
 </div>
-<div class="info-item-static">
-  <div class="icon-simple">
-    <i class="bi bi-calendar-check"></i>
-  </div>
-  <div class="divider-simple"></div>
-  <div class="content">
-    <h5>Disponibilidad</h5>
-    <p>Consultoría y Gestión Operativa</p>
-  </div>
-</div>
+              </div>
+            </div>
+          </div>
 
-  <div class="info-item-static">
-    <div class="icon-simple">
-      <i class="bi bi-whatsapp"></i>
-    </div>
-    <div class="divider-simple"></div>
-    <div class="content">
-      <h5>Contacto</h5>
-      <p>+54 9 261 386 3563</p>
-    </div>
-  </div>
-</div>
+          <h4 class="mb-4">Consultoría & Resolución de Dudas</h4>
+          <div class="accordion mb-5" id="inventoryFAQ">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                  ¿Por qué mi sistema dice una cosa y el físico otra?
+                </button>
+              </h2>
+              <div id="f1" class="accordion-collapse collapse" data-bs-parent="#inventoryFAQ">
+                <div class="accordion-body">
+                  Esto se debe a fallas en la tarja de recepción o mermas no registradas. Mi solución es implementar <strong>Conteos Cíclicos</strong>, eliminando la necesidad de inventarios anuales traumáticos.
+                </div>
+              </div>
+            </div>
 
-<!-- secion de servicios otros-->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                  ¿Cómo gestiono productos con fecha de vencimiento?
+                </button>
+              </h2>
+              <div id="f2" class="accordion-collapse collapse" data-bs-parent="#inventoryFAQ">
+                <div class="accordion-body">
+                  Aplicamos protocolos <strong>FEFO (First Expired, First Out)</strong>. Diseñamos el layout de la bodega para que lo próximo a vencer sea lo primero disponible para picking.
+                </div>
+              </div>
+            </div>
 
-<div class="related-services mt-5">
-  <h4 class="mb-4" style="color: white; font-weight: 700; border-bottom: 2px solid #333; padding-bottom: 10px;">Otros Servicios</h4>
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                  ¿Es posible reducir el inventario sin perder ventas?
+                </button>
+              </h2>
+              <div id="f3" class="accordion-collapse collapse" data-bs-parent="#inventoryFAQ">
+                <div class="accordion-body">
+                  Sí. Mediante el análisis del <strong>Lead Time</strong> de proveedores y el ajuste del Punto de Reorden, liberamos flujo de caja manteniendo el nivel de servicio deseado.
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-box-seam" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Gestion de Invetarios</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;"> Control de stock y auditoría de mermas.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-truck" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Recepcion y Despacho</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Verificación y flujo de mercancías.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-house-gear" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Gestión de Bodegas</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Optimización y control de espacios.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi bi-tsunami" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Operativa Portuaria</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Gestión de contenedores y tarja.</p>
-    </div>
-  </div>
-
-  <div class="service-item-horizontal mb-3" style="background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 10px; display: flex; align-items: center; position: relative; transition: 0.3s;">
-    
-    <div class="icon" style="min-width: 45px; height: 45px; background: #333; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
-      <i class="bi-diagram-3" style="color: white; font-size: 20px;"></i>
-    </div>
-
-    <div style="width: 1px; height: 40px; background: #444; margin: 0 15px;"></div>
-
-    <div class="content">
-      <h5 style="margin: 0; font-size: 1rem; font-weight: 700;">
-        <a href="#" class="stretched-link" style="color: white; text-decoration: none;">Optimizacion de Procesos</a>
-      </h5>
-      <p style="margin: 0; color: #888; font-size: 12px; line-height: 1.2;">Gestión de contenedores y tarja.</p>
-    </div>
-  </div>
-
-</div>
+          <div class="glass-card mb-5" style="border-style: dashed;">
+            <h5 class="mb-4"><i class="bi bi-book me-2"></i> Glosario Táctico</h5>
+            <div class="row g-3">
+              <div class="col-md-6 small text-secondary"><strong>SKU:</strong> Unidad mínima de inventario para control individual.</div>
+              <div class="col-md-6 small text-secondary"><strong>Kardex:</strong> Registro histórico de movimientos de stock.</div>
+              <div class="col-md-6 small text-secondary"><strong>Stock Muerto:</strong> Productos sin rotación por más de 120 días.</div>
+              <div class="col-md-6 small text-secondary"><strong>Muda:</strong> Desperdicio de espacio o tiempo en la bodega.</div>
+            </div>
           </div>
 
         </div>
-      </div>
-    </section>
 
-  </main>
+        <div class="col-lg-4" data-aos="fade-left">
+          <div class="glass-card sticky-top" style="top: 20px;">
+            <h5 class="mb-4 fw-bold">Estrategia de Implementación</h5>
+            
+            <div class="mb-4">
+              <small class="text-secondary d-block">MÉTODO</small>
+              <span class="fw-bold">Lean Inventory & Six Sigma</span>
+            </div>
 
-  <footer id="footer" class="footer position-relative">
+            <div class="mb-4">
+              <small class="text-secondary d-block">HERRAMIENTAS</small>
+              <span class="fw-bold">WMS, ERP SAP/Oracle, Excel BI</span>
+            </div>
 
-    <div class="container">
-      <div class="copyright text-center ">
-        <p>© <span>Copyright 2026</span> <strong class="px-1 sitename">Miguel Carrasquilla |</strong> <span>Todos los derechos reservados</span></p>
-      </div>
-      <div class="credits">
+            <div class="mb-4">
+              <small class="text-secondary d-block">ESPECIALIDADES</small>
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <span class="badge border border-secondary text-secondary">Slotting</span>
+                <span class="badge border border-secondary text-secondary">Auditoría Ciega</span>
+                <span class="badge border border-secondary text-secondary">FEFO / FIFO</span>
+              </div>
+            </div>
 
-        Diseñado por <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">Herramientas de desarrollo</a>
+            <hr class="border-secondary opacity-25">
+
+            <p class="small text-secondary mb-4 italic">"El inventario es dinero durmiendo. Mi trabajo es despertarlo y ponerlo a circular."</p>
+
+            <a href="https://wa.me/5492613863563" class="btn-neon-fill w-100 justify-content-center">
+              Auditar mi Stock <i class="bi bi-whatsapp"></i>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
 
-  </footer>
+<div class="glass-card mb-5 border-white" data-aos="zoom-in">
+            <div class="row">
+              <div class="col-lg-12 mb-4">
+                <span class="badge bg-light text-dark mb-2">HERRAMIENTA ACTIVA</span>
+                <h3 class="text-white">Calculadora de Stock de Seguridad & Reorden</h3>
+                <p class="small text-secondary">Utilice esta herramienta para predecir cuándo debe realizar su próxima compra según su demanda actual.</p>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="small text-secondary">Demanda Diaria Promedio</label>
+                <input type="number" id="demandaD" class="form-control bg-transparent text-white border-secondary" placeholder="Ej: 50">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="small text-secondary">Lead Time (Días de entrega)</label>
+                <input type="number" id="leadT" class="form-control bg-transparent text-white border-secondary" placeholder="Ej: 15">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="small text-secondary">Nivel de Servicio (%)</label>
+                <select id="serviceL" class="form-control bg-transparent text-white border-secondary">
+                  <option value="1.65">95% (Estándar)</option>
+                  <option value="1.96">97.5% (Crítico)</option>
+                  <option value="2.33">99% (Alta Disponibilidad)</option>
+                </select>
+              </div>
+              <div class="col-12 mt-3">
+                <button onclick="calcularLogistica()" class="btn-neon-fill w-100">PROCESAR ANÁLISIS TÁCTICO</button>
+              </div>
+              
+              <div id="resultadoApp" class="col-12 mt-4 d-none">
+                <div class="p-4 rounded-4" style="background: rgba(255,255,255,0.05);">
+                  <div class="row text-center">
+                    <div class="col-md-6">
+                      <span class="d-block small text-secondary">STOCK DE SEGURIDAD RECOMENDADO</span>
+                      <h2 id="resSS" class="fw-bold text-white mt-2">--</h2>
+                    </div>
+                    <div class="col-md-6 border-start border-secondary">
+                      <span class="d-block small text-secondary">PUNTO DE REORDEN (ROP)</span>
+                      <h2 id="resROP" class="fw-bold text-white mt-2">--</h2>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+          <h4 class="mb-4">Monitoreo de Salud de Inventario</h4>
+          <div class="row g-4 mb-5">
+            <div class="col-md-6">
+              <div class="glass-card p-4">
+                <h6 class="small text-uppercase fw-bold mb-3">Distribución de Almacenaje</h6>
+                <div class="d-flex justify-content-between mb-2">
+                  <span class="small">Capacidad Utilizada</span>
+                  <span class="small">82%</span>
+                </div>
+                <div class="progress mb-4" style="height: 6px; background: #333;">
+                  <div class="progress-bar bg-white" style="width: 82%"></div>
+                </div>
+                <p class="small text-secondary">Alerta: La saturación por encima del 85% degrada la eficiencia del picking en un 20%.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="glass-card p-4">
+                <h6 class="small text-uppercase fw-bold mb-3">ERI Histórico (Exactitud)</h6>
+                <div class="d-flex align-items-end gap-2" style="height: 60px;">
+                  <div class="bg-secondary opacity-25" style="width: 20%; height: 60%;"></div>
+                  <div class="bg-secondary opacity-50" style="width: 20%; height: 75%;"></div>
+                  <div class="bg-secondary opacity-75" style="width: 20%; height: 90%;"></div>
+                  <div class="bg-white" style="width: 20%; height: 98%;"></div>
+                  <div class="bg-white shadow-lg" style="width: 20%; height: 100%;"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                  <span class="text-secondary" style="font-size: 10px;">MES 1</span>
+                  <span class="text-white fw-bold" style="font-size: 10px;">HOY (99.8%)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card mb-5">
+            <h4 class="mb-4">Tecnologías Integradas en mi Gestión</h4>
+            <div class="row text-center g-4">
+              <div class="col-4 col-md-2">
+                <i class="bi bi-microsoft fs-2 d-block mb-2"></i>
+                <span class="small">Power BI</span>
+              </div>
+              <div class="col-4 col-md-2">
+                <i class="bi bi-database-check fs-2 d-block mb-2"></i>
+                <span class="small">WMS Elite</span>
+              </div>
+              <div class="col-4 col-md-2">
+                <i class="bi bi-qr-code-scan fs-2 d-block mb-2"></i>
+                <span class="small">RFID/QR</span>
+              </div>
+              <div class="col-4 col-md-2">
+                <i class="bi bi-cpu fs-2 d-block mb-2"></i>
+                <span class="small">ERP SAP</span>
+              </div>
+              <div class="col-4 col-md-2">
+                <i class="bi bi-bar-chart-line fs-2 d-block mb-2"></i>
+                <span class="small">Tableau</span>
+              </div>
+              <div class="col-4 col-md-2">
+                <i class="bi bi-cloud-check fs-2 d-block mb-2"></i>
+                <span class="small">Cloud Sync</span>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="mb-4">Metodología de Auditoría Ciega</h4>
+          <div class="ps-3 border-start border-secondary">
+            <div class="mb-4 position-relative">
+              <span class="badge bg-white text-dark position-absolute" style="left: -32px; top: 0;">1</span>
+              <h6 class="fw-bold">Generación de Listado Sin Cantidades</h6>
+              <p class="small text-secondary">El auditor recibe ubicaciones y SKUs, pero nunca el stock teórico del sistema para evitar sesgos.</p>
+            </div>
+            <div class="mb-4 position-relative">
+              <span class="badge bg-white text-dark position-absolute" style="left: -32px; top: 0;">2</span>
+              <h6 class="fw-bold">Conteo Físico Doble</h6>
+              <p class="small text-secondary">Validación cruzada por dos operarios distintos para asegurar un margen de error humano del 0%.</p>
+            </div>
+            <div class="mb-4 position-relative">
+              <span class="badge bg-white text-dark position-absolute" style="left: -32px; top: 0;">3</span>
+              <h6 class="fw-bold">Conciliación de Diferencias</h6>
+              <p class="small text-secondary">Análisis de causa raíz sobre cualquier desviación encontrada antes del ajuste contable.</p>
+            </div>
+          </div>
+
+<script>
+  function calcularLogistica() {
+    const demanda = parseFloat(document.getElementById('demandaD').value);
+    const leadTime = parseFloat(document.getElementById('leadT').value);
+    const zScore = parseFloat(document.getElementById('serviceL').value);
+
+    if (demanda > 0 && leadTime > 0) {
+      // Cálculo simplificado de SS: Z * sqrt(LT) * varianza (asumimos varianza controlada de 2 para el ejemplo)
+      const ss = Math.round(zScore * Math.sqrt(leadTime) * 2);
+      const rop = Math.round((demanda * leadTime) + ss);
+
+      document.getElementById('resSS').innerText = ss + " und";
+      document.getElementById('resROP').innerText = rop + " und";
+      document.getElementById('resultadoApp').classList.remove('d-none');
+    } else {
+      alert("Por favor, ingrese valores válidos.");
+    }
+  }
+</script>
+
+
+
+
+  </main>
 
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/js/main.js"></script>
+
+  <script>
+    AOS.init({ duration: 1000, once: true });
+
+    // CANVAS DE FONDO DINÁMICO
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, mouseX = 0, mouseY = 0;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+    resize();
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 0.3;
+      for (let i = 0; i < 25; i++) {
+        ctx.beginPath();
+        let offset = (mouseX - width/2) * (i * 0.005);
+        ctx.moveTo(100 + i * 80 + offset, 0);
+        ctx.lineTo(i * 30 + offset, height);
+        ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
 
 </body>
 </html>
