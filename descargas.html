@@ -72,16 +72,23 @@
     }
 
     /* Footer idéntico pero mejorado */
-    .footer-custom {
-      padding: 40px 0;
-      background: #161616;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      margin-top: 60px;
-    }
+/* --- FOOTER TOTALMENTE TRANSPARENTE Y SIN LÍNEAS --- */
+#footer {
+    background: transparent !important;
+    background-color: transparent !important;
+    border-top: none !important; /* QUITAMOS LA LÍNEA AQUÍ */
+    box-shadow: none !important;
+    padding: 30px 0;
+    margin-top: 0; /* Lo pegamos a la frase */
+    position: relative;
+    z-index: 1;
+}
   </style>
 </head>
 
 <body class="starter-page-page">
+  
+  <canvas id="hero-canvas"></canvas>
 
   <header id="header" class="header dark-background d-flex flex-column justify-content-center">
     <i class="header-toggle d-xl-none bi bi-list"></i>
@@ -111,32 +118,53 @@
 
   <main class="main">
 
-    <div class="page-title dark-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Centro de Descargas</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Inicio</a></li>
-            <li class="current">Descargas</li>
-          </ol>
-        </nav>
-      </div>
+   <div class="page-title dark-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <div>
+      <h1 class="mb-1 text-white">Terminal de Recursos Operativos</h1>
+      <p class="text-secondary mb-0">Accede a herramientas de ingeniería logística y activos profesionales certificados.</p>
     </div>
+    
+    <div class="d-flex gap-2 mt-3 mt-lg-0">
+      <a href="index.html#contact" class="btn-cta-outline">
+        <i class="bi bi-chat-left-dots me-1"></i> Consultar Proyectos
+      </a>
+      <a href="assets/docs/PACK_MIGUEL_CARRASQUILLA.zip" download class="btn-cta-white">
+        <i class="bi bi-file-earmark-zip me-1"></i> Descargar Todo (ZIP)
+      </a>
+    </div>
+  </div>
+</div>
 
     <section id="starter-section" class="starter-section section">
 
-      <div class="container" data-aos="fade-up">
-        
-        <div class="security-banner" data-aos="fade-right">
-          <h3 class="text-white fw-bold"><i class="bi bi-shield-check me-2"></i>Bienvenido al Repositorio Seguro</h3>
-          <p class="text-secondary mb-0">
-            Aquí encontrarás documentación técnica y herramientas exclusivas. Cada archivo ha sido verificado para garantizar una descarga <strong>100% segura y libre de malware</strong>. Optimiza tu gestión logística con recursos de confianza.
-          </p>
-        </div>
+  <div class="container" data-aos="fade-up">
 
+
+<div class="category-header" data-aos="fade-up">
+    <span class="category-pre">EXPLORAR</span>
+    <h3 class="category-title">Categorías de Recursos</h3>
+    <div class="category-line"></div>
+</div>
+
+
+    <ul class="nav nav-pills justify-content-center mb-5" id="pills-tab" role="tablist" data-aos="fade-up">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active btn-tab-neon" id="pills-personal-tab" data-bs-toggle="pill" data-bs-target="#pills-personal" type="button" role="tab">Profesional</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link btn-tab-neon" id="pills-logistica-tab" data-bs-toggle="pill" data-bs-target="#pills-logistica" type="button" role="tab">Logística & Tech</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link btn-tab-neon" id="pills-legal-tab" data-bs-toggle="pill" data-bs-target="#pills-legal" type="button" role="tab">Legal & Habilitaciones</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+
+      <div class="tab-pane fade show active" id="pills-personal" role="tabpanel">
         <div class="row g-4">
-          
-          <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-lg-4 col-md-6">
             <div class="download-card">
               <div class="icon-box-neon"><i class="bi bi-file-earmark-person"></i></div>
               <h4 class="text-white fw-bold">Curriculum Vitae</h4>
@@ -145,85 +173,269 @@
             </div>
           </div>
 
-<!-- lista de tarjetas de docuemntos para descargar-->
 
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
-    <h4 class="text-white fw-bold">Gestión de Stock</h4>
-    <p class="text-secondary small">Plantilla avanzada para cálculo de Punto de Reorden y Stock de Seguridad.</p>
-    <a href="assets/docs/Plantilla_Stock_Carrasquilla.xlsx" download class="btn-animado btn-neon-action">Descargar XLSX</a>
-  </div>
-</div>
-
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-patch-check"></i></div>
-    <h4 class="text-white fw-bold">Certificaciones</h4>
-    <p class="text-secondary small">Compendio de títulos, diplomados y cursos técnicos verificables.</p>
-    <a href="assets/docs/Certificados_Carrasquilla.zip" download class="btn-animado btn-neon-action">Descargar ZIP</a>
-  </div>
-</div>
-
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-journal-text"></i></div>
-    <h4 class="text-white fw-bold">Manual Logi-Load</h4>
-    <p class="text-secondary small">Guía técnica de usuario para el sistema de optimización de carga 3D.</p>
-    <a href="assets/docs/Manual_LogiLoad.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
-  </div>
-</div>
-
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="500">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-bar-chart-line"></i></div>
-    <h4 class="text-white fw-bold">Dashboards KPIs</h4>
-    <p class="text-secondary small">Modelos de indicadores de gestión y rentabilidad operativa para logística.</p>
-    <a href="assets/docs/KPIs_Logistica.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
-  </div>
-</div>
-
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="600">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-shield-check"></i></div>
-    <h4 class="text-white fw-bold">Seguridad Portuaria</h4>
-    <p class="text-secondary small">Guía resumida de normativas vigentes y protocolos de seguridad vial.</p>
-    <a href="assets/docs/Normativas_Seguridad.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
-  </div>
-</div>
-
-
-          <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+          <div class="col-lg-4 col-md-6">
             <div class="download-card">
-              <div class="icon-box-neon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
-              <h4 class="text-white fw-bold">Plantillas Logísticas</h4>
-              <p class="text-secondary small">Calculadoras de Punto de Reorden y Stock de Seguridad en formato Excel.</p>
-              <a href="#" class="btn-animado btn-neon-action">Descargar Pack</a>
+              <div class="icon-box-neon"><i class="bi bi-patch-check"></i></div>
+              <h4 class="text-white fw-bold">Certificaciones</h4>
+              <p class="text-secondary small">Compendio de títulos, diplomados y cursos técnicos verificables.</p>
+              <a href="assets/docs/Certificados_Carrasquilla.zip" download class="btn-animado btn-neon-action">Descargar ZIP</a>
             </div>
           </div>
-
-          <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="700">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-card-checklist"></i></div>
-    <h4 class="text-white fw-bold">Licencias de Conducir</h4>
-    <p class="text-secondary small">Copia digital de licencias nacionales e internacionales habilitadas para transporte pesado.</p>
-    <a href="assets/docs/Licencias_Carrasquilla.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
-  </div>
-</div>
-
-<div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="800">
-  <div class="download-card">
-    <div class="icon-box-neon"><i class="bi bi-person-badge"></i></div>
-    <h4 class="text-white fw-bold">Habilitaciones</h4>
-    <p class="text-secondary small">Credenciales de acceso a terminales portuarias y permisos de seguridad vigentes.</p>
-    <a href="assets/docs/Habilitaciones_Acceso.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
-  </div>
-</div>
-
         </div>
       </div>
-<!--  fin lista de tarjetas de docuemntos para descargar-->
-    </section>
+
+      <div class="tab-pane fade" id="pills-logistica" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
+              <h4 class="text-white fw-bold">Gestión de Stock</h4>
+              <p class="text-secondary small">Plantilla avanzada para cálculo de Punto de Reorden y Stock de Seguridad.</p>
+              <a href="assets/docs/Plantilla_Stock_Carrasquilla.xlsx" download class="btn-animado btn-neon-action">Descargar XLSX</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-journal-text"></i></div>
+              <h4 class="text-white fw-bold">Manual Logi-Load</h4>
+              <p class="text-secondary small">Guía técnica de usuario para el sistema de optimización de carga 3D.</p>
+              <a href="assets/docs/Manual_LogiLoad.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-bar-chart-line"></i></div>
+              <h4 class="text-white fw-bold">Dashboards KPIs</h4>
+              <p class="text-secondary small">Modelos de indicadores de gestión y rentabilidad operativa para logística.</p>
+              <a href="assets/docs/KPIs_Logistica.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="pills-legal" role="tabpanel">
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-shield-check"></i></div>
+              <h4 class="text-white fw-bold">Seguridad Portuaria</h4>
+              <p class="text-secondary small">Guía resumida de normativas vigentes y protocolos de seguridad vial.</p>
+              <a href="assets/docs/Normativas_Seguridad.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-card-checklist"></i></div>
+              <h4 class="text-white fw-bold">Licencias</h4>
+              <p class="text-secondary small">Copia digital de licencias nacionales e internacionales habilitadas.</p>
+              <a href="assets/docs/Licencias_Carrasquilla.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="download-card">
+              <div class="icon-box-neon"><i class="bi bi-person-badge"></i></div>
+              <h4 class="text-white fw-bold">Habilitaciones</h4>
+              <p class="text-secondary small">Credenciales de acceso a terminales portuarias y permisos vigentes.</p>
+              <a href="assets/docs/Habilitaciones_Acceso.pdf" download class="btn-animado btn-neon-action">Descargar PDF</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> </div>
+</section>
+
+
+
+<style>
+
+/* --- CONFIGURACIÓN DEL FONDO DINÁMICO --- */
+#hero-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Detrás de todo */
+  opacity: 0.3; /* Un poco más visible que en la otra para que resalte */
+  pointer-events: none;
+}
+
+/* IMPORTANTE: Tu sección "starter-section" debe ser transparente */
+.starter-section {
+  background-color: transparent !important; /* Quitamos el #1f1f1f */
+  background: transparent !important;
+}
+
+.main {
+  background: transparent !important;
+}
+
+/* Ajuste para que las tarjetas resalten sobre las líneas */
+.download-card {
+  background: rgba(35, 35, 35, 0.8) !important; /* Un poco de transparencia */
+  backdrop-filter: blur(10px); /* Efecto cristal */
+}
+
+/* La consola de seguridad también con transparencia */
+.security-badge {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(8px);
+}
+/* --- ESTILO DE TITULO DE CATEGORÍAS --- */
+.category-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.category-pre {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #666;
+    font-weight: 700;
+}
+
+.category-title {
+    color: #fff;
+    font-weight: 700;
+    margin-top: 5px;
+}
+
+.category-line {
+    width: 40px;
+    height: 3px;
+    background: #fff;
+    margin: 15px auto;
+    border-radius: 10px;
+}
+
+/* Ajuste móvil */
+@media (max-width: 991px) {
+    .security-badge {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 20px;
+        gap: 15px;
+    }
+    .badge-nodes {
+        border-left: none;
+        padding-left: 0;
+        gap: 15px;
+    }
+}
+
+
+/* Nodos de Confianza */
+.trust-node {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.node-icon {
+    font-size: 24px;
+    color: #555; /* Color base apagado */
+    transition: all 0.4s ease;
+}
+
+.node-text strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+}
+
+.node-text span {
+    color: #888;
+    font-size: 12px;
+}
+
+/* EFECTO HOVER: Aquí es donde cambia el icono */
+.trust-node:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-5px);
+}
+
+.trust-node:hover .node-icon {
+    color: #ffffff;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 10px #ffffff);
+}
+
+/* Animación del punto */
+@keyframes pulse-green {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    70% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+
+/* Botones de Acción en el Header */
+.btn-cta-white {
+  background: #ffffff;
+  color: #1a1a1a !important;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+.btn-cta-white:hover {
+  background: #cccccc;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+.btn-cta-outline {
+  background: transparent;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  text-decoration: none;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+}
+.btn-cta-outline:hover {
+  border-color: #ffffff;
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+
+
+  .btn-tab-neon {
+    color: #aaaaaa !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    margin: 0 10px;
+    border-radius: 30px !important;
+    transition: all 0.3s ease;
+  }
+  .nav-pills .nav-link.active {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+  }
+  .tab-pane.fade {
+    transition: opacity 0.4s linear, transform 0.4s ease-out;
+    transform: translateY(20px);
+  }
+  .tab-pane.fade.show {
+    transform: translateY(0);
+  }
+
+
+</style>
 
   </main>
 
@@ -254,5 +466,42 @@
     AOS.init({ duration: 1000, once: true });
   </script>
 
+<script>
+    // MOTOR DEL CANVAS DE LÍNEAS
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, mouseX = 0, mouseY = 0;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { 
+        mouseX = e.clientX; 
+        mouseY = e.clientY; 
+    });
+    
+    resize();
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'; // Color de las líneas
+      ctx.lineWidth = 0.3;
+      
+      // Dibujamos 25 líneas que reaccionan al mouse
+      for (let i = 0; i < 25; i++) {
+        ctx.beginPath();
+        // El offset crea el efecto de perspectiva
+        let offset = (mouseX - width/2) * (i * 0.005);
+        ctx.moveTo(100 + i * 80 + offset, 0); // Ajusté el 60 a 80 para cubrir más pantalla
+        ctx.lineTo(i * 30 + offset, height);
+        ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+</script>
 </body>
 </html>
