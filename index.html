@@ -1125,8 +1125,379 @@ Formación en gestión naviera y portuaria. Orientado a resultados, con capacida
 }
 </style>
 
-
 <!-- /Fin de Sección de Herramientas -->
+
+<!-- /preguntas frecuentes -->
+
+<section id="logistics-dashboard" class="section light-background">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>CENTRO DE CONTROL OPERATIVO</h2>
+    <p>Análisis técnico avanzado y visión estratégica sobre gestión logística global.</p>
+  </div>
+
+  <div class="container" data-aos="fade-up">
+    <div class="dashboard-wrapper">
+      
+      <div class="dashboard-sidebar">
+        <div class="dashboard-tabs">
+          <button onclick="updateCategory('inventario', this)" class="dash-tab active">
+            <i class="bi bi-box-seam"></i> Inventario
+          </button>
+          <button onclick="updateCategory('transporte', this)" class="dash-tab">
+            <i class="bi bi-truck"></i> Transporte
+          </button>
+          <button onclick="updateCategory('estrategia', this)" class="dash-tab">
+            <i class="bi bi-diagram-3"></i> Estrategia
+          </button>
+        </div>
+        <div id="question-list" class="question-list">
+          </div>
+      </div>
+
+      <div class="dashboard-main">
+        <div class="monitor-screen">
+          <div class="monitor-header">
+            <div class="system-status">
+              <span class="status-dot"></span>
+              <span id="system-msg">SISTEMA DE ANÁLISIS ACTIVO</span>
+            </div>
+            <div class="tech-info">LOGISTICS_EXPERT_V3.0</div>
+          </div>
+
+          <div class="monitor-body">
+            <h5 id="display-q">SELECCIONE UN PARÁMETRO PARA EVALUACIÓN TÉCNICA</h5>
+            <div class="flat-divider"></div>
+            
+            <div id="text-container" class="analysis-text">
+              <p id="display-a" class="main-response">Iniciando protocolo de consulta... Seleccione una pregunta para visualizar el análisis profundo y la visión estratégica aplicada.</p>
+              
+              <div id="impact-box" class="impact-box" style="display:none;">
+                <div class="impact-header">
+                  <i class="bi bi-shield-check"></i>
+                  <span>VISIÓN ESTRATÉGICA Y VALOR AGREGADO</span>
+                </div>
+                <p id="display-impact"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="monitor-bottom-bar">
+            <span id="timestamp">READY_STATE</span>
+            <span>MIGUEL_CARRASQUILLA | SENIOR_LOGISTICS</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Variables de Color Oxford Mate */
+  :root {
+    --bg-monitor: #1a1d20;
+    --border-line: #2d3238;
+    --text-silver: #adb5bd;
+    --accent-gray: #6c757d;
+  }
+
+  .dashboard-wrapper {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    border: 1px solid #dee2e6;
+  }
+
+  /* Sidebar Estética */
+  .dashboard-sidebar { 
+    background: #f8f9fa; 
+    border-right: 1px solid #dee2e6; 
+    height: 650px; 
+    display: flex; 
+    flex-direction: column; 
+  }
+
+  .dashboard-tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1px solid #dee2e6; }
+
+  .dash-tab {
+    border: none; background: #f1f3f5; padding: 15px 5px; font-size: 10px; font-weight: 700;
+    text-transform: uppercase; color: #777; cursor: pointer; transition: 0.3s;
+  }
+
+  .dash-tab.active { background: #fff; color: #000; box-shadow: inset 0 -3px 0 #212529; }
+  .dash-tab i { display: block; font-size: 1.3rem; margin-bottom: 4px; }
+
+  .question-list { overflow-y: auto; flex: 1; }
+  .q-item { padding: 15px 20px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 12.5px; color: #555; line-height: 1.4; transition: 0.2s; }
+  .q-item:hover { background: #fff; padding-left: 25px; color: #000; }
+  .q-item.active { background: #fff; border-left: 5px solid #1a1d20; font-weight: 700; color: #000; }
+
+  /* Monitor Mate */
+  .dashboard-main { 
+    background: var(--bg-monitor); 
+    padding: 40px; 
+    color: #fff; 
+    font-family: 'Roboto Mono', monospace; 
+  }
+
+  .monitor-header { display: flex; justify-content: space-between; font-size: 11px; color: #555; margin-bottom: 20px; border-bottom: 1px solid var(--border-line); padding-bottom: 12px; }
+  .status-dot { width: 8px; height: 8px; background: #28a745; border-radius: 50%; display: inline-block; margin-right: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .monitor-body h5 { font-size: 1.1rem; color: #fff; margin-bottom: 20px; font-weight: 500; }
+  .flat-divider { height: 1px; background: var(--border-line); margin-bottom: 25px; }
+
+  .analysis-text { height: 420px; overflow-y: auto; padding-right: 15px; }
+  .analysis-text::-webkit-scrollbar { width: 3px; }
+  .analysis-text::-webkit-scrollbar-thumb { background: #333; }
+
+  .main-response { color: var(--text-silver); font-size: 0.95rem; line-height: 1.8; text-align: justify; margin-bottom: 25px; }
+
+  /* Bloque de Impacto Estratégico */
+  .impact-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+
+  .impact-header { display: flex; align-items: center; gap: 10px; color: #fff; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 12px; }
+  .impact-header i { color: var(--accent-gray); }
+  
+  #display-impact { color: #888; font-size: 0.88rem; line-height: 1.6; font-style: italic; margin: 0; }
+
+  .monitor-bottom-bar { margin-top: 25px; border-top: 1px solid var(--border-line); padding-top: 15px; display: flex; justify-content: space-between; font-size: 10px; color: #444; }
+
+  @media (max-width: 992px) { .dashboard-wrapper { grid-template-columns: 1fr; } .dashboard-sidebar { height: 300px; } }
+</style>
+
+<script>
+const dashboardData = {
+    inventario: [
+        { 
+            q: "¿Cómo garantizas la exactitud del inventario?", 
+            a: "La exactitud de inventario (ERI) se gestiona mediante un ecosistema de control que trasciende el conteo físico. Integro el uso de terminales de radiofrecuencia con el sistema WMS para asegurar que cada movimiento (picking o cross-docking) se registre en tiempo real. Implemento validaciones sistémicas en cada paso del flujo para eliminar el error humano en el origen.", 
+            impact: "Garantiza una fiabilidad superior al 99.5%, optimizando el capital de trabajo y reduciendo costos por rotura de stock." 
+        },
+        { 
+            q: "¿Cómo gestionas productos perecederos (FEFO)?", 
+            a: "Utilizo una disciplina estricta bajo el método FEFO, capturando fechas de vencimiento desde la recepción. El sistema bloquea automáticamente lotes próximos a caducar y configura el picking para priorizar la salida del inventario más antiguo. Este control garantiza la inocuidad y la calidad, minimizando mermas económicas por productos no comercializables.", 
+            impact: "Reduce las mermas hasta en un 40% y asegura el cumplimiento de normativas de calidad y salud pública." 
+        },
+        { 
+            q: "¿Qué haces ante un faltante crítico de stock?", 
+            a: "Realizo un análisis inmediato de trazabilidad en el WMS para descartar errores de ubicación. Si se confirma el faltante, notifico a compras para una reposición urgente y ajusto el inventario sistémico para evitar comprometer pedidos futuros. Analizo la causa raíz (recepción, robo o error de picking) para prevenir su recurrencia.", 
+            impact: "Protege el nivel de servicio al cliente y mantiene la integridad de la base de datos logística." 
+        },
+        { 
+            q: "¿Cómo optimizas el layout del almacén?", 
+            a: "Aplico segmentación ABC basada en la rotación de los SKUs. Ubico los productos 'A' cerca de las zonas de despacho para reducir los tiempos de recorrido. Revalúo periódicamente el diseño para adaptarlo a cambios en la demanda estacional, asegurando que el flujo de materiales sea lineal y sin cuellos de botella.", 
+            impact: "Aumenta la productividad del picking hasta en un 25% al reducir distancias innecesarias de recorrido." 
+        },
+        { 
+            q: "¿Cómo manejas el inventario obsoleto?", 
+            a: "Identifico ítems sin movimiento mediante reportes de antigüedad y cobertura. Propongo estrategias comerciales de liquidación o traslado a zonas de bajo costo para liberar slots de alta rotación. El objetivo es evitar que el inventario 'muerto' absorba costos de almacenamiento y limite la capacidad operativa del centro.", 
+            impact: "Maximiza el aprovechamiento del espacio y mejora el flujo de caja mediante la liberación de activos inmovilizados." 
+        },
+        { 
+            q: "¿Cómo coordinas la logística inversa?", 
+            a: "Establezco un flujo de entrada dedicado para devoluciones donde se clasifica el producto según su estado: re-almacenaje, reparación o descarte. Cada ítem se reintegra al sistema con un código de estado específico para evitar su mezcla con stock nuevo hasta que sea aprobado por control de calidad.", 
+            impact: "Recupera valor de productos retornados y agiliza el proceso de notas de crédito para el cliente." 
+        },
+        { 
+            q: "¿Qué es un conteo cíclico eficiente?", 
+            a: "Es aquel que permite validar el 100% del stock anualmente sin detener la operación. Divido el inventario en grupos diarios según su valor y movimiento, permitiendo discrepancias mínimas que se investigan al instante. Este método elimina la necesidad de cierres anuales por inventario general.", 
+            impact: "Mantiene la visibilidad del stock constante y evita paros operativos costosos a final de gestión." 
+        },
+        { 
+            q: "¿Cómo aseguras la seguridad en el almacén?", 
+            a: "Implemento protocolos basados en normas ISO y seguridad industrial, incluyendo señalización de rutas, uso de EPP y revisiones preventivas de montacargas. Realizo capacitaciones constantes sobre manipulación de cargas pesadas y sustancias peligrosas, fomentando una cultura de 'cero accidentes' en el entorno de trabajo.", 
+            impact: "Reduce el ausentismo laboral y protege los activos físicos y humanos de la organización." 
+        },
+        { 
+            q: "¿Cómo manejas las fluctuaciones de demanda?", 
+            a: "Utilizo stock de seguridad dinámico calculado según la variabilidad del lead time del proveedor y el nivel de servicio deseado. Durante temporadas altas, coordino turnos adicionales y preparo zonas de almacenamiento temporal para absorber el incremento de volumen sin colapsar las áreas de recepción.", 
+            impact: "Garantiza la continuidad operativa y la satisfacción del cliente ante picos de demanda inesperados." 
+        },
+        { 
+            q: "¿Cómo auditas a los proveedores de insumos?", 
+            a: "Evalúo el cumplimiento de tiempos de entrega, calidad del embalaje y precisión documental. Establezco un sistema de calificación de proveedores que impacta directamente en la prioridad de compra. Las auditorías periódicas aseguran que el flujo de entrada no se vea interrumpido por errores externos.", 
+            impact: "Estabiliza la cadena de suministro desde el origen, reduciendo re-trabajos en la recepción de mercancía." 
+        }
+    ],
+    transporte: [
+        { 
+            q: "¿Cómo optimizas las rutas de distribución?", 
+            a: "Utilizo software de geolocalización para consolidar cargas por zonas geográficas y ventanas horarias. El objetivo es maximizar la ocupación del vehículo y reducir el kilometraje en vacío. Analizo variables de tráfico y restricciones urbanas para diseñar el flujo de entrega más eficiente y rentable.", 
+            impact: "Reduce los costos de combustible y emisiones de CO2, mejorando el margen de beneficio por entrega." 
+        },
+        { 
+            q: "¿Cómo gestionas el retraso de un transportista?", 
+            a: "Mantengo monitoreo GPS activo para detectar desviaciones en tiempo real. Ante un retraso, activo el protocolo de comunicación proactiva informando al cliente y reprogramando la ventana de recepción si es necesario. Analizo la causa del retraso para ajustar los tiempos de tránsito en planificaciones futuras.", 
+            impact: "Mitiga el impacto negativo en la experiencia del cliente y evita cuellos de botella en los muelles de descarga." 
+        },
+        { 
+            q: "¿Cómo seleccionas a tus proveedores de transporte?", 
+            a: "La selección se basa en un scoring que incluye: estado de la flota, seguros de carga vigentes, cumplimiento de KPIs de entrega y competitividad en costos. Priorizo socios que ofrezcan visibilidad tecnológica (rastreo satelital) y tengan protocolos de seguridad robustos para el tránsito portuario.", 
+            impact: "Asegura la integridad de la carga y garantiza niveles de servicio consistentes y medibles." 
+        },
+        { 
+            q: "¿Qué documentación técnica manejas en transporte?", 
+            a: "Domino la gestión de Bill of Lading (BL), manifiestos de carga, guías de remisión, certificados de origen y pólizas de seguro. Aseguro que toda la documentación cumpla con los requisitos legales y aduaneros para evitar retenciones en puerto o multas por inconsistencias de datos.", 
+            impact: "Agiliza el despacho aduanero y evita sobrecostos por demoras documentales en terminales portuarias." 
+        },
+        { 
+            q: "¿Cómo controlas los costos de última milla?", 
+            a: "Implemento el uso de centros de transferencia urbanos para desconsolidar carga pesada en vehículos ligeros más ágiles. Monitoreo el costo por parada y el porcentaje de entregas fallidas, ajustando las rutas diariamente para minimizar el impacto del tráfico y las restricciones de acceso urbano.", 
+            impact: "Mejora la tasa de éxito en la primera entrega, reduciendo los costos de retorno y logística inversa." 
+        },
+        { 
+            q: "¿Cómo aseguras la estiba correcta de la carga?", 
+            a: "Superviso el cumplimiento de planos de carga que respeten el centro de gravedad y la compatibilidad de productos. Utilizo elementos de trincado certificados para evitar desplazamientos durante el tránsito. El objetivo es prevenir daños a la mercancía y garantizar la estabilidad del vehículo en carretera.", 
+            impact: "Elimina los daños por transporte y garantiza la seguridad vial de los operadores y terceros." 
+        },
+        { 
+            q: "¿Cómo manejas reclamaciones por daños en tránsito?", 
+            a: "Establezco un protocolo de inspección fotográfica al momento de la entrega. Ante un daño, gestiono la reclamación con el seguro y el transportista basándome en las evidencias del acta de recepción. Realizo un análisis de causa (embalaje vs. manipulación) para aplicar medidas correctivas inmediatas.", 
+            impact: "Protege el patrimonio de la empresa y asegura la reposición rápida de productos dañados al cliente." 
+        },
+        { 
+            q: "¿Cómo implementas telemetría en la flota?", 
+            a: "Integro sistemas GPS que reportan no solo ubicación, sino hábitos de conducción (frenados bruscos, ralentí excesivo). Utilizo estos datos para capacitar a los conductores y optimizar el consumo de combustible, además de programar mantenimientos preventivos basados en el kilometraje real reportado por el sistema.", 
+            impact: "Extiende la vida útil de los activos y reduce el gasto operativo en combustible hasta en un 15%." 
+        },
+        { 
+            q: "¿Cómo coordinas cargas consolidadas (LCL)?", 
+            a: "Planifico la carga basándome en la densidad y el volumen, asegurando que productos pesados sirvan de base para los ligeros. Coordino con los operadores portuarios para asegurar que el llenado del contenedor se realice maximizando el espacio cúbico disponible, diluyendo así el costo del flete entre más unidades.", 
+            impact: "Reduce el costo logístico unitario y mejora la eficiencia en el uso de contenedores y espacios de bodega." 
+        },
+        { 
+            q: "¿Cómo reduces tiempos de espera en muelles?", 
+            a: "Implemento un sistema de citas (Slot Booking) para transportistas, alineado con la capacidad de descarga del almacén. Exijo la pre-alerta documental para que el ingreso al puerto o bodega sea fluido, evitando que los vehículos permanezcan inactivos consumiendo horas hombre y recursos de transporte.", 
+            impact: "Aumenta el flujo de vehículos diarios y reduce las penalizaciones por demora en terminales." 
+        }
+    ],
+    estrategia: [
+        { 
+            q: "¿Cuáles son tus KPIs logísticos críticos?", 
+            a: "Mido la gestión a través del OTIF (On-Time In-Full) para el nivel de servicio, el ERI para la exactitud de inventario y el Costo Logístico sobre Ventas. Estos indicadores me permiten identificar desviaciones operativas y tomar decisiones basadas en datos para mejorar la rentabilidad general de la cadena de suministro.", 
+            impact: "Proporciona una hoja de ruta clara para la mejora continua y la alineación de la logística con los objetivos financieros." 
+        },
+        { 
+            q: "¿Qué software logístico dominas?", 
+            a: "Tengo experiencia avanzada en SAP (módulos MM y WM) para la gestión de materiales y almacenes. Adicionalmente, utilizo herramientas de BI como Power BI para crear dashboards interactivos que visualizan el rendimiento operativo y facilitan la comunicación de resultados a la alta gerencia.", 
+            impact: "Acelera la toma de decisiones estratégicas mediante el acceso a información analítica precisa y oportuna." 
+        },
+        { 
+            q: "¿Cómo manejas la presión en temporada alta?", 
+            a: "Planifico los recursos (personal y transporte) con meses de antelación basándome en pronósticos de demanda. Establezco prioridades de despacho para clientes estratégicos y refuerzo los protocolos de seguridad para evitar que el aumento de velocidad operativa derive en accidentes o errores de picking.", 
+            impact: "Garantiza el cumplimiento de metas comerciales extraordinarias sin comprometer la integridad operativa." 
+        },
+        { 
+            q: "¿Cómo sincronizas Compras con Almacén?", 
+            a: "Establezco un calendario de recepciones basado en la capacidad de almacenamiento instalada. Mantengo comunicación constante con compras para ajustar las cantidades de pedido según el espacio real disponible, evitando el sobre-stock que genera ineficiencias en el movimiento de materiales dentro de la bodega.", 
+            impact: "Optimiza la fluidez de los muelles de entrada y previene el colapso de las zonas de recepción." 
+        },
+        { 
+            q: "¿Cómo digitalizas procesos manuales?", 
+            a: "Identifico tareas repetitivas basadas en papel y las migro a flujos digitales mediante el uso de radiofrecuencia o aplicaciones móviles. El objetivo es centralizar la información en una base de datos única que elimine la duplicidad de tareas y los errores de transcripción humana.", 
+            impact: "Aumenta la velocidad de procesamiento de datos y mejora la trazabilidad de cada operación logística." 
+        },
+        { 
+            q: "¿Cómo negocias con operadores logísticos?", 
+            a: "La negociación se basa en volúmenes garantizados y Acuerdos de Nivel de Servicio (SLAs) claros. Busco asociaciones a largo plazo donde el costo sea competitivo pero el cumplimiento de los estándares de calidad y tiempos sea innegociable, realizando revisiones trimestrales de desempeño.", 
+            impact: "Estabiliza los costos logísticos y garantiza un partner confiable para el crecimiento del negocio." 
+        },
+        { 
+            q: "¿Qué importancia das a la logística verde?", 
+            a: "Implemento estrategias de reducción de huella de carbono mediante la optimización de rutas y el reciclaje de materiales de embalaje (cartón y pallets). Considero que la sostenibilidad es un pilar de la eficiencia moderna que reduce costos a largo plazo y mejora la reputación corporativa ante clientes globales.", 
+            impact: "Cumple con estándares internacionales de responsabilidad ambiental y reduce gastos en materiales descartables." 
+        },
+        { 
+            q: "¿Cómo abordas el alza de costos de flete?", 
+            a: "Analizo alternativas intermodales y re-negocio contratos de volumen con transportistas estratégicos. Busco optimizar el factor de estiba para mover más carga en menos viajes y exploro proveedores locales que puedan reducir los tramos de transporte nacional sin afectar el tiempo de entrega final.", 
+            impact: "Protege el margen de utilidad del producto ante la volatilidad de los precios del mercado de transporte." 
+        },
+        { 
+            q: "¿Cómo te mantienes actualizado técnicamente?", 
+            a: "Participo activamente en foros internacionales de Supply Chain y realizo formaciones continuas en tendencias de Logística 4.0 y gestión portuaria. Mi enfoque es la curiosidad técnica constante para implementar innovaciones que mantengan la operación a la vanguardia competitiva del mercado.", 
+            impact: "Asegura la adopción de mejores prácticas globales y previene la obsolescencia de los procesos operativos." 
+        },
+        { 
+            q: "¿Cuál es tu estilo de gestión de equipo?", 
+            a: "Lidero mediante objetivos claros, capacitación técnica constante y una política de puertas abiertas. Creo en el empoderamiento del personal operativo a través del conocimiento, asegurando que cada miembro del equipo entienda el impacto de su labor en la cadena de valor global de la empresa.", 
+            impact: "Aumenta la retención de talento y garantiza una operación cohesionada, segura y altamente productiva." 
+        }
+    ]
+};
+
+let typeTimeout;
+
+function updateCategory(cat, btn) {
+    const list = document.getElementById('question-list');
+    const tabs = document.querySelectorAll('.dash-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    list.innerHTML = '';
+    const data = dashboardData[cat] || [];
+    data.forEach((item) => {
+        const div = document.createElement('div');
+        div.className = 'q-item';
+        div.innerText = item.q;
+        div.onclick = () => showAnalysis(item, div);
+        list.appendChild(div);
+    });
+}
+
+function showAnalysis(item, el) {
+    if (typeTimeout) clearTimeout(typeTimeout);
+    
+    document.querySelectorAll('.q-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+
+    document.getElementById('system-msg').innerText = "EJECUTANDO ANÁLISIS ESTRATÉGICO...";
+    document.getElementById('display-q').innerText = item.q;
+    document.getElementById('impact-box').style.display = 'none';
+    
+    const answerEl = document.getElementById('display-a');
+    const impactEl = document.getElementById('display-impact');
+    answerEl.innerText = '';
+    
+    let i = 0;
+    function typeWriter() {
+        if (i < item.a.length) {
+            answerEl.innerHTML += item.a.charAt(i);
+            i++;
+            typeTimeout = setTimeout(typeWriter, 10);
+        } else {
+            document.getElementById('system-msg').innerText = "QUERY FINALIZADA";
+            impactEl.innerText = item.impact;
+            document.getElementById('impact-box').style.display = 'block';
+        }
+    }
+    typeWriter();
+    
+    const now = new Date();
+    document.getElementById('timestamp').innerText = `REQ_TIME: ${now.toLocaleTimeString()}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    updateCategory('inventario', document.querySelector('.dash-tab'));
+});
+</script>
+
+<!-- /Fin de seccion de preguntas frecuentes -->
+
+
+
+<!-- /Fin de seccion de preguntas frecuentes -->
+
+
 
     </section><!-- /Sección de testimonios -->
 
@@ -1271,6 +1642,8 @@ Formación en gestión naviera y portuaria. Orientado a resultados, con capacida
 
   <!-- Archivo JS principal -->
   <script src="assets/js/main.js"></script>
+
+
 
 </body>
 
