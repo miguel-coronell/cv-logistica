@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Terminal de Herramientas | Miguel Carrasquilla</title>
+
+  <link href="assets/img/icono-pagina.ico" rel="icon">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    /* --- CONFIGURACIÓN BASE (Sincronizada con Apoyo Logístico) --- */
+    :root {
+      --bg-dark: #121212;
+      --card-bg: rgba(20, 20, 20, 0.4);
+      --neon-white: #ffffff;
+    }
+
+    body { background-color: var(--bg-dark); color: #e0e0e0; font-family: "Plus Jakarta Sans", sans-serif; overflow-x: hidden; }
+    
+    #hero-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.25; pointer-events: none; }
+    
+    .main { background: transparent !important; padding-left: 20px; }
+    .category-pre { font-size: 10px; letter-spacing: 5px; color: #555; text-transform: uppercase; font-weight: 900; }
+
+    /* --- FILTROS MINIMALISTAS --- */
+    .filter-nav {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 5px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 2rem;
+    }
+    .btn-tab-neon {
+      background: transparent;
+      border: none !important;
+      color: #888 !important;
+      padding: 8px 20px;
+      border-radius: 50px !important;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .btn-tab-neon.active { background: #fff !important; color: #000 !important; box-shadow: 0 4px 15px rgba(255,255,255,0.1); }
+    .count-badge { font-size: 0.7rem; opacity: 0.6; margin-left: 5px; }
+
+    /* --- TARJETAS EXPANDIBLES (Tu diseño solicitado) --- */
+    .app-card-neon {
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 35px;
+        height: 100%;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(10px);
+    }
+    .app-card-neon:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(30, 30, 30, 0.6);
+        transform: translateY(-8px);
+    }
+    .card-main-content { transition: transform 0.4s ease; }
+    .app-card-neon:hover .card-main-content { transform: translateY(-10px); }
+    .icon-box-neon { font-size: 2.5rem; color: #fff; margin-bottom: 20px; opacity: 0.8; transition: 0.4s; }
+
+    .card-details {
+        max-height: 0;
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        margin-top: 5px;
+        padding-top: 0;
+    }
+    .app-card-neon:hover .card-details {
+        max-height: 500px;
+        opacity: 1;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+
+    .tech-stack { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+    .tech-badge {
+        font-size: 0.65rem;
+        background: rgba(255,255,255,0.05);
+        padding: 3px 8px;
+        border-radius: 4px;
+        color: #aaa;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+    .btn-neon-action {
+      background: #fff; color: #000 !important; font-size: 0.75rem; font-weight: 700;
+      padding: 10px; border-radius: 8px; text-transform: uppercase; text-decoration: none;
+      transition: 0.3s; text-align: center;
+    }
+    .btn-outline-neon {
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #888 !important;
+        font-size: 0.7rem;
+        padding: 8px;
+        text-align: center;
+        border-radius: 6px;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+    .btn-outline-neon:hover { background: rgba(255,255,255,0.05); color: #fff !important; border-color: #fff; }
+
+    /* --- SOPORTE & FAQ --- */
+    .support-node {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
+    .support-node:hover { background: rgba(255,255,255,0.06); border-color: #fff; transform: translateX(5px); }
+
+    .accordion-item { background: transparent; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
+    .accordion-button { background: transparent !important; color: white !important; box-shadow: none !important; }
+    .accordion-button:not(.collapsed) { color: #fff !important; opacity: 0.7; }
+
+    .status-pulse {
+      width: 8px; height: 8px; background: #fff; border-radius: 50%;
+      display: inline-block; margin-right: 10px;
+      box-shadow: 0 0 8px #fff;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+    .app-item { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .app-item.hidden { display: none !important; opacity: 0; transform: translateY(20px); }
+  
+  
+
+
+  
+  
+  
+  
+  </style>
+</head>
+
+<body>
+
+  <canvas id="hero-canvas"></canvas>
+
+  <header id="header" class="header dark-background d-flex flex-column justify-content-center">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+    <div class="header-container d-flex flex-column align-items-start">
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero"><i class="bi bi-house navicon"></i>Inicio</a></li>
+          <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
+          <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i>Trayectoria</a></li>
+          <li><a href="index.html#services"><i class="bi bi-hdd-stack navicon"></i>Servicios</a></li>
+          <li><a href="index.html#herramientas-pasarela"><i class="bi bi-pc-display-horizontal navicon"></i>Herramientas</a></li>
+          <li><a href="#" class="active"><i class="bi bi-download navicon"></i>Descargas</a></li>
+          <li><a href="index.html#contact"><i class="bi bi-envelope navicon"></i>Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="social-links text-center">
+        <a href="https://www.instagram.com/miguel.coronell" class="instagram"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/miguelcoronell/" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/miguel-coronell" class="github" target="_blank"><i class="bi bi-github"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="container" style="padding-top: 100px;" data-aos="fade">
+      <span class="category-pre">Terminal de Soluciones</span>
+      <h1 class="display-5 fw-bold text-white mb-3">Ingeniería Aplicada</h1>
+      <p class="text-secondary col-lg-7 mb-5">
+        Ecosistema de 6 herramientas tácticas diseñadas para la eficiencia operativa. Mediante la integración de modelos matemáticos avanzados, transformamos flujos críticos en entornos digitales de alta precisión.
+      </p>
+
+      <div class="text-start mb-5">
+        <div class="filter-nav">
+          <button class="btn-tab-neon active" onclick="filterApps('all', 'Visión integral del ecosistema de ingeniería.', event)">
+            Todos <span class="count-badge">6</span>
+          </button>
+          <button class="btn-tab-neon" onclick="filterApps('transporte', 'Algoritmos de optimización de carga y costos.', event)">
+            Transporte <span class="count-badge">3</span>
+          </button>
+          <button class="btn-tab-neon" onclick="filterApps('inventario', 'Modelos predictivos de niveles de stock.', event)">
+            Inventarios <span class="count-badge">1</span>
+          </button>
+          <button class="btn-tab-neon" onclick="filterApps('gestion', 'Sistemas de auditoría y monitoreo de KPIs.', event)">
+            Gestión <span class="count-badge">2</span>
+          </button>
+        </div>
+        <p id="category-desc" class="small text-secondary mt-2 px-2" style="transition: 0.3s; opacity: 0.7;">Visión integral del ecosistema de ingeniería.</p>
+      </div>
+
+      <div class="row g-4" id="apps-container">
+        
+        <div class="col-lg-4 col-md-6 app-item" data-category="transporte">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-box-seam"></i></div>
+              <h5 class="fw-bold text-white">LogiLoad PRO</h5>
+              <p class="text-secondary small">Optimización de cubicaje 3D.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Algoritmo que maximiza el uso de contenedores y camiones.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">Python</span><span class="tech-badge">Three.js</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Ejecutar</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-download"></i> App</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Manual</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 app-item" data-category="inventario">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-cpu"></i></div>
+              <h5 class="fw-bold text-white">Stock Intel Sync</h5>
+              <p class="text-secondary small">Predictor de inventarios.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Cálculo dinámico de stock de seguridad y puntos de reorden.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">JS</span><span class="tech-badge">SQL</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Gestionar</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-download"></i> Excel</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Guía</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 app-item" data-category="transporte">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-truck"></i></div>
+              <h5 class="fw-bold text-white">Transit Analyzer</h5>
+              <p class="text-secondary small">Simulador financiero.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Análisis de tarifas internacionales y rentabilidad de flota.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">Python</span><span class="tech-badge">Pandas</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Simular</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-download"></i> CSV</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Doc</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 app-item" data-category="gestion">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-graph-up"></i></div>
+              <h5 class="fw-bold text-white">LogiMetrics</h5>
+              <p class="text-secondary small">Dashboard de KPIs.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Monitoreo en tiempo real de OTIF y tiempos de ciclo.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">React</span><span class="tech-badge">D3.js</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Abrir</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-download"></i> PDF</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Manual</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 app-item" data-category="gestion">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-file-check"></i></div>
+              <h5 class="fw-bold text-white">DocuAuditor</h5>
+              <p class="text-secondary small">Auditoría automática OCR.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Validación de documentos COMEX mediante inteligencia artificial.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">AI</span><span class="tech-badge">Tesseract</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Auditar</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Guía</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-shield"></i> Reglas</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 app-item" data-category="transporte">
+          <div class="app-card-neon">
+            <div class="card-main-content">
+              <div class="icon-box-neon"><i class="bi bi-shield-lock"></i></div>
+              <h5 class="fw-bold text-white">SafeRoute</h5>
+              <p class="text-secondary small">Gestión de riesgo en ruta.</p>
+            </div>
+            <div class="card-details">
+              <p class="text-secondary" style="font-size: 0.75rem;">Análisis predictivo de corredores logísticos y paradas seguras.</p>
+              <div class="tech-stack">
+                <span class="tech-badge">Leaflet</span><span class="tech-badge">API Maps</span>
+              </div>
+              <div class="action-grid">
+                <a href="#" class="btn-neon-action" style="grid-column: span 2;">Planificar</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-geo-alt"></i> Mapa</a>
+                <a href="#" class="btn-outline-neon"><i class="bi bi-book"></i> Doc</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+<!--secion de preguntas frecuentes-->
+ <div class="row g-5">
+    <div class="col-lg-12">
+      <span class="category-pre">Centro de Consultas</span>
+      <h2 class="text-white fw-bold mb-4">Preguntas Frecuentes</h2>
+
+      <div class="filter-nav mb-4">
+        <button class="btn-tab-neon active" onclick="filterFAQ('todas', event)">Todas</button>
+        <button class="btn-tab-neon" onclick="filterFAQ('apps', event)">Herramientas</button>
+        <button class="btn-tab-neon" onclick="filterFAQ('dev', event)">Desarrollo</button>
+        <button class="btn-tab-neon" onclick="filterFAQ('tiempos', event)">Tiempos y Entrega</button>
+      </div>
+      
+      <div class="accordion accordion-flush" id="faqEngineering">
+        
+        <div class="accordion-item faq-item apps" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q1">
+              1. ¿Cómo garantiza LogiLoad PRO la precisión en el cubicaje?
+            </button>
+          </h2>
+          <div id="q1" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              El algoritmo considera restricciones de peso por eje, fragilidad y orientación, permitiendo un aprovechamiento del espacio superior al 95%.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item apps" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">
+              2. ¿Stock Intel Sync se integra con ERPs existentes?
+            </button>
+          </h2>
+          <div id="q2" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              Sí, mediante API o conexión directa SQL, permitiendo automatizar el cálculo del stock de seguridad en tiempo real.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item dev" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q7">
+              3. ¿Qué lenguajes se utilizan para estas soluciones?
+            </button>
+          </h2>
+          <div id="q7" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              Utilizamos un stack moderno: Python para motores de cálculo, React/JS para interfaces, y modelos de IA mediante TensorFlow o Tesseract para procesos de auditoría.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item dev" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q8">
+              4. ¿El software es escalable para grandes volúmenes de datos?
+            </button>
+          </h2>
+          <div id="q8" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              Absolutamente. La arquitectura está basada en microservicios o módulos independientes, lo que permite procesar miles de registros sin degradar el rendimiento del sistema.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item tiempos" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q9">
+              5. ¿Cuál es el tiempo promedio de implementación?
+            </button>
+          </h2>
+          <div id="q9" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              Una herramienta estándar se despliega en 2-4 semanas. Proyectos personalizados de ingeniería de software pueden requerir de 8 a 12 semanas dependiendo de la complejidad.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item tiempos" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q10">
+              6. ¿Cómo se manejan las actualizaciones post-entrega?
+            </button>
+          </h2>
+          <div id="q10" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              Todas las herramientas incluyen un periodo de soporte técnico y optimización de algoritmos basado en el feedback operativo real de los primeros 3 meses.
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item faq-item apps" style="background: transparent !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important;">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q11">
+              7. ¿SafeRoute requiere hardware GPS específico?
+            </button>
+          </h2>
+          <div id="q11" class="accordion-collapse collapse" data-bs-parent="#faqEngineering">
+            <div class="accordion-body text-secondary small">
+              No, es agnóstico al hardware. Se integra con las APIs de tus proveedores actuales de telemetría para centralizar el análisis de riesgo.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  
+
+<script>
+  function filterFAQ(category, event) {
+    // Manejo de botones activos
+    const buttons = event.target.parentElement.querySelectorAll('.btn-tab-neon');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Manejo de visibilidad de preguntas
+    const items = document.querySelectorAll('.faq-item');
+    items.forEach(item => {
+      if (category === 'todas' || item.classList.contains(category)) {
+        item.style.display = 'block';
+        setTimeout(() => item.style.opacity = '1', 10);
+      } else {
+        item.style.opacity = '0';
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+<style>
+  .accordion-button {
+    background: transparent !important;
+    color: white !important;
+    box-shadow: none !important;
+    padding: 20px 10px;
+  }
+  .accordion-button:not(.collapsed) {
+    background: rgba(255,255,255,0.02) !important;
+    color: #fff !important;
+  }
+  .faq-item {
+    transition: opacity 0.4s ease;
+  }
+
+
+  .accordion-button::after {
+    filter: invert(1) brightness(2);
+  }
+</style>
+
+    </div>
+
+<!--secion de soporte tecnico-->
+
+<div class="container-fluid p-0">
+        <div class="premium-support-card">
+            <div class="row g-0 align-items-center">
+                <div class="col-lg-7 p-5">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="status-pulse"></div>
+                        <span class="category-pre m-0" style="color: #fff; opacity: 0.9;">Soporte Nivel Ingeniería</span>
+                    </div>
+                    <h2 class="display-6 fw-bold text-white mb-4">¿Necesitas una implementación a medida?</h2>
+                    <p class="text-secondary mb-5" style="max-width: 600px; line-height: 1.8;">
+                        Nuestro equipo de ingeniería está disponible para despliegues complejos, integración de APIs personalizadas y optimización de modelos matemáticos según la infraestructura de tu compañía.
+                    </p>
+
+                    <div class="support-action-grid">
+                        <a href="https://wa.me/5492613863563" class="premium-btn whatsapp">
+                            <div class="btn-content">
+                                <i class="bi bi-whatsapp"></i>
+                                <div class="btn-text">
+                                    <span>Atención Inmediata</span>
+                                    <small>Consultoría por WhatsApp</small>
+                                </div>
+                            </div>
+                            <i class="bi bi-arrow-right-short arrow"></i>
+                        </a>
+
+                        <a href="mailto:miguelcarrasquillac@gmail.com" class="premium-btn email">
+                            <div class="btn-content">
+                                <i class="bi bi-envelope-paper"></i>
+                                <div class="btn-text">
+                                    <span>Enviar Ticket</span>
+                                    <small>Soporte vía Correo</small>
+                                </div>
+                            </div>
+                            <i class="bi bi-arrow-right-short arrow"></i>
+                        </a>
+
+                        <a href="#" class="premium-btn docs">
+                            <div class="btn-content">
+                                <i class="bi bi-terminal-plus"></i>
+                                <div class="btn-text">
+                                    <span>Dev Documentation</span>
+                                    <small>API & Webhooks</small>
+                                </div>
+                            </div>
+                            <i class="bi bi-arrow-right-short arrow"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 d-none d-lg-block border-start border-white-5">
+                    <div class="p-5">
+                        <div class="metric-node mb-4">
+                            <h4 class="text-white fw-bold mb-0">99.9%</h4>
+                            <small class="text-secondary text-uppercase tracking-wider" style="font-size: 10px; letter-spacing: 2px;">Uptime de Herramientas</small>
+                        </div>
+                        <div class="metric-node mb-4">
+                            <h4 class="text-white fw-bold mb-0">< 2 hrs</h4>
+                            <small class="text-secondary text-uppercase tracking-wider" style="font-size: 10px; letter-spacing: 2px;">Tiempo de Respuesta</small>
+                        </div>
+                        <div class="metric-node">
+                            <h4 class="text-white fw-bold mb-0">Global</h4>
+                            <small class="text-secondary text-uppercase tracking-wider" style="font-size: 10px; letter-spacing: 2px;">Soporte Multilenguaje</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<style>
+    /* Contenedor Principal con Efecto Glass */
+    .premium-support-card {
+        background: rgba(255, 255, 255, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+    }
+
+    .border-white-5 { border-color: rgba(255,255,255,0.05) !important; }
+
+    /* Grid de Botones Accionables */
+    .support-action-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 15px;
+    }
+
+    /* Botón Premium Individual */
+    .premium-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        text-decoration: none !important;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .premium-btn .btn-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        z-index: 2;
+    }
+
+    .premium-btn i.bi {
+        font-size: 1.5rem;
+        color: #fff;
+        transition: 0.3s;
+    }
+
+    .premium-btn .btn-text span {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .premium-btn .btn-text small {
+        color: #666;
+        font-size: 0.75rem;
+    }
+
+    .premium-btn .arrow {
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: 0.3s;
+    }
+
+    /* Hovers */
+    .premium-btn:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.3);
+        transform: translateY(-5px);
+    }
+
+    .premium-btn:hover .arrow {
+        opacity: 1;
+        transform: translateX(0);
+        color: #fff;
+    }
+
+    .premium-btn:hover i.bi:not(.arrow) {
+        transform: scale(1.1);
+    }
+
+    /* Variaciones sutiles por tipo */
+    .premium-btn.whatsapp:hover { box-shadow: 0 10px 30px rgba(37, 211, 102, 0.05); }
+    .premium-btn.email:hover { box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05); }
+
+    /* Nodos de métricas */
+    .metric-node {
+        border-left: 2px solid rgba(255,255,255,0.1);
+        padding-left: 20px;
+        transition: 0.3s;
+    }
+    .metric-node:hover {
+        border-left-color: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .support-action-grid { grid-template-columns: 1fr; }
+    }
+
+    .info-terminal-box {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        transition: 0.3s;
+    }
+
+    .info-terminal-box:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .terminal-header {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-dots {
+        display: flex;
+        gap: 6px;
+    }
+
+    .terminal-dots span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .terminal-title {
+        font-family: 'monospace';
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .terminal-body {
+        padding: 25px 30px;
+    }
+
+    /* Ajuste para dispositivos móviles */
+    @media (max-width: 768px) {
+        .terminal-body {
+            padding: 20px;
+        }
+    }
+</style>
+
+
+<div class="mt-5 mb-5" data-aos="fade-up">
+    <div class="row align-items-start border-start border-white border-2 ps-4 ms-1">
+        <div class="col-12">
+            <h6 class="text-white fw-bold mb-2" style="letter-spacing: 2px;">ADVISORY_LOG // PRECISIÓN DE ALGORITMOS</h6>
+            <p class="text-secondary small mb-0" style="line-height: 1.6; max-width: 900px;">
+                Todos los modelos matemáticos (Cubicaje, Stock y Rutas) han sido validados bajo estándares de ingeniería logística. Se recomienda la supervisión humana para decisiones críticas de despacho basadas en la integridad de la data de entrada.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!--secion de pie de pagina-->
+
+
+    <footer style="border-top: 1px solid rgba(255,255,255,0.05); padding: 60px 0 30px 0; margin-top: 50px;">
+      <div class="container text-center">
+        <p class="category-pre" style="font-size: 8px;">Logistics Engineering Toolset v3.0</p>
+        <p class="small text-secondary mb-0">© 2026 <strong>Miguel Carrasquilla</strong>. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    function filterApps(category, description, event) {
+      const items = document.querySelectorAll('.app-item');
+      const descElement = document.getElementById('category-desc');
+      const buttons = document.querySelectorAll('.btn-tab-neon');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      descElement.style.opacity = '0';
+      setTimeout(() => {
+          descElement.innerText = description;
+          descElement.style.opacity = '0.7';
+      }, 200);
+
+      items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+          item.classList.remove('hidden');
+          setTimeout(() => { item.style.opacity = '1'; item.style.transform = 'translateY(0)'; }, 50);
+        } else {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(15px)';
+          setTimeout(() => { item.classList.add('hidden'); }, 300);
+        }
+      });
+    }
+
+    // CANVAS DINÁMICO (Sincronizado con Apoyo Logístico)
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, mouseX = 0, mouseY = 0;
+
+    function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+    resize();
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+      ctx.lineWidth = 0.3;
+      for (let i = 0; i < 25; i++) {
+        ctx.beginPath();
+        let offset = (mouseX - width/2) * (i * 0.005);
+        ctx.moveTo(100 + i * 60 + offset, 0);
+        ctx.lineTo(i * 20 + offset, height);
+        ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>

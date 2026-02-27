@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>FAQ Técnica | Miguel Carrasquilla</title>
+  
+  <link href="assets/img/icono-pagina.ico" rel="icon">
+  <link href="assets/img/icono-pagina.ico" rel="apple-touch-icon">
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    /* --- CONFIGURACIÓN DE ESCENA Y FONDO --- */
+    body { background-color: #202020; color: #fff; overflow-x: hidden; }
+    
+    #hero-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .main { background: transparent !important; }
+
+    /* --- ESTILO DE CABECERA DE SECCIÓN --- */
+    .category-header { text-align: center; margin-bottom: 50px; }
+    .category-pre { font-size: 10px; letter-spacing: 4px; color: #666; font-weight: 700; text-transform: uppercase; }
+    .category-title { font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 10px; }
+    .category-line { width: 60px; height: 4px; background: #fff; margin: 20px auto; border-radius: 10px; }
+
+    /* --- SISTEMA DE FILTROS (TABS NEÓN) --- */
+    .intel-filters {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+    }
+
+    .btn-filter-intel {
+      background: rgba(255, 255, 255, 0.03);
+      color: #888;
+      border: 1px solid rgba(255, 255, 255, 0.086);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase;
+    }
+
+    .btn-filter-intel.active, .btn-filter-intel:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    /* --- GRID Y TARJETAS INTERACTIVAS --- */
+    .intel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 30px;
+      padding-bottom: 100px;
+    }
+
+    .intel-card {
+ 
+      background: rgba(20, 20, 20, 0.7); 
+      backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 40px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intel-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .intel-card:hover {
+      transform: translateY(-15px);
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      background: rgba(30, 30, 30, 0.8);
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 25px;
+      transition: 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .intel-card:hover .card-icon {
+      background: #fff;
+      color: #000;
+      transform: rotate(-8deg) scale(1.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .intel-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .intel-card p {
+      font-size: 0.95rem;
+      color: #999;
+      line-height: 1.8;
+      margin-bottom: 30px;
+      flex-grow: 1;
+    }
+
+    /* --- FOOTER DE TARJETA (DATA SECTION) --- */
+    .card-footer-data {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 25px;
+      margin-top: auto;
+    }
+
+    .data-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .data-result {
+      font-size: 0.9rem;
+      color: #eee;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .data-result i { color: #fff; font-size: 1.1rem; }
+
+    /* Responsividad Móvil */
+    @media (max-width: 768px) {
+      .intel-grid { grid-template-columns: 1fr; }
+      .category-title { font-size: 1.8rem; }
+      .intel-card { padding: 30px; }
+    }
+  </style>
+</head>
+
+<body class="starter-page-page">
+  
+  <canvas id="hero-canvas"></canvas>
+
+  <header id="header" class="header dark-background d-flex flex-column justify-content-center">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+    <div class="header-container d-flex flex-column align-items-start">
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html#hero"><i class="bi bi-house navicon"></i>Inicio</a></li>
+          <li><a href="index.html#about"><i class="bi bi-person navicon"></i> Sobre Mi</a></li>
+          <li><a href="index.html#resume"><i class="bi bi-file-earmark-text navicon"></i>Trayectoria</a></li>
+          <li><a href="index.html#services"><i class="bi bi-hdd-stack navicon"></i>Servicios</a></li>
+          <li><a href="index.html#herramientas-pasarela"><i class="bi bi-pc-display-horizontal navicon"></i>Herramientas</a></li>
+          <li><a href="descargas.html" class="active"><i class="bi bi-download navicon"></i>Descargas</a></li>
+          <li><a href="index.html#contact"><i class="bi bi-envelope navicon"></i>Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="social-links text-center">
+        <a href="https://www.linkedin.com/in/miguelcoronell/" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/miguel-coronell" class="github"><i class="bi bi-github"></i></a>
+        <a href="https://www.instagram.com/miguel.coronell" class="instagram"><i class="bi bi-instagram"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="page-title dark-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="mb-1">Centro de Consulta Técnica</h1>
+          <p class="text-secondary mb-0">Análisis estratégico y respuestas expertas sobre gestión de cadena de suministro.</p>
+        </div>
+      </div>
+    </div>
+
+
+   <div class="container">
+
+        <div class="category-header" data-aos="fade-up">
+          <span class="category-pre">OPERATIONAL KNOWLEDGE</span>
+          <h2 class="category-title">Preguntas Frecuentes</h2>
+          <div class="category-line"></div>
+        </div>
+
+        <div class="intel-filters" data-aos="fade-up">
+          <button onclick="updateIntelGrid('inventario', this)" class="btn-filter-intel active">Gestión de Inventarios</button>
+          <button onclick="updateIntelGrid('transporte', this)" class="btn-filter-intel">Logística & Transporte</button>
+          <button onclick="updateIntelGrid('estrategia', this)" class="btn-filter-intel">Estrategia & BI</button>
+        </div>
+
+        <div id="intel-grid" class="intel-grid" data-aos="fade-up">
+          </div>
+
+      </div>
+
+
+  </main>
+
+  <footer id="footer" class="footer position-relative">
+    <div class="container">
+      <div class="copyright text-center">
+        <p>© <span>Copyright 2026</span> <strong class="px-1 sitename">Miguel Carrasquilla</strong> <span>| Todos los derechos reservados</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    // BASE DE DATOS EXTENDIDA (MÁS DE 30 ITEMS)
+    const faqDatabase = {
+      inventario: [
+        {
+          icon: "bi-bullseye",
+          q: "¿Cómo garantizas la exactitud del inventario?",
+          a: "Implemento un ecosistema de control basado en RF (Radiofrecuencia) y WMS. Realizo validaciones sistémicas en cada paso del flujo (picking/cross-docking) para eliminar el error humano en origen.",
+          impact: "ERI superior al 99.5% y optimización de capital de trabajo."
+        },
+        {
+          icon: "bi-calendar-event",
+          q: "¿Cómo gestionas productos perecederos (FEFO)?",
+          a: "Utilizo una disciplina estricta bajo el método FEFO, capturando fechas de vencimiento desde la recepción. El sistema bloquea automáticamente lotes próximos a caducar.",
+          impact: "Reduce las mermas hasta en un 40% y asegura la inocuidad."
+        },
+        {
+          icon: "bi-grid-3x3-gap",
+          q: "¿Cómo optimizas el layout del almacén?",
+          a: "Aplico segmentación ABC basada en la rotación de SKUs. Ubico productos 'A' cerca de zonas de despacho para reducir tiempos de recorrido y fatiga operativa.",
+          impact: "Aumento de productividad del picking en un 25%."
+        },
+        {
+          icon: "bi-arrow-repeat",
+          q: "¿Qué es un conteo cíclico eficiente?",
+          a: "Es aquel que permite validar el 100% del stock anualmente sin detener la operación, dividiendo el inventario en grupos diarios según su valor crítico.",
+          impact: "Evita paros operativos costosos y mantiene visibilidad constante."
+        },
+        {
+          icon: "bi-shield-exclamation",
+          q: "¿Qué haces ante un faltante crítico?",
+          a: "Análisis inmediato de trazabilidad en WMS, ajuste sistémico preventivo y auditoría de causa raíz (recepción vs despacho) para evitar recurrencia.",
+          impact: "Protege el nivel de servicio y la integridad de la base de datos."
+        },
+        {
+          icon: "bi-trash",
+          q: "¿Cómo manejas el inventario obsoleto?",
+          a: "Identificación de ítems sin movimiento mediante reportes de antigüedad. Propuesta de liquidación para liberar slots de alta rotación.",
+          impact: "Maximiza el aprovechamiento del espacio y mejora el flujo de caja."
+        },
+        {
+          icon: "bi-safe",
+          q: "¿Cómo aseguras la seguridad en el almacén?",
+          a: "Protocolos ISO, señalización de rutas, uso estricto de EPP y revisiones preventivas de montacargas bajo estándares de seguridad industrial.",
+          impact: "Cero accidentes y reducción de ausentismo laboral."
+        },
+        {
+          icon: "bi-diagram-2",
+          q: "¿Cómo sincronizas Compras con Almacén?",
+          a: "Calendario de recepciones basado en capacidad instalada. Comunicación constante para evitar sobre-stock y colapsos en muelles de entrada.",
+          impact: "Fluidez total en zonas de recepción y descarga rápida."
+        },
+        {
+          icon: "bi-layers",
+          q: "¿Cómo clasificas el stock de seguridad?",
+          a: "Cálculo dinámico basado en la variabilidad del lead time del proveedor y la desviación estándar de la demanda real.",
+          impact: "Garantiza disponibilidad ante picos inesperados de demanda."
+        },
+        {
+          icon: "bi-check-all",
+          q: "¿Cómo auditas a proveedores en recepción?",
+          a: "Sistema de calificación (Scorecard) evaluando tiempos de entrega, calidad de embalaje y precisión documental en el ingreso.",
+          impact: "Estabiliza la cadena de suministro desde el origen."
+        }
+      ],
+      transporte: [
+        {
+          icon: "bi-map",
+          q: "¿Cómo optimizas las rutas de distribución?",
+          a: "Uso de software de geolocalización para consolidar cargas por zonas y ventanas horarias, maximizando la ocupación del vehículo.",
+          impact: "Reducción de costos de combustible y emisiones de CO2."
+        },
+        {
+          icon: "bi-truck",
+          q: "¿Cómo seleccionas proveedores de transporte?",
+          a: "Scoring basado en: estado de flota, seguros vigentes, cumplimiento de KPIs y visibilidad tecnológica (GPS/Telemetría).",
+          impact: "Asegura la integridad de la carga y niveles de servicio constantes."
+        },
+        {
+          icon: "bi-geo-alt",
+          q: "¿Cómo gestionas el retraso de un transportista?",
+          a: "Monitoreo GPS activo y protocolo de comunicación proactiva informando al cliente final y reprogramando ventanas de descarga.",
+          impact: "Mitiga el impacto negativo en la experiencia del cliente."
+        },
+        {
+          icon: "bi-file-earmark-medical",
+          q: "¿Qué documentación técnica manejas?",
+          a: "Gestión experta de Bill of Lading (BL), manifiestos de carga, guías de remisión y pólizas de seguro internacionales.",
+          impact: "Agiliza el despacho aduanero y evita multas por errores de datos."
+        },
+        {
+          icon: "bi-bicycle",
+          q: "¿Cómo controlas la última milla?",
+          a: "Uso de hubs urbanos para desconsolidar carga y monitoreo de costo por parada para ajustar rutas diariamente.",
+          impact: "Mejora la tasa de éxito en la primera entrega significativamente."
+        },
+        {
+          icon: "bi-box",
+          q: "¿Cómo aseguras la estiba correcta?",
+          a: "Supervisión de planos de carga respetando centros de gravedad y compatibilidad de productos para evitar daños en tránsito.",
+          impact: "Elimina averías por transporte y garantiza seguridad vial."
+        },
+        {
+          icon: "bi-exclamation-triangle",
+          q: "¿Cómo manejas reclamaciones por daños?",
+          a: "Protocolo de inspección fotográfica inmediata y gestión de reclamación con seguros basada en evidencias de recepción.",
+          impact: "Protege el patrimonio y asegura la reposición rápida al cliente."
+        },
+        {
+          icon: "bi-lightning-charge",
+          q: "¿Qué es el Cross-Docking para ti?",
+          a: "Sincronización de flujos de entrada y salida sin almacenamiento intermedio, agilizando el paso por el centro de distribución.",
+          impact: "Reducción de costos operativos y tiempos de entrega."
+        },
+        {
+          icon: "bi-water",
+          q: "¿Cómo coordinas cargas consolidadas (LCL)?",
+          a: "Planificación por densidad y volumen para maximizar el espacio cúbico del contenedor, diluyendo el costo del flete.",
+          impact: "Mejora la rentabilidad del transporte internacional."
+        },
+        {
+          icon: "bi-hourglass-split",
+          q: "¿Cómo reduces tiempos en muelles?",
+          a: "Implementación de sistema de citas (Slot Booking) alineado con la capacidad de descarga del equipo operativo.",
+          impact: "Aumenta el flujo de vehículos y reduce penalizaciones por demora."
+        }
+      ],
+      estrategia: [
+        {
+          icon: "bi-bar-chart-steps",
+          q: "¿Cuáles son tus KPIs críticos?",
+          a: "Mido la gestión a través de OTIF (On-Time In-Full), ERI (Exactitud) y el Costo Logístico sobre Ventas totales.",
+          impact: "Proporciona una hoja de ruta clara para la rentabilidad financiera."
+        },
+        {
+          icon: "bi-pc-display",
+          q: "¿Qué software logístico dominas?",
+          a: "Experiencia avanzada en SAP (módulos MM/WM) y creación de Dashboards interactivos en Power BI para visualización de datos.",
+          impact: "Acelera la toma de decisiones estratégicas de la gerencia."
+        },
+        {
+          icon: "bi-people",
+          q: "¿Cuál es tu estilo de gestión de equipo?",
+          a: "Liderazgo por objetivos, capacitación técnica constante y empoderamiento del personal operativo a través del conocimiento.",
+          impact: "Aumenta la retención de talento y garantiza cohesión operativa."
+        },
+        {
+          icon: "bi-graph-up-arrow",
+          q: "¿Cómo manejas la presión en temporada alta?",
+          a: "Planificación de recursos con meses de antelación y priorización de despachos para clientes estratégicos (Key Accounts).",
+          impact: "Cumplimiento de metas comerciales sin accidentes operativos."
+        },
+        {
+          icon: "bi-fingerprint",
+          q: "¿Cómo digitalizas procesos manuales?",
+          a: "Identificación de tareas repetitivas en papel y migración a flujos digitales mediante apps móviles o radiofrecuencia.",
+          impact: "Elimina errores de transcripción y mejora la trazabilidad 100%."
+        },
+        {
+          icon: "bi-handshake",
+          q: "¿Cómo negocias con operadores (3PL)?",
+          a: "Negociación basada en Acuerdos de Nivel de Servicio (SLAs) claros y revisiones trimestrales de desempeño operativo.",
+          impact: "Garantiza partners confiables alineados al crecimiento del negocio."
+        },
+        {
+          icon: "bi-tree",
+          q: "¿Qué importancia das a la logística verde?",
+          a: "Optimización de rutas para reducir huella de carbono y reciclaje de materiales (cartón/pallets) como pilar de eficiencia.",
+          impact: "Mejora la reputación corporativa y reduce gastos en insumos."
+        },
+        {
+          icon: "bi-currency-exchange",
+          q: "¿Cómo abordas el alza de costos de flete?",
+          a: "Análisis de alternativas intermodales y re-negociación de contratos por volumen con transportistas estratégicos.",
+          impact: "Protege el margen de utilidad ante la volatilidad del mercado."
+        },
+        {
+          icon: "bi-mortarboard",
+          q: "¿Cómo te mantienes actualizado?",
+          a: "Participación activa en foros de Supply Chain y formación continua en tendencias de Logística 4.0 y puertos inteligentes.",
+          impact: "Asegura la adopción de mejores prácticas globales en la empresa."
+        },
+        {
+          icon: "bi-gear-wide-connected",
+          q: "¿Qué es para ti la Supply Chain 4.0?",
+          a: "La integración de Big Data, IoT y analítica predictiva para anticipar cuellos de botella antes de que ocurran en la cadena.",
+          impact: "Transforma la logística de reactiva a proactiva y resiliente."
+        }
+      ]
+    };
+
+    // MOTOR DE RENDERIZADO DE TARJETAS
+    function updateIntelGrid(category, btn) {
+      const grid = document.getElementById('intel-grid');
+      const buttons = document.querySelectorAll('.btn-filter-intel');
+      
+      // Actualizar estado de botones
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Limpiar y cargar con animación
+      grid.style.opacity = '0';
+      
+      setTimeout(() => {
+        grid.innerHTML = '';
+        const data = faqDatabase[category];
+        
+        data.forEach((item, index) => {
+          const card = document.createElement('div');
+          card.className = 'intel-card';
+          card.innerHTML = `
+            <div class="card-icon"><i class="bi ${item.icon}"></i></div>
+            <h3>${item.q}</h3>
+            <p>${item.a}</p>
+            <div class="card-footer-data">
+              <span class="data-label">Visión Estratégica</span>
+              <div class="data-result">
+                <i class="bi bi-shield-check"></i>
+                <span>${item.impact}</span>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+        
+        grid.style.opacity = '1';
+        AOS.refresh();
+      }, 300);
+    }
+
+    // INICIALIZACIÓN
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ duration: 1000, once: true });
+      updateIntelGrid('inventario', document.querySelector('.btn-filter-intel'));
+    });
+
+    // MOTOR DEL CANVAS DE LÍNEAS (Idéntico al de descargas.html)
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, mouseX = 0;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { mouseX = e.clientX; });
+    resize();
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 0.3;
+      
+      for (let i = 0; i < 25; i++) {
+        ctx.beginPath();
+        let offset = (mouseX - width/2) * (i * 0.005);
+        ctx.moveTo(100 + i * 80 + offset, 0);
+        ctx.lineTo(i * 30 + offset, height);
+        ctx.stroke();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+
+</body>
+</html>
