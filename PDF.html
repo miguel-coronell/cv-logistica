@@ -12,8 +12,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="tu-logo.png">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@21.2.7/build/css/intlTelInput.css">
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@21.2.7/build/js/intlTelInput.min.js"></script>
+    
+    
     <style>
+
+    
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     
     :root {
@@ -43,6 +48,11 @@
         width: 100%;
         box-sizing: border-box; /* Crucial para que el padding no aumente el ancho real */
     }
+
+/* Busca esta sección en tu código y añade esto: */
+#c_tel {
+    padding-left: 80px !important; /* Mueve el texto a la derecha */
+}
 
     /* Espacio extra entre labels e inputs */
     label {
@@ -146,10 +156,12 @@
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black text-slate-400 ml-3 uppercase">Teléfono</label>
-                            <input type="tel" id="c_tel" placeholder="300...">
-                        </div>
+
+                       <div class="space-y-1">
+                        <label class="text-[10px] font-black text-slate-400 ml-3 uppercase">Teléfono</label>
+                        <input type="tel" id="c_tel" class="w-full" placeholder="300...">
+                      </div>
+
                         <div class="space-y-1">
                             <label class="text-[10px] font-black text-slate-400 ml-3 uppercase">Correo</label>
                             <input type="email" id="c_email" placeholder="cliente@mail.com">
@@ -263,7 +275,35 @@
 
                 <button onclick="generarPDF()" class="btn-primary w-full py-6 text-lg flex items-center justify-center gap-4">
                     <i data-lucide="file-down"></i> Generar Propuesta PDF
+                
                 </button>
+
+<div class="glass-card p-8 text-center space-y-8">
+      
+
+       
+            
+            <div class="grid grid-cols-2 gap-3">
+
+         <button onclick="enviarWhatsApp()" class="bg-[#25D366] text-white rounded-2xl py-4 font-bold text-sm uppercase flex items-center justify-center gap-3 shadow-lg shadow-green-200">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-10 h-10" alt="WhatsApp">
+    <span>WhatsApp</span>
+</button>
+
+    
+
+
+                <button onclick="enviarEmail()" class="bg-slate-800 text-white rounded-2xl py-4 font-bold text-xs uppercase flex items-center justify-center gap-2 shadow-lg shadow-slate-200">
+                    <i data-lucide="mail"></i> Correo
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
             </div>
         </section>
 
@@ -636,6 +676,125 @@ doc.roundedRect(145, currentY, 50, 18, 3, 3, 'FD');
         // Inicialización
         lucide.createIcons();
         calcular();
+
+
+
+// ... (tus funciones anteriores se mantienen igual)
+
+    function obtenerDatosResumen() {
+        return {
+            cliente: document.getElementById('c_nombre').value || "Cliente",
+            telefono: document.getElementById('c_tel').value.replace(/\s+/g, ''),
+            email: document.getElementById('c_email').value,
+            total: document.getElementById('finalTotal').innerText,
+            tipo: document.getElementById('c_tipo').value,
+            obra: document.getElementById('c_obra').value || "No especificada"
+        };
+    }
+
+   
+/*
+    function enviarWhatsApp() {
+        const d = obtenerDatosResumen();
+        if(!d.telefono) {
+            alert("Por favor, ingrese un número de teléfono en la sección de Identificación.");
+            nav('cliente', document.querySelector('[onclick*="cliente"]'));
+            return;
+        }
+
+        const mensaje = encodeURIComponent(
+            `*PROYECTO: ${d.tipo}*\n` +
+            `---------------------------\n` +
+            `Hola, *${d.cliente}*.\n` +
+            `Adjunto el resumen de la propuesta para la obra en: *${d.obra}*.\n\n` +
+            `💰 *Inversión Total:* ${d.total}\n` +
+            `🛠️ _Kioscos José Arteta - Arquitectura Natural_`
+        );
+
+        window.open(`https://wa.me/${d.telefono}?text=${mensaje}`, '_blank');
+    }
+
+    */
+ function enviarWhatsApp() {
+    // 1. Obtenemos los datos base (Nombre, Teléfono, Obra)
+    const d = obtenerDatosResumen();
+
+    if(!d.telefono) {
+        alert("Por favor, ingrese un número de teléfono en la sección de Identificación.");
+        nav('cliente', document.querySelector('[onclick*="cliente"]'));
+        return;
+    }
+
+    // 2. Obtenemos los subtotales usando los IDs reales de tu HTML
+    const totalMat = document.getElementById('sub_mat').innerText;
+    const totalServ = document.getElementById('sub_mo').innerText;
+
+    // 3. Construimos el mensaje con saltos de línea limpios (\n\n)
+    const textoMensaje = 
+        `Hola, *${d.cliente}*.\n\n` +
+        `Es un gusto saludarte. Adjunto el resumen de tu *${d.tipo}* para la obra en: *${d.obra}*.\n\n` +
+        `• *Total Materiales:* ${totalMat}\n` +
+        `• *Total Servicios:* ${totalServ}\n` +
+        `*INVERSIÓN TOTAL:* ${d.total}\n\n` +
+        `*Nota:* El documento detallado en PDF ha sido generado y se le enviará a la brevedad por este medio.\n\n` +
+        `_Quedo atento a cualquier duda adicional._\n\n` +
+        `---------------------------\n` +
+        `*KIOSCOS JOSÉ ARTETA*\n` +
+        `_Arquitectura Natural_`;
+
+    // 4. Codificamos y abrimos la ventana
+    const mensajeFinal = encodeURIComponent(textoMensaje);
+    window.open(`https://wa.me/${d.telefono}?text=${mensajeFinal}`, '_blank');
+}
+
+    function enviarEmail() {
+        const d = obtenerDatosResumen();
+        if(!d.email) {
+            alert("Por favor, ingrese un correo electrónico en la sección de Identificación.");
+            nav('cliente', document.querySelector('[onclick*="cliente"]'));
+            return;
+        }
+
+        const asunto = encodeURIComponent(`${d.tipo} - Kioscos José Arteta`);
+        const cuerpo = encodeURIComponent(
+            `Estimado(a) ${d.cliente},\n\n` +
+            `Es un gusto saludarle. A continuación presento el resumen del presupuesto para su proyecto:\n\n` +
+            `Ubicación: ${d.obra}\n` +
+            `Valor Total: ${d.total}\n\n` +
+            `Quedo atento a cualquier inquietud para proceder con la programación de la obra.\n\n` +
+            `Atentamente,\n` +
+            `José Arteta\n` +
+            `Arquitectura Natural & Construcción Técnica`
+        );
+
+        window.location.href = `mailto:${d.email}?subject=${asunto}&body=${cuerpo}`;
+    }
+// Inicialización del selector de países
+const inputTel = document.querySelector("#c_tel");
+const iti = window.intlTelInput(inputTel, {
+    initialCountry: "co", // Colombia por defecto
+    separateDialCode: true, // Muestra el +57 fuera del cuadro de texto
+    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@21.2.7/build/js/utils.js",
+});
+
+// MODIFICACIÓN NECESARIA EN LA FUNCIÓN obtenerDatosResumen
+// Para que WhatsApp tome el código del país correctamente
+function obtenerDatosResumen() {
+    const numeroCompleto = iti.getNumber(); // Esto obtiene el +57 junto al número
+    return {
+        cliente: document.getElementById('c_nombre').value || "Cliente",
+        telefono: numeroCompleto.replace('+', ''), // WhatsApp prefiere sin el +
+        email: document.getElementById('c_email').value,
+        total: document.getElementById('finalTotal').innerText,
+        tipo: document.getElementById('c_tipo').value,
+        obra: document.getElementById('c_obra').value || "No especificada"
+    };
+}
+
+
+
+
+
     </script>
 </body>
 </html>

@@ -3,378 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LogiLoad PRO | Intelligence Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Ubuntu:wght@700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title>LogiLoad Engineering v5.2</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         :root {
-            --brand-blue: #0d6efd;
-            --brand-dark: #0d1117;
-            --panel-bg: #161b22;
-            --text-light: #f4f4f4;
-            --accent-gold: #f1c40f;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+            --gray-light: #f8f9fa;
+            --gray-mid: #dfe6e9;
+            --text: #2d3436;
+            --accent: #0984e3;
+            --danger: #d63031;
+            --success: #00b894;
+            --whatsapp: #25d366;
         }
 
-        @keyframes revealPage {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            margin: 0; padding-bottom: 110px;
         }
 
-        body { 
-            background-color: var(--brand-dark); 
-            color: var(--text-light); 
-            font-family: 'Inter', sans-serif; 
-            padding-top: 100px;
-            animation: revealPage 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        h1, h2, h3, h4, h5, .ubuntu { font-family: 'Ubuntu', sans-serif; }
+
+        /* --- HEADER & BADGES --- */
+        .app-header {
+            background: var(--white);
+            padding: 20px;
+            border-bottom: 2px solid var(--gray-mid);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        /* --- NAVBAR DINÁMICO --- */
-        .navbar-custom { 
-            background: rgba(13, 17, 23, 0.7); 
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-            transition: all 0.4s ease;
-            padding: 15px 0;
+        .status-pill {
+            font-size: 0.7rem; font-weight: 800; padding: 5px 15px;
+            border-radius: 50px; text-transform: uppercase;
+            border: 1px solid transparent;
         }
-        .navbar-scrolled { padding: 8px 0; background: rgba(13, 17, 23, 0.95); }
+        .status-ok { background: #e3fcef; color: var(--success); border-color: var(--success); }
+        .status-err { background: #fff0f0; color: var(--danger); border-color: var(--danger); }
 
-        .nav-link-pro {
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin: 0 15px;
-            position: relative;
+        /* --- CARDS & HOVER --- */
+        .card-eng {
+            background: var(--white); border: 1px solid var(--gray-mid);
+            border-radius: 12px; padding: 20px; margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-eng:hover {
+            transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            border-color: var(--accent);
+        }
+
+        /* --- TIPO DE CARGA SELECTOR --- */
+        .type-selector { display: flex; gap: 10px; margin-bottom: 20px; }
+        .type-btn {
+            flex: 1; padding: 15px; border: 1px solid var(--gray-mid);
+            border-radius: 10px; text-align: center; cursor: pointer; transition: 0.2s;
+            background: var(--gray-light);
+        }
+        .type-btn.active {
+            background: var(--accent); color: white; border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(9, 132, 227, 0.3);
+        }
+
+        /* --- INPUTS & SELECTS --- */
+        .form-label { font-size: 0.75rem; font-weight: 700; color: #636e72; text-transform: uppercase; }
+        .form-control, .form-select {
+            border: 1px solid var(--gray-mid); background: var(--gray-light);
+            border-radius: 8px; font-weight: 500;
+        }
+        .form-control:focus { box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.1); border-color: var(--accent); }
+
+        /* --- NAV BAR --- */
+        .nav-logi {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 600px; background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px); border: 1px solid var(--gray-mid);
+            border-radius: 20px; display: flex; justify-content: space-around;
+            padding: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); z-index: 2000;
+        }
+        .nav-item {
+            text-decoration: none; color: #636e72; font-size: 0.65rem;
+            font-weight: 700; display: flex; flex-direction: column; align-items: center;
             transition: 0.3s;
         }
-        .nav-link-pro:hover { color: var(--brand-blue); }
-        .nav-link-pro::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background: var(--brand-blue); transition: 0.3s;
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; }
+        .nav-item.active { color: var(--accent); }
+
+        /* --- MODAL RESUMEN --- */
+        .report-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; align-items: center;
+            justify-content: center; z-index: 3000;
         }
-        .nav-link-pro:hover::after { width: 100%; }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 20px;
+            width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
 
-        /* --- INTRO & CARDS --- */
-        .intro-box { background: rgba(13, 110, 253, 0.03); border: 1px dashed rgba(13, 110, 253, 0.3); border-radius: 15px; padding: 20px; margin-bottom: 25px; transition: 0.3s; }
-        .intro-box:hover { border-style: solid; background: rgba(13, 110, 253, 0.06); }
-
-        .app-container { background: var(--panel-bg); border-radius: 24px; border: 1px solid #30363d; padding: 35px; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
-        .section-card { background: rgba(0,0,0,0.2); padding: 25px; border-radius: 18px; border: 1px solid #30363d; }
-        
-        .form-control, .form-select { background: #0d1117; border: 1px solid #30363d; color: white; border-radius: 10px; }
-        .form-control:focus { background: #0d1117; color: white; border-color: var(--brand-blue); box-shadow: none; }
-
-        /* --- BOTONES --- */
-        .btn-pro { border-radius: 12px; font-weight: 700; transition: 0.4s; padding: 12px; }
-        .btn-pro:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .btn-support-nav { border: 1px solid var(--brand-blue); color: var(--brand-blue); background: transparent; padding: 6px 18px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; transition: 0.3s; text-decoration: none; }
-        .btn-support-nav:hover { background: var(--brand-blue); color: white; }
-
-        /* --- FOOTER DINÁMICO --- */
-        .footer-minimal { background: #090c10; border-top: 1px solid #30363d; padding: 80px 0 40px; margin-top: 100px; position: relative; }
-        .footer-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80%; height: 1px; background: linear-gradient(90deg, transparent, var(--brand-blue), transparent); }
-        .footer-link { color: #8b949e; text-decoration: none; transition: 0.3s; font-size: 0.85rem; }
-        .footer-link:hover { color: var(--brand-blue); transform: translateX(5px); display: inline-block; }
-
-        .result-val { font-family: 'Ubuntu', sans-serif; color: var(--brand-blue); font-size: 1.8rem; text-shadow: 0 0 20px rgba(13, 110, 253, 0.2); }
+        .share-btn {
+            width: 100%; padding: 12px; border-radius: 10px; border: none;
+            margin-bottom: 10px; font-weight: 700; display: flex;
+            align-items: center; justify-content: center; gap: 10px; transition: 0.2s;
+        }
+        .btn-pdf { background: #ff7675; color: white; }
+        .btn-ws { background: var(--whatsapp); color: white; }
+        .btn-mail { background: var(--accent); color: white; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg fixed-top navbar-custom" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">
-            <i class="bi bi-box-seam-fill text-primary me-2 fs-4"></i>
-            <span style="font-family:'Ubuntu'; color:white; letter-spacing: 1px;">LOGI<span class="text-primary">LOAD</span> PRO</span>
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="mx-auto">
-                <a href="#" class="nav-link-pro">SIMULADOR</a>
-                <a href="#" class="nav-link-pro">EQUIPOS</a>
-                <a href="#" class="nav-link-pro">REPORTES</a>
-            </div>
-            <div class="d-flex">
-                <a href="mailto:soporte@logiload.com" class="btn-support-nav">
-                    <i class="bi bi-headset me-2"></i>SOPORTE TÉCNICO
-                </a>
-            </div>
-        </div>
+<header class="app-header d-flex justify-content-between align-items-center">
+    <div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-gear-wide-connected text-primary"></i> LOGILOAD <span class="fw-light">V5.2</span></h5>
+        <small class="text-muted">Terminal de Ingeniería de Transporte</small>
     </div>
-</nav>
+    <div id="top-status" class="status-pill status-ok">Óptimo</div>
+</header>
 
-<div class="container mb-5">
-    <div class="intro-box">
-        <div class="row align-items-center">
-            <div class="col-md-11">
-                <h6 class="fw-bold text-white mb-1"><i class="bi bi-journal-text text-primary me-2"></i>Protocolo de Optimización</h6>
-                <p class="small text-white-50 mb-0">
-                    Defina las dimensiones brutas del bulto y seleccione las variables de entorno. El sistema recalculará la <strong>estiba neta</strong> considerando factores de mermas técnicas.
-                </p>
-            </div>
-        </div>
+<main class="container mt-4">
+
+    <div class="card-eng">
+        <label class="form-label"><i class="bi bi-truck-flatbed me-2"></i>Tipo de Unidad / Flota</label>
+        <select id="unit-select" class="form-select form-select-lg" onchange="app.calculate()">
+            <optgroup label="Contenedores Marítimos">
+                <option value="1200|235|239|28000">40' High Cube (12m - 28T)</option>
+                <option value="590|235|235|21000">20' Estándar (5.9m - 21T)</option>
+                <option value="1360|248|270|26000">45' Pallet Wide (13.6m - 26T)</option>
+            </optgroup>
+            <optgroup label="Semiremolques y Carretera">
+                <option value="1350|245|270|32000">Semiremolque Sider (13.5m - 32T)</option>
+                <option value="1350|240|260|30000">Frigorífico / Reffer (13.5m - 30T)</option>
+                <option value="1360|250|0|35000">Plataforma Abierta (13.6m - 35T)</option>
+            </optgroup>
+        </select>
     </div>
 
-    <div class="app-container">
-        <div class="row g-4">
-            <div class="col-lg-5">
-                <div class="section-card">
-                    <h6 class="text-primary fw-bold mb-4 small"><i class="bi bi-sliders me-2"></i>PARÁMETROS DE CARGA</h6>
-                    
-                    <label class="small fw-bold text-white-50 mb-1">Tipo de Unidad</label>
-                    <select id="v_unidad" class="form-select mb-3" onchange="calcularCubicaje()">
-                        <option value="28000|67|40 HC">Contenedor 40' HC (28t / 67m³)</option>
-                        <option value="26000|33|20 ST">Contenedor 20' ST (26t / 33m³)</option>
-                        <option value="24000|90|Sider">Sider / Full Truck (24t / 90m³)</option>
-                    </select>
+    <div class="type-selector">
+        <div class="type-btn active" id="type-sq" onclick="app.setShape('square')">
+            <i class="bi bi-box-seam d-block fs-4"></i><small class="fw-bold">Cúbica</small>
+        </div>
+        <div class="type-btn" id="type-cy" onclick="app.setShape('cylindrical')">
+            <i class="bi bi-circle-upside-down d-block fs-4"></i><small class="fw-bold">Cilíndrica</small>
+        </div>
+    </div>
 
-                    <div class="row g-2 mb-3">
-                        <div class="col-6"><label class="small fw-bold text-white-50">Cant. Bultos</label><input type="number" id="v_cant" class="form-control" value="0" oninput="calcularCubicaje()"></div>
-                        <div class="col-6"><label class="small fw-bold text-white-50">Peso Unit. (kg)</label><input type="number" id="v_peso" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card-eng">
+                <h6 class="ubuntu fw-bold mb-3">Métricas de la Mercancía</h6>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label class="form-label">Cant. Bultos</label>
+                        <input type="number" id="qty" class="form-control" value="24" oninput="app.calculate()">
                     </div>
-
-                    <div class="row g-2 mb-4">
-                        <div class="col-4"><label class="small fw-bold text-white-50">Largo (m)</label><input type="number" id="v_l" class="form-control" value="0" oninput="calcularCubicaje()"></div>
-                        <div class="col-4"><label class="small fw-bold text-white-50">Ancho (m)</label><input type="number" id="v_w" class="form-control" value="0" oninput="calcularCubicaje()"></div>
-                        <div class="col-4"><label class="small fw-bold text-white-50">Alto (m)</label><input type="number" id="v_h" class="form-control" value="0" oninput="calcularCubicaje()"></div>
+                    <div class="col-6">
+                        <label class="form-label">Peso Un. (kg)</label>
+                        <input type="number" id="weight" class="form-control" value="1000" oninput="app.calculate()">
                     </div>
-
-                    <h6 class="text-primary fw-bold mb-3 small"><i class="bi bi-layers-half me-2"></i>AJUSTES OPERATIVOS</h6>
-                    <div class="p-3 bg-dark rounded-3 border border-secondary mb-4">
-                        <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="check_pallet" onchange="calcularCubicaje()"><label class="small">Peso de Pallets (+25kg)</label></div>
-                        <div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="check_seguridad" onchange="calcularCubicaje()"><label class="small">Holgura de Seguridad (5%)</label></div>
-                        <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="check_estiba" onchange="calcularCubicaje()"><label class="small">Pérdida por Estiba (10%)</label></div>
+                    <div class="col-4">
+                        <label class="form-label" id="lbl-l">Largo (m)</label>
+                        <input type="number" id="dim-l" class="form-control" value="1.2" step="0.1" oninput="app.calculate()">
                     </div>
-
-                    <button onclick="generarPDF()" class="btn btn-pro btn-primary w-100">
-                        <i class="bi bi-cloud-download me-2"></i>GENERAR ANALÍTICA PRO
-                    </button>
-                </div>
-            </div>
-
-            <div class="col-lg-7">
-                <div class="section-card h-100">
-                    <div class="row text-center mb-5">
-                        <div class="col-6 border-end border-secondary">
-                            <span class="small text-white-50 d-block mb-1">VOLUMEN OCUPADO</span>
-                            <span class="result-val" id="res_vol">0 m³</span>
-                        </div>
-                        <div class="col-6">
-                            <span class="small text-white-50 d-block mb-1">MASA BRUTA TOTAL</span>
-                            <span class="result-val" id="res_peso">0 kg</span>
-                        </div>
+                    <div class="col-4">
+                        <label class="form-label" id="lbl-w">Ancho (m)</label>
+                        <input type="number" id="dim-w" class="form-control" value="1.0" step="0.1" oninput="app.calculate()">
                     </div>
-
-                    <div style="height: 320px;">
-                        <canvas id="loadChart"></canvas>
-                    </div>
-
-                    <div id="alert_box" class="mt-4 p-3 rounded-3 d-none">
-                        <div class="d-flex align-items-center">
-                            <i id="alert_icon" class="bi fs-4 me-3"></i>
-                            <div>
-                                <h6 class="fw-bold mb-0 small" id="alert_title"></h6>
-                                <p class="extra-small mb-0 opacity-75" id="alert_msg" style="font-size: 0.75rem;"></p>
-                            </div>
-                        </div>
+                    <div class="col-4">
+                        <label class="form-label">Alto (m)</label>
+                        <input type="number" id="dim-h" class="form-control" value="1.1" step="0.1" oninput="app.calculate()">
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-5">
+            <div class="card-eng text-center bg-light border-0">
+                <h6 class="ubuntu small fw-bold opacity-50">OCUPACIÓN DE MASA BRUTA</h6>
+                <h1 id="total-weight" class="fw-bold mb-0">0</h1>
+                <small class="fw-bold text-muted">KILOGRAMOS TOTALES</small>
+                <div class="progress mt-3" style="height: 10px;">
+                    <div id="weight-bar" class="progress-bar bg-primary" style="width: 0%"></div>
+                </div>
+                <div id="usage-text" class="small mt-2 fw-bold">0% de capacidad usada</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-eng border-primary bg-white shadow-sm" onclick="app.optimize()">
+        <div class="d-flex align-items-center justify-content-between cursor-pointer">
+            <div>
+                <h6 class="mb-0 ubuntu fw-bold text-primary"><i class="bi bi-cpu me-2"></i>Optimizar Distribución</h6>
+                <small class="text-muted">Ajustar dimensiones para máxima eficiencia</small>
+            </div>
+            <i class="bi bi-chevron-right text-primary"></i>
+        </div>
+        <div id="opt-tip" class="mt-3 p-2 bg-light rounded small d-none border-start border-primary border-4"></div>
+    </div>
+
+</main>
+
+<div class="report-modal" id="modal-report">
+    <div class="modal-content">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <h5 class="fw-bold ubuntu mb-0">Resumen de Carga</h5>
+            <button class="btn-close" onclick="app.closeModal()"></button>
+        </div>
+        
+        <div id="summary-data" class="bg-light p-3 rounded mb-4 small">
+            </div>
+
+        <button class="share-btn btn-pdf" onclick="app.exportPDF()">
+            <i class="bi bi-file-earmark-pdf"></i> Descargar Reporte PDF
+        </button>
+        <button class="share-btn btn-ws" onclick="app.shareWS()">
+            <i class="bi bi-whatsapp"></i> Enviar por WhatsApp
+        </button>
+        <button class="share-btn btn-mail" onclick="app.shareMail()">
+            <i class="bi bi-envelope"></i> Enviar por Email
+        </button>
     </div>
 </div>
 
-<footer class="footer-minimal">
-    <div class="footer-glow"></div>
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-lg-5">
-                <h5 class="fw-bold text-white mb-3" style="font-family:'Ubuntu';">M. <span class="text-primary">CARRASQUILLA</span></h5>
-                <p class="small text-white-50 pe-lg-5">Especialista en Transformación Digital Logística. Desarrollando soluciones de precisión para el corredor bioceánico.</p>
-                <div class="d-flex gap-3 mt-4">
-                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-linkedin"></i></a>
-                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-whatsapp"></i></a>
-                    <a href="#" class="text-white-50 fs-5"><i class="bi bi-github"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-2 col-6">
-                <h6 class="text-primary small fw-bold mb-4">SISTEMA</h6>
-                <a href="#" class="footer-link d-block mb-2">Simulador</a>
-                <a href="#" class="footer-link d-block mb-2">KPIs 2026</a>
-                <a href="#" class="footer-link d-block">Configuración</a>
-            </div>
-            <div class="col-lg-2 col-6">
-                <h6 class="text-primary small fw-bold mb-4">RECURSOS</h6>
-                <a href="#" class="footer-link d-block mb-2">Documentación</a>
-                <a href="#" class="footer-link d-block mb-2">Límites Legales</a>
-                <a href="#" class="footer-link d-block">Ayuda</a>
-            </div>
-            <div class="col-lg-3">
-                <h6 class="text-primary small fw-bold mb-4">SUSCRIPCIÓN TÉCNICA</h6>
-                <div class="input-group">
-                    <input type="text" class="form-control form-control-sm" placeholder="Email...">
-                    <button class="btn btn-primary btn-sm"><i class="bi bi-send"></i></button>
-                </div>
-                <p class="extra-small text-white-50 mt-3" style="font-size: 0.7rem;">Reciba actualizaciones de tarifas y normativas internacionales.</p>
-            </div>
-        </div>
-        <div class="mt-5 pt-4 border-top border-secondary text-center">
-            <p class="small text-white-50 mb-0">© 2026 <b>Miguel Carrasquilla</b>. <span class="badge bg-dark border border-secondary ms-2">V 1.0.5 STABLE</span></p>
-        </div>
-    </div>
-</footer>
+<nav class="nav-logi">
+    <a href="#" class="nav-item active"><i class="bi bi-calculator-fill"></i><span>INGENIERÍA</span></a>
+    <a href="javascript:app.openModal()" class="nav-item"><i class="bi bi-send-fill"></i><span>DESPACHAR</span></a>
+    <a href="javascript:location.reload()" class="nav-item"><i class="bi bi-trash3-fill"></i><span>LIMPIAR</span></a>
+</nav>
 
 <script>
-    // Dinámica del Navbar al Scroll
-    window.onscroll = function() {
-        const nav = document.getElementById('mainNav');
-        if (window.scrollY > 50) {
-            nav.classList.add('navbar-scrolled');
-        } else {
-            nav.classList.remove('navbar-scrolled');
-        }
-    };
+const app = {
+    shape: 'square',
+    data: {},
 
-    let loadChart;
+    setShape(type) {
+        this.shape = type;
+        document.getElementById('type-sq').classList.toggle('active', type === 'square');
+        document.getElementById('type-cy').classList.toggle('active', type === 'cylindrical');
+        document.getElementById('lbl-l').innerText = type === 'square' ? 'Largo (m)' : 'Diámetro (m)';
+        document.getElementById('lbl-w').innerText = type === 'square' ? 'Ancho (m)' : 'Altura (m)';
+        this.calculate();
+    },
 
-    function calcularCubicaje() {
-        const unidadRaw = document.getElementById('v_unidad').value.split('|');
-        const capPeso = parseFloat(unidadRaw[0]);
-        const capVol = parseFloat(unidadRaw[1]);
-
-        let cant = parseFloat(document.getElementById('v_cant').value) || 0;
-        let pUnit = parseFloat(document.getElementById('v_peso').value) || 0;
-        let l = parseFloat(document.getElementById('v_l').value) || 0;
-        let w = parseFloat(document.getElementById('v_w').value) || 0;
-        let h = parseFloat(document.getElementById('v_h').value) || 0;
-
-        if (document.getElementById('check_pallet').checked) pUnit += 25;
+    calculate() {
+        const v = document.getElementById('unit-select').value.split('|');
+        const unit = { l: +v[0], w: +v[1], h: +v[2], max: +v[3], name: document.getElementById('unit-select').selectedOptions[0].text };
         
-        let volTotal = cant * (l * w * h);
-        let pesoTotal = cant * pUnit;
+        const qty = +document.getElementById('qty').value;
+        const wUn = +document.getElementById('weight').value;
+        const totalW = qty * wUn;
+        const perc = (totalW / unit.max) * 100;
 
-        if (document.getElementById('check_seguridad').checked) volTotal *= 1.05;
-        if (document.getElementById('check_estiba').checked) volTotal *= 1.10;
-
-        document.getElementById('res_vol').innerText = volTotal.toFixed(2) + ' m³';
-        document.getElementById('res_peso').innerText = pesoTotal.toLocaleString() + ' kg';
-
-        const porcVol = (volTotal / capVol) * 100;
-        const porcPeso = (pesoTotal / capPeso) * 100;
-
-        const ctx = document.getElementById('loadChart').getContext('2d');
-        if (loadChart) loadChart.destroy();
-
-        loadChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Espacio %', 'Peso %'],
-                datasets: [{
-                    data: [porcVol, porcPeso],
-                    backgroundColor: [porcVol > 100 ? '#ff4d4d' : '#0d6efd', porcPeso > 100 ? '#ff4d4d' : '#00c875'],
-                    borderRadius: 8,
-                    barThickness: 35
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { 
-                    x: { max: 120, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#8b949e' } },
-                    y: { ticks: { color: '#fff' } }
-                }
-            }
-        });
-
-        const abox = document.getElementById('alert_box');
-        abox.classList.remove('d-none', 'bg-success', 'bg-danger', 'bg-warning', 'text-dark', 'text-white');
-
-        if (porcPeso > 100 || porcVol > 100) {
-            abox.className = 'mt-4 p-3 rounded-3 bg-danger text-white d-flex align-items-center';
-            document.getElementById('alert_icon').className = 'bi bi-x-octagon-fill fs-4 me-3';
-            document.getElementById('alert_title').innerText = "CAPACIDAD EXCEDIDA";
-            document.getElementById('alert_msg').innerText = "Riesgo estructural y legal detectado.";
+        // UI Updates
+        document.getElementById('total-weight').innerText = totalW.toLocaleString();
+        document.getElementById('weight-bar').style.width = Math.min(perc, 100) + "%";
+        document.getElementById('usage-text').innerText = perc.toFixed(1) + "% de la capacidad usada";
+        
+        const status = document.getElementById('top-status');
+        if(perc > 100) {
+            status.className = "status-pill status-err";
+            status.innerText = "¡Sobrepeso!";
+            document.getElementById('weight-bar').className = "progress-bar bg-danger";
         } else {
-            abox.className = 'mt-4 p-3 rounded-3 bg-success text-white d-flex align-items-center';
-            document.getElementById('alert_icon').className = 'bi bi-check-circle-fill fs-4 me-3';
-            document.getElementById('alert_title').innerText = "DATOS DENTRO DE NORMA";
-            document.getElementById('alert_msg').innerText = "La unidad soporta la configuración de carga actual.";
+            status.className = "status-pill status-ok";
+            status.innerText = "Seguro";
+            document.getElementById('weight-bar').className = "progress-bar bg-primary";
         }
+
+        this.data = { unit, totalW, qty, wUn, perc };
+    },
+
+    optimize() {
+        const tip = document.getElementById('opt-tip');
+        tip.classList.remove('d-none');
+        
+        const v = this.data.unit;
+        const dl = +document.getElementById('dim-l').value * 10;
+        const dw = +document.getElementById('dim-w').value * 10;
+        
+        const cap = Math.floor(v.l / dl) * Math.floor(v.w / dw);
+        
+        if (this.data.perc > 100) {
+            const ideal = Math.floor(v.max / this.data.wUn);
+            tip.innerHTML = `⚠️ <strong>ALERTA:</strong> Exceso de peso. Retire ${this.data.qty - ideal} unidades para no exceder las ${v.max/1000} toneladas.`;
+        } else if (this.data.qty > cap) {
+            tip.innerHTML = `📐 <strong>TIP:</strong> No caben en un nivel. Debe estibar en 2 niveles o usar configuración en espiga.`;
+        } else {
+            tip.innerHTML = `✅ <strong>ÓPTIMO:</strong> La carga entra perfectamente en la base de la unidad.`;
+        }
+    },
+
+    openModal() {
+        this.calculate();
+        const d = this.data;
+        document.getElementById('summary-data').innerHTML = `
+            <strong>UNIDAD:</strong> ${d.unit.name}<br>
+            <strong>CARGA TOTAL:</strong> ${d.totalW.toLocaleString()} kg (${d.perc.toFixed(1)}%)<br>
+            <strong>CANTIDAD:</strong> ${d.qty} unidades de ${d.wUn} kg<br>
+            <strong>ESTADO:</strong> ${d.perc > 100 ? 'FUERA DE NORMA' : 'DENTRO DE NORMA'}
+        `;
+        document.getElementById('modal-report').style.display = 'flex';
+    },
+
+    closeModal() { document.getElementById('modal-report').style.display = 'none'; },
+
+    exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFont("helvetica", "bold");
+        doc.text("MANIFIESTO DE CARGA - LOGILOAD", 20, 20);
+        doc.setFont("helvetica", "normal");
+        doc.text(`Unidad: ${this.data.unit.name}`, 20, 35);
+        doc.text(`Carga Bruta: ${this.data.totalW} kg`, 20, 45);
+        doc.text(`Cantidad: ${this.data.qty} bultos`, 20, 55);
+        doc.save("Reporte_Carga.pdf");
+    },
+
+    shareWS() {
+        const msg = encodeURIComponent(`📦 *LogiLoad Report*\nUnidad: ${this.data.unit.name}\nPeso: ${this.data.totalW}kg\nEstado: ${this.data.perc > 100 ? 'SOBREPESO' : 'OK'}`);
+        window.open(`https://wa.me/?text=${msg}`);
+    },
+
+    shareMail() {
+        const subject = encodeURIComponent("Reporte de Ingeniería de Carga");
+        const body = encodeURIComponent(`Resumen Logístico:\nVehículo: ${this.data.unit.name}\nPeso Total: ${this.data.totalW}kg\nUso: ${this.data.perc.toFixed(1)}%`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
     }
+};
 
-    function generarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const fecha = new Date().toLocaleString();
-    const unidad = document.getElementById('v_unidad').selectedOptions[0].text;
-    
-    // --- ENCABEZADO CORPORATIVO ---
-    doc.setFillColor(13, 110, 253); // Azul LogiLoad
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22);
-    doc.setFont("helvetica", "bold");
-    doc.text("LOGILOAD PRO | REPORT", 15, 20);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text("Análisis Técnico de Cubicaje y Optimización de Carga", 15, 28);
-
-    // --- METADATOS ---
-    doc.setTextColor(40, 40, 40);
-    doc.text(`Fecha de emisión: ${fecha}`, 140, 50);
-    doc.text(`Unidad analizada: ${unidad}`, 15, 50);
-
-    // --- TABLA DE DATOS TÉCNICOS ---
-    const rows = [
-        ["Cantidad de Bultos", document.getElementById('v_cant').value + " Unidades"],
-        ["Dimensiones Unitarias", `${document.getElementById('v_l').value}m x ${document.getElementById('v_w').value}m x ${document.getElementById('v_h').value}m`],
-        ["Peso de Pallets incluido", document.getElementById('check_pallet').checked ? "SÍ (+25kg/u)" : "NO"],
-        ["Margen de Seguridad (5%)", document.getElementById('check_seguridad').checked ? "APLICADO" : "N/A"],
-        ["Merma por Estiba (10%)", document.getElementById('check_estiba').checked ? "APLICADA" : "N/A"],
-        ["VOLUMEN TOTAL FINAL", document.getElementById('res_vol').innerText],
-        ["PESO BRUTO TOTAL", document.getElementById('res_peso').innerText]
-    ];
-
-    doc.autoTable({
-        startY: 60,
-        head: [['Parámetro Operativo', 'Valor Resultante']],
-        body: rows,
-        theme: 'striped',
-        headStyles: { fillStyle: [13, 17, 23], textColor: [255, 255, 255] },
-        styles: { fontSize: 10, cellPadding: 4 }
-    });
-
-    // --- SOPORTE Y FIRMA ---
-    const finalY = doc.lastAutoTable.finalY + 15;
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.text("SOPORTE TÉCNICO:", 15, finalY);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Analista: Miguel Carrasquilla", 15, finalY + 7);
-    doc.text("Email: soporte@logiload.com", 15, finalY + 12);
-
-    // --- DESCARGO DE RESPONSABILIDAD (DISCLAIMER) ---
-    doc.setFontSize(8);
-    doc.setTextColor(120, 120, 120);
-    const disclaimer = "AVISO LEGAL: Este documento es una simulación basada en cálculos matemáticos de cubicaje. Los valores finales pueden variar dependiendo de la distribución física real, el centro de gravedad de la carga y las normativas viales vigentes en cada jurisdicción. LogiLoad Pro no se hace responsable por daños en la mercancía o multas por exceso de peso resultantes de una estiba incorrecta.";
-    const splitDisclaimer = doc.splitTextToSize(disclaimer, 180);
-    doc.text(splitDisclaimer, 15, finalY + 30);
-
-    // --- GUARDAR ---
-    doc.save(`Reporte_LogiLoad_${Math.floor(Math.random() * 1000)}.pdf`);
-}
-
-    window.onload = calcularCubicaje;
+window.onload = () => app.init();
 </script>
-
 </body>
 </html>
