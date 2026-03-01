@@ -292,17 +292,19 @@
 
        
             
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
 
-         <button onclick="enviarWhatsApp()" class="bg-[#25D366] text-white rounded-2xl py-4 font-bold text-sm uppercase flex items-center justify-center gap-3 shadow-lg shadow-green-200">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-10 h-10" alt="WhatsApp">
+         <button onclick="enviarWhatsApp()" 
+         class="w-full bg-[#25D366] text-white rounded-2xl py-4 font-bold text-sm uppercase flex items-center justify-center gap-3 shadow-lg shadow-green-200">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-8 h-8 sm:w-10 sm:h-10"alt="WhatsApp">
     <span>WhatsApp</span>
 </button>
 
     
 
 
-                <button onclick="enviarEmail()" class="bg-slate-800 text-white rounded-2xl py-4 font-bold text-xs uppercase flex items-center justify-center gap-2 shadow-lg shadow-slate-200">
+                <button onclick="enviarEmail()" 
+                class="w-full bg-slate-800 text-white rounded-2xl py-4 font-bold text-xs uppercase flex items-center justify-center gap-2 shadow-lg shadow-slate-200">
                     <i data-lucide="mail"></i> Correo
                 </button>
             </div>
