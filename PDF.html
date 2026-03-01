@@ -49,10 +49,8 @@
         box-sizing: border-box; /* Crucial para que el padding no aumente el ancho real */
     }
 
-/* Busca esta sección en tu código y añade esto: */
-#c_tel {
-    padding-left: 80px !important; /* Mueve el texto a la derecha */
-}
+/* campo de numero de celular ajuste de centrado */
+#c_tel { padding-left: 50px !important; }
 
     /* Espacio extra entre labels e inputs */
     label {
@@ -173,22 +171,33 @@
                         <input type="text" id="c_obra" placeholder="Ciudad, Barrio o Finca">
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-[2rem]">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black text-olive ml-2 uppercase">Garantía (Días)</label>
-                            <input type="number" id="c_garantia" value="30" class="text-center font-bold">
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-black text-olive ml-2 uppercase">Documento</label>
-                            <select id="c_tipo" class="font-bold">
-                                <option value="COTIZACIÓN">COTIZACIÓN</option>
-                                <option value="CONTRATO">FACTURA</option>
-                            </select>
-                        </div>
-                    </div>
+              <div class="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-[2rem]">
+    
+    <div class="space-y-1">
+        <label class="text-[10px] font-black text-olive ml-2 uppercase">Tipo de Documento</label>
+        <select id="c_tipo" class="font-bold" onchange="toggleFacturaField()">
+            <option value="COTIZACIÓN">COTIZACIÓN</option>
+            <option value="FACTURA">FACTURA</option>
+        </select>
+    </div>
+    
+                <div class="space-y-1">
+        <label class="text-[10px] font-black text-olive ml-2 uppercase">
+            <span id="label-tiempo">Garantía (Días)</span>
+        </label>
+        <input type="number" id="c_garantia" value="0" class="text-center font-bold">
+    </div>
+    
+    
+
+    <div id="contenedor-num-factura" class="col-span-2 space-y-1 hidden">
+        <label class="text-[10px] font-black text-slate-400 ml-2 uppercase">Número de Factura</label>
+        <input type="text" id="c_num_factura" placeholder="Ej: 001" class="font-bold border-olive">
+    </div>
+</div>
                 </div>
 
-                <div class="bg-olive/5 border border-olive/10 rounded-[2.5rem] p-5">
+               <div id="anticipoSection" class="bg-olive/5 border border-olive/10 rounded-[2.5rem] p-5">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-3">
                             <i data-lucide="banknote" class="text-olive"></i>
@@ -203,7 +212,7 @@
                         <div class="flex items-center gap-4">
                             <div class="flex-1">
                                 <label class="text-[10px] font-bold text-slate-400 ml-2 uppercase">Porcentaje (%)</label>
-                                <input type="number" id="val_anticipo_pct" value="50" oninput="calcular()">
+                                <input type="number" id="val_anticipo_pct" value="0" oninput="calcular()">
                             </div>
                             <div class="text-right">
                                 <label class="text-[10px] font-bold text-slate-400 mr-2 uppercase">Valor Sugerido</label>
@@ -274,7 +283,7 @@
                 </div>
 
                 <button onclick="generarPDF()" class="btn-primary w-full py-6 text-lg flex items-center justify-center gap-4">
-                    <i data-lucide="file-down"></i> Generar Propuesta PDF
+                    <i data-lucide="file-down"></i> Generar Documento PDF
                 
                 </button>
 
@@ -362,6 +371,46 @@ imgLogo.onload = function() {
         }
 
         // GESTIÓN DE ITEMS
+
+function toggleFacturaField() {
+
+    const tipo = document.getElementById('c_tipo').value;
+    const contenedorFactura = document.getElementById('contenedor-num-factura');
+    const labelTiempo = document.getElementById('label-tiempo');
+    const inputTiempo = document.getElementById('c_garantia');
+    const anticipoSection = document.getElementById('anticipoSection');
+
+    if (tipo === 'FACTURA') {
+
+        // Mostrar número factura
+        contenedorFactura.classList.remove('hidden');
+
+        // Cambiar Garantía → Vencimiento
+        labelTiempo.innerText = "Vencimiento (Días)";
+        labelTiempo.classList.replace('text-olive', 'text-red-500');
+
+        if (inputTiempo.value == "0") inputTiempo.value = "8";
+
+        // ✅ OCULTAR ANTICIPO
+        anticipoSection.classList.add('hidden');
+
+    } else {
+
+        // Ocultar número factura
+        contenedorFactura.classList.add('hidden');
+
+        // Volver a Garantía
+        labelTiempo.innerText = "Garantía (Días)";
+        labelTiempo.classList.replace('text-red-500', 'text-olive');
+
+        document.getElementById('c_num_factura').value = '';
+
+        // ✅ MOSTRAR ANTICIPO
+        anticipoSection.classList.remove('hidden');
+    }
+}
+
+
         function addItem(tipo) {
     const cont = tipo === 'MO' ? document.getElementById('cont-mo') : document.getElementById('cont-mat');
     const lista = tipo === 'MO' ? DB.MO : DB.MAT;
@@ -497,6 +546,8 @@ imgLogo.onload = function() {
         }
 
        // GENERACIÓN DE PDF PROFESIONAL
+
+
 async function generarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -670,28 +721,47 @@ doc.roundedRect(145, currentY, 50, 18, 3, 3, 'FD');
                 doc.text("Kioscos Jose Arteta", 105, 290, {align:'center'});
             }
 
-            doc.save(`PROPUESTA_${document.getElementById('c_nombre').value.replace(/\s+/g, '_')}.pdf`);
-        }
+       const tipoDoc = document.getElementById('c_tipo').value;
+const cliente = document.getElementById('c_nombre').value.replace(/\s+/g, '_');
+const numFactura = document.getElementById('c_num_factura').value;
+const fecha = new Date().toISOString().slice(0,10);
+
+let nombreArchivo;
+
+if(tipoDoc === "FACTURA" && numFactura){
+    nombreArchivo = `FACTURA_${numFactura}_${cliente}.pdf`;
+}else{
+    nombreArchivo = `${tipoDoc}_${cliente}_${fecha}.pdf`;
+}
+
+doc.save(nombreArchivo);
+}
 
         // Inicialización
         lucide.createIcons();
         calcular();
 
-
+toggleFacturaField();
 
 // ... (tus funciones anteriores se mantienen igual)
 
-    function obtenerDatosResumen() {
-        return {
-            cliente: document.getElementById('c_nombre').value || "Cliente",
-            telefono: document.getElementById('c_tel').value.replace(/\s+/g, ''),
-            email: document.getElementById('c_email').value,
-            total: document.getElementById('finalTotal').innerText,
-            tipo: document.getElementById('c_tipo').value,
-            obra: document.getElementById('c_obra').value || "No especificada"
-        };
-    }
+ function obtenerDatosResumen() {
+    // Usamos iti.getNumber() para que WhatsApp reciba el +57 correctamente
+    const numeroCompleto = typeof iti !== 'undefined' ? iti.getNumber() : document.getElementById('c_tel').value;
+    const tipoDoc = document.getElementById('c_tipo').value;
+    const numFact = document.getElementById('c_num_factura').value;
 
+    return {
+        cliente: document.getElementById('c_nombre').value || "Cliente",
+        telefono: numeroCompleto.replace('+', ''), // WhatsApp prefiere sin el +
+        email: document.getElementById('c_email').value,
+        total: document.getElementById('finalTotal').innerText,
+        tipo: tipoDoc,
+        // Si hay número de factura, crea: "FACTURA N° 001", si no, solo "COTIZACIÓN"
+        tipoEtiqueta: numFact ? `${tipoDoc} N° ${numFact}` : tipoDoc,
+        obra: document.getElementById('c_obra').value || "No especificada"
+    };
+}
    
 /*
     function enviarWhatsApp() {
