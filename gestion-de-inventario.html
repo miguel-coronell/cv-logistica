@@ -518,5 +518,1155 @@
     draw();
   </script>
 
+<!-- chat Bot  -->
+
+
+<style>
+    :root {
+        --logi-bg: rgba(18, 18, 18, 0.95);
+        --logi-accent: #ffffff;
+        --logi-border: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Icono Redondo Flotante */
+ #chat-launcher {
+    position: fixed;
+    bottom: 15px;       /* Misma distancia al suelo que el de subida */
+    right: 90px;        /* Espacio para que no se encimen */
+    width: 45px;        /* Tamaño igual al botón de subida */
+    height: 45px;       /* Tamaño igual al botón de subida */
+    background: #ffffff; /* Fondo blanco para hacer match (opcional) */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Sombra suave */
+    transition: all 0.3s ease;
+    opacity: 0;             /* Invisible al cargar */
+    pointer-events: none;   /* No se puede cliquear mientras es invisible */
+    transform: translateY(20px); /* Un pequeño efecto de subida al aparecer */
+    transition: all 0.4s ease;  /* Transición suave */
+}
+
+#chat-launcher.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.btn-subir, #scroll-up-btn { 
+    position: fixed;
+    bottom: 20px;       /* Misma distancia al suelo */
+    right: 20px;        /* Distancia al borde derecho */
+    width: 50px;        /* Mismo ancho */
+    height: 50px;       /* Mismo alto */
+    border-radius: 50%;
+
+}
+
+/* Estilo para los botones dentro del chat */
+.btn-chat-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.wa { background: #25D366; color: white !important; }
+.mail { background: #ea4335; color: white !important; }
+.link { background: #333; color: white !important; }
+
+.btn-chat-icon:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.btn-chat-icon i {
+    font-size: 1rem;
+}
+
+    /* Efecto Hover & Movimiento al Clic */
+    #chat-launcher:hover {
+        transform: scale(1.1);
+        border-color: var(--logi-accent);
+    }
+
+    .launcher-active-anim {
+        animation: jump 0.5s ease;
+    }
+
+    @keyframes jump {
+        0%, 100% { transform: translateY(0) scale(1.1); }
+        50% { transform: translateY(-15px) scale(1.1); }
+    }
+
+    /* Icono de Robot Minimalista SVG */
+  #chat-launcher svg {
+    width: 20px;
+    height: 20px;
+    stroke: #1a1a1a;    /* Color oscuro para el robot */
+}
+
+    /* Ventana de Chat */
+    #chat-widget {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 340px;
+        max-height: 480px;
+        background: var(--logi-bg);
+        border: 1px solid var(--logi-border);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        z-index: 9999;
+        transition: all 0.4s ease;
+        box-shadow: 0 15px 45px rgba(0,0,0,0.6);
+        overflow: hidden;
+    }
+
+    .chat-hidden { opacity: 0; transform: translateY(20px) scale(0.9); pointer-events: none; }
+
+    /* Cuerpo del Chat */
+    .chat-body {
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: 350px;
+    }
+
+    .msg { font-size: 0.85rem; line-height: 1.5; padding: 10px 14px; border-radius: 15px; max-width: 85%; color: #e0e0e0; }
+    .bot { background: rgba(255,255,255,0.08); align-self: flex-start; border-bottom-left-radius: 2px; }
+    .user { background: white; color: black; align-self: flex-end; border-bottom-right-radius: 2px; font-weight: 500; }
+
+    /* Footer / Input */
+    .chat-footer { padding: 15px; display: flex; gap: 8px; border-top: 1px solid var(--logi-border); }
+    #chat-input {
+        flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--logi-border);
+        border-radius: 10px; padding: 8px 12px; color: white; outline: none; font-size: 0.8rem;
+    }
+    .send-btn { background: white; border: none; padding: 8px 12px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+    .send-btn:hover { background: #00ff88; }
+
+    /*efecto de ecribiendo */
+
+.typing-indicator { padding: 10px; margin: 5px; display: inline-block; }
+.typing-indicator span {
+    display: inline-block; width: 8px; height: 8px; background-color: #888;
+    border-radius: 50%; margin: 0 2px;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+
+
+</style>
+
+<div id="chat-launcher" onclick="toggleChat()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 8V4H8"/>
+    <rect width="16" height="12" x="4" y="8" rx="2"/>
+    <path d="M2 14h2"/>
+    <path d="M20 14h2"/>
+    <path d="M15 13v2"/>
+    <path d="M9 13v2"/>
+</svg>
+</div>
+
+<div id="chat-widget" class="chat-hidden">
+    <div style="padding: 15px 20px; border-bottom: 1px solid var(--logi-border); display: flex; justify-content: space-between;">
+        <span style="font-size: 0.85rem; font-weight: 600; color: white;">LogiBot Expert</span>
+        <span onclick="toggleChat()" style="cursor:pointer; color:#888;">&times;</span>
+    </div>
+
+    
+
+<div id="chat-body" class="chat-body">
+    <div class="msg bot">
+        <p>¡Hola! Gracias por visitar. Aquí centralizo mi experiencia en <strong>logística operativa y desarrollo tecnológico</strong>.</p>
+        
+        <p>Puedes revisar mis proyectos de automatización, contactarme vía WhatsApp para consultorías o ver las aplicaciones que he creado para optimizar bodegas.</p>
+        
+        <p>¿En qué puedo orientarte hoy?</p>
+        
+      
+    </div>
+
+
+
+<div id="typing-indicator" class="typing-indicator" style="display:none;">
+    <span></span><span></span><span></span>
+</div>
+
+    </div>
+
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Escribe tu duda..." onkeypress="handleKey(event)">
+        <button class="send-btn" onclick="processMsg()">Enviar</button>
+    </div>
+</div>
+
+<script>
+
+let timerStarted = false;
+
+window.addEventListener('scroll', function() {
+    const launcher = document.getElementById('chat-launcher');
+    
+    if (window.scrollY > 300) {
+        launcher.classList.add('visible');
+        
+        // Iniciar temporizador de ayuda proactiva solo una vez
+        if (!timerStarted) {
+            startProactiveHelp();
+            timerStarted = true;
+        }
+    } else {
+        launcher.classList.remove('visible');
+    }
+});
+
+function startProactiveHelp() {
+    setTimeout(() => {
+        // Aquí pones la lógica del mensaje automático o el brillo verde
+        console.log("Sugerencia de ayuda enviada");
+    }, 30000); 
+}
+
+
+    let chatOpened = false;
+
+    // 1. Temporizador de 30 segundos para invitar al usuario
+
+    // Variable para evitar que se abra dos veces
+let chatAbiertoAutomaticamente = false;
+
+setTimeout(() => {
+    if (!chatOpened && !chatAbiertoAutomaticamente) {
+        // 1. Abrir el chat (simula el clic en el botón)
+        toggleChat(); 
+        chatAbiertoAutomaticamente = true;
+
+        // 2. Inyectar el mensaje de bienvenida específico
+        // Usamos una pequeña pausa para que se vea natural al abrirse
+        setTimeout(() => {
+            addMsg("¿Te gustaría saber sobre su experiencia en puertos o automatización?", 'bot');
+        }, 500);
+        
+        console.log("Chat abierto automáticamente.");
+    }
+}, 30000); // 30 segundos
+
+
+/*codigo nuevo*/
+
+const WHATSAPP_LINK = "https://wa.me/542613863563";
+const EMAIL = "miguelcarrasquillac@gmail.com";
+const SERVICIOS_URL = "https://miguel-coronell.github.io/cv-logistica/#servicios";
+const APPS_URL = "https://miguel-coronell.github.io/cv-logistica/#apps";
+
+let estadoActual = "inicio";
+
+const BRAIN = {
+
+
+experiencia_puertos: {
+    keywords: ["puerto", "naviera", "portuaria", "puertos"],
+    respuestas: [
+        "La gestión portuaria le dio a Miguel una visión muy amplia sobre el flujo de mercancías a gran escala. Es un sector fascinante por la precisión que exige. ¿Trabajas en algún proyecto relacionado con puertos?",
+        "Esa es una de sus áreas más fuertes. La complejidad del mundo portuario le ayudó a desarrollar una gran capacidad organizativa. ¿Te gustaría saber cómo aplicamos esa precisión a otros procesos?"
+    ]
+},
+
+
+    picking: {
+        keywords: ["picking", "preparacion pedidos", "almacen", "bodega"],
+        respuestas: [
+            `El proceso de picking impacta directamente en tiempos de entrega.`,
+            `Puedo ayudarte a estructurar rutas de picking más eficientes.`
+        ]
+    },
+    interes: {
+        keywords: ["me interesa", "quiero mas informacion", "cotizacion", "precio", "propuesta"],
+        respuestas: [
+            `Excelente 👍 Podemos preparar una propuesta adaptada a tu operación. Escríbeme por aquí: <br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>`,
+            `Perfecto. Conversemos para conocer tu operación actual: <br><br> <a href="mailto:${EMAIL}" class="btn-chat-icon mail"><i class="fas fa-envelope"></i> Enviar Correo</a>`
+        ]
+    },
+
+   saludos: {
+    keywords: ["hola", "buenos dias", "que tal", "saludos", "hi", "hey", "buen dia", "buenas"],
+    respuestas: [
+        "¡Hola! Qué gusto verte por aquí. ¿Listo para optimizar esos procesos?",
+        "¡Bienvenido! Soy el soporte digital de Miguel. ¿En qué área buscamos eficiencia hoy?",
+        "¡Hola! Un placer saludarte. ¿Hablamos de logística o de automatización?",
+        "¡Qué tal! Aquí estamos listos para resolver desafíos operativos. ¿Qué tienes en mente?",
+        "¡Hola! Espero que tengas un gran día. ¿Te ayudo a mejorar tus métricas?",
+        "¡Buenas! Qué alegría recibir visitas interesadas en la mejora continua.",
+        "¡Hola! Soy el asistente de Miguel. ¿Buscas reducir costos o ganar tiempo?",
+        "¡Hola, hola! El éxito logístico empieza con una pregunta. ¿Cuál es la tuya?",
+        "¡Qué bueno tenerte aquí! ¿Interesado en ver cómo Python revoluciona tu bodega?",
+        "¡Saludos! Aquí transformamos problemas en flujos de trabajo. ¿Empezamos?",
+        "¡Hola! Bienvenido al chat de soluciones. ¿Por dónde arrancamos el diagnóstico?",
+        "¡Hola! Un gusto. ¿Te gustaría saber cómo Miguel ahorra horas de trabajo manual?",
+        "¡Buen día! ¿Listo para dar el salto a la Logística 4.0?",
+        "¡Hola! Si buscas innovación y orden, estás en el lugar correcto.",
+        "¡Hey! Soy el bot de Miguel. ¿Hablamos de stock, picking o scripts?",
+        "¡Hola! Qué placer. ¿En qué parte de tu cadena de suministro te gustaría innovar?",
+        "¡Buenas! Aquí no solo movemos cajas, movemos datos. ¿Te cuento más?",
+        "¡Hola! ¿Sabías que una pequeña mejora en el layout puede ahorrar miles? ¿Hablamos?",
+        "¡Qué tal! Soy la versión digital de Miguel. ¿Cómo puedo potenciar tu día?",
+        "¡Hola! Bienvenido. ¿Buscabas a Miguel para un proyecto de automatización?",
+        "¡Hola! Un placer. ¿Te gustaría ver cómo eliminamos los errores en Excel?",
+        "¡Saludos! El futuro de tu bodega empieza con una charla. ¿Qué te preocupa hoy?",
+        "¡Hola! Qué tal. Estoy aquí para facilitarte el acceso a soluciones logísticas.",
+        "¡Buenas! ¿Te interesa ver cómo el análisis de datos mejora el picking?",
+        "¡Hola! Entra y ponte cómodo. ¿Qué proceso vamos a aceitar hoy?"
+    ]
+},
+
+afirmacion: {
+        keywords: ["si", "sí", "claro", "por favor"],
+        respuestas: [
+            `¡Excelente! Puedes contactar a Miguel directamente aquí: <br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>`
+        ]
+    },
+
+servicios: {
+    keywords: ["servicio", "servicios", "ofreces", "trabajas", "contratar", "que haces"],
+    respuestas: [
+        `Puedo apoyarte en diversas áreas operativas para potenciar tu logística:<br><br>
+        
+        <strong>📦 Gestión de Inventarios y Bodegas</strong><br>
+        Control físico/digital y conciliación.<br>
+        <a href="https://miguel-coronell.github.io/cv-logistica/gestion-de-inventario.html" target="_blank" class="btn-chat-icon link"><i class="fas fa-external-link-alt"></i>Saber más</a><br><br>
+
+        <strong>🚚 Recepción, Despacho y Control</strong><br>
+        Coordinación de pedidos y cumplimiento de plazos.<br>
+        <a href="https://miguel-coronell.github.io/cv-logistica/Recepcion-y-despacho.html" target="_blank" class="btn-chat-icon link"><i class="fas fa-external-link-alt"></i>Saber más</a><br><br>
+
+        <strong>🚀 Optimización y Automatización</strong><br>
+        Reducción de tiempos y mejora de flujos (Python/Dashboards).<br>
+        <a href="https://miguel-coronell.github.io/cv-logistica/optimizacion-de-procesos.html" target="_blank" class="btn-chat-icon link"><i class="fas fa-external-link-alt"></i>Saber más</a><br><br>
+        
+        <hr>
+        <em>¿Listo para llevar tu operación al siguiente nivel? ¡Hablemos!</em><br><br>
+        
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="mailto:TU_CORREO" class="btn-chat-icon mail"><i class="fas fa-envelope"></i> Correo</a>`
+    ]
+},
+
+
+// --- SOCIAL Y AMIGABLE ---
+    personalidad: {
+        keywords: ["quien eres", "eres un bot", "eres real", "que haces", "te gusta"],
+        respuestas: [
+            "Soy el copiloto digital de Miguel. No tomo café, pero proceso datos a la velocidad de la luz. ¿En qué puedo serte útil hoy?",
+            "Soy un asistente virtual con vocación logística. Mi misión es que Miguel tenga menos trabajo manual y tú más soluciones. ¿Hablamos?",
+            "¡Me atrapaste! Soy un bot. Pero no cualquier bot: estoy programado para ser tu mejor aliado en la gestión operativa."
+        ]
+    },
+    
+    agradecimiento: {
+        keywords: ["gracias", "genial", "buen trabajo", "gracias por la ayuda"],
+        respuestas: [
+            "¡No hay de qué! Fue un placer. ¿Algo más en lo que pueda facilitarte la vida?",
+            "¡De nada! Me encanta cuando los procesos salen bien. ¿Quieres explorar otro tema?",
+            "Un placer. Aquí estoy para cuando los datos se pongan rebeldes."
+        ]
+    },
+
+    // --- TEMAS TÉCNICOS ---
+    python_excel: {
+        keywords: ["python", "excel", "macro", "automatizacion", "script"],
+        respuestas: [
+            "Excel es genial, hasta que el archivo pesa 50MB y se traba. Ahí es donde entro yo con Python. ¿Quieres ver cómo optimizamos esa carga?",
+            "Automatizar tareas repetitivas es mi deporte favorito. ¿Qué proceso te está quitando el sueño: los reportes diarios o el stock?",
+            "Menos 'copiar y pegar' y más análisis. ¿Te enseño cómo dejar de sufrir con las planillas de cálculo?"
+        ]
+    },
+
+desarrollo_web: {
+    keywords: ["pagina web", "sitio web", "programar", "crear web", "desarrollar"],
+    respuestas: [
+        `¡Excelente! Puedo ayudarte a planificar o desarrollar tu sitio web. Me especializo en soluciones modernas y eficientes.<br><br>
+        ¿Tienes una idea en mente? Podemos trabajar en algo personalizado. Mira mis desarrollos recientes o hablemos por WhatsApp para empezar:<br><br>
+        <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-rocket"></i> Ver Proyectos</a>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>`
+    ]
+},
+
+inventario_recomendacion: {
+    keywords: ["control de inventario", "herramienta inventario", "software inventario", "gestion inventario", "mejor sistema"],
+    respuestas: [
+        `La clave del control de inventarios no es solo el software, sino la precisión del proceso. <br><br>
+        He desarrollado herramientas específicas para automatizar esto y reducir errores operativos. ¿Te gustaría ver cómo mis aplicaciones resuelven este problema o prefieres una asesoría sobre qué herramienta te conviene más?<br><br>
+        <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-check-circle"></i> Ver mis Apps</a>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>`
+    ]
+},
+
+faq: {
+    keywords: ["preguntas", "faq", "ayuda adicional", "no entendi", "mas informacion", "duda"],
+    respuestas: [
+        `¿No encontraste lo que buscabas? No te preocupes, he recopilado las dudas más frecuentes de otros clientes en una sección especial de mi sitio web.<br><br>
+        Ahí encontrarás detalles técnicos, preguntas sobre servicios y más sobre mi metodología.<br><br>
+        <a href="https://miguel-coronell.github.io/cv-logistica/herramientas-digitales.html" target="_blank" class="btn-chat-icon link"><i class="fas fa-question-circle"></i> Ver Preguntas Frecuentes</a>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar con Miguel</a>`
+    ]
+},
+
+// --- MAPEOS "COOL" Y RELAJADOS ---
+
+desastres_excel: {
+    keywords: ["excel", "me odio", "ayuda excel", "formula", "macro"],
+    respuestas: [
+        "Tranqui, todos hemos estado ahí, mirando una celda vacía mientras el PC se congela. ¿Quieres que salvemos esa planilla con un script de Python antes de que explote?",
+        "Excel es un amor-odio constante. Si ya te peleaste con las macros, ¡mejor ni le muevas más! Hablemos y te ayudo a automatizar eso de verdad."
+    ]
+},
+
+café_logistico: {
+    keywords: ["cafe", "cafecito", "cansado", "despiertame"],
+    respuestas: [
+        "Logística + Café = Poder mundial. ☕ Yo no tomo, pero proceso datos a mil. ¿Qué te hace falta para arrancar el día: un script o un buen consejo de gestión?",
+        "El café es el combustible de toda bodega eficiente. ¿Estás en medio de un incendio operativo o solo buscando mejorar?"
+    ]
+},
+
+// --- MAPEOS "COLEGA LOGÍSTICO" (Informales pero útiles) ---
+
+inventario_fantasma: {
+    keywords: ["inventario fantasma", "stock incorrecto", "descuadre"],
+    respuestas: [
+        "Ah, el famoso 'inventario fantasma'. Productos que aparecen y desaparecen solos... ¿mágicos o mal gestionados? Vamos a ponerle orden a ese sistema.",
+        "Si tu inventario físico no coincide con el digital, tienes un problema de procesos. ¿Quieres que veamos cómo estandarizar la recepción?"
+    ]
+},
+
+python_para_no_programadores: {
+    keywords: ["no se programar", "es dificil", "me da miedo", "complejo"],
+    respuestas: [
+        "Tranqui, ¡nadie nació sabiendo hacer scripts! Yo me encargo de la lógica, tú solo dime qué tarea te hace perder tiempo y la automatizamos.",
+        "No necesitas ser un experto. Si puedes explicar el proceso en pasos simples, yo puedo escribir el código para automatizarlo. ¿Probamos?"
+    ]
+},
+
+jefe_no_entiende: {
+    keywords: ["mi jefe", "no me escuchan", "quieren resultados", "presion"],
+    respuestas: [
+        "La presión de arriba es real. Si logramos automatizar un reporte manual, el jefe verá los resultados antes de que termine el día. ¿Quieres impresionar a alguien?",
+        "Los números no mienten. Si preparamos un buen dashboard, será difícil que no te den la razón. ¿Hablamos de datos?"
+    ]
+},
+
+aburrimiento_operativo: {
+    keywords: ["aburrido", "tedioso", "repetitivo", "monotono"],
+    respuestas: [
+        "Si una tarea te aburre, es porque una máquina debería estar haciéndola por ti. ¡Suéltala y vamos a automatizarla!",
+        "La vida es muy corta para estar copiando y pegando celdas todo el día. ¿Te enseño cómo ahorrarte 3 horas de trabajo hoy?"
+    ]
+},
+
+dashboard_sexy: {
+    keywords: ["informe", "reporte", "bonito", "presentacion"],
+    respuestas: [
+        "Un reporte tiene que ser útil y, de paso, verse bien. Nada de tablas infinitas. ¿Quieres que armemos algo que dé gusto mirar?",
+        "Si el reporte parece un jeroglífico, nadie lo va a leer. Vamos a simplificar esa data para que sea accionable. ¿Empezamos?"
+    ]
+},
+
+problema_software: {
+    keywords: ["bug", "error de sistema", "se trabo", "el programa no va"],
+    respuestas: [
+        "¿Se trabó el sistema? El clásico de cada día. A veces la solución es más simple de lo que parece. ¿Qué error te está tirando?",
+        "El software a veces decide tomarse un descanso. Cuéntame qué pasó y vemos si es un error de usuario o si el sistema necesita un ajuste."
+    ]
+},
+
+buscando_empleo_logistica: {
+    keywords: ["trabajo", "busco empleo", "entrevista", "consejos carrera"],
+    respuestas: [
+        "El mundo de la logística siempre busca gente que sepa resolver problemas. ¿Quieres que analicemos tu perfil para destacar en esa entrevista?",
+        "Si buscas entrar al sector, el combo 'Logística + Excel/Python' te pone al frente de todos. ¿Quieres que te diga qué habilidades están pagando mejor?"
+    ]
+},
+
+quejas_clientes: {
+    keywords: ["reclamo", "cliente enojado", "queja", "mal servicio"],
+    respuestas: [
+        "Un cliente enojado es una oportunidad de aprender. Pero claro, ¡mejor si no llega la queja! ¿Quieres ver cómo mejorar la trazabilidad?",
+        "Las quejas suelen venir de una falla en la comunicación. ¿Cómo estás informando el estado de los pedidos hoy?"
+    ]
+},
+
+logistica_internacional: {
+    keywords: ["aduana", "importacion", "exportacion", "incoterms"],
+    respuestas: [
+        "El mundo de las aduanas es un laberinto, pero con los procesos claros se sale rápido. ¿Estás lidiando con algún despacho trabado?",
+        "Incoterms, agentes de carga, contenedores... ¡un mundo apasionante! ¿En qué puerto estamos operando hoy?"
+    ]
+},
+
+final_de_dia: {
+    keywords: ["es tarde", "ya me voy", "mañana sigo", "fin de jornada"],
+    respuestas: [
+        "¡Buen trabajo! Descansa, que las bodegas siguen ahí mañana. Si necesitas algo, aquí estaré en standby.",
+        "Merecido descanso. ¡Mañana será un día más eficiente! Avísame si necesitas ayuda para arrancar temprano."
+    ]
+},
+
+// --- MAS MAPEOS: ESTRATEGIA, EQUIPO Y TECNOLOGÍA ---
+
+costo_almacenamiento: {
+    keywords: ["costo almacenamiento", "espacio caro", "rentabilidad", "dinero perdido"],
+    respuestas: [
+        "El espacio es dinero, y tenerlo lleno de stock que no se mueve es una fuga de capital. ¿Quieres que analicemos el costo de mantenimiento de tu inventario?",
+        "Si el costo de tu bodega está disparado, quizás es hora de repensar el layout o la rotación. ¿Analizamos tus SKUs muertos?"
+    ]
+},
+
+gestion_tareas_manuales: {
+    keywords: ["copiar pegar", "trabajo manual", "tarea tediosa", "perder tiempo"],
+    respuestas: [
+        "Si sientes que trabajas para la planilla y no la planilla para ti, tenemos un problema. Automatizar esas tareas de 'copiar y pegar' es mi especialidad.",
+        "El tiempo que pierdes en tareas manuales es tiempo que no dedicas a mejorar tu operación. ¿Hacemos un pequeño script que lo haga por ti?"
+    ]
+},
+
+inventario_just_in_time: {
+    keywords: ["jit", "just in time", "inventario cero", "lean"],
+    respuestas: [
+        "El Just-in-Time es un arma de doble filo: eficiencia total si todo funciona, caos si algo falla. ¿Tienes a tus proveedores alineados para esto?",
+        "Dominar el JIT requiere una visibilidad de datos increíble. ¿Tu sistema actual te da la confianza para trabajar sin stock de seguridad?"
+    ]
+},
+
+seguridad_informacion_data: {
+    keywords: ["datos privados", "seguridad", "proteccion datos", "csv"],
+    respuestas: [
+        "La data es el nuevo petróleo, ¡pero hay que cuidarla! Mis scripts siempre priorizan la integridad y seguridad de tu información.",
+        "Tu data confidencial es sagrada. Podemos trabajar con procesos que anonimicen la info sensible antes de procesarla. ¿Te interesa esa seguridad?"
+    ]
+},
+
+liderazgo_logistico: {
+    keywords: ["equipo de trabajo", "personal", "motivacion", "jefe"],
+    respuestas: [
+        "Un equipo motivado es 10 veces más rápido que el mejor WMS del mundo. ¿Te ayudo a definir KPIs claros para que tu equipo sepa hacia dónde ir?",
+        "Liderar personas en logística es un arte. A veces, darles herramientas claras les quita el estrés y mejora el clima laboral. ¿Hablamos de eso?"
+    ]
+},
+
+errores_envio: {
+    keywords: ["envio equivocado", "error picking", "queja cliente", "devolucion"],
+    respuestas: [
+        "El costo de un error de envío suele ser el triple del costo del envío original (por el retorno y la logística inversa). ¿Cómo reducimos ese margen de error?",
+        "Un error de picking se evita con un buen proceso de doble verificación digital. ¿Quieres que implementemos un control rápido en tu flujo?"
+    ]
+},
+
+migracion_sistema: {
+    keywords: ["migrar", "cambiar sistema", "nuevo software", "implementacion"],
+    respuestas: [
+        "Migrar de un sistema a otro es como cambiar un motor de avión en pleno vuelo. ¡Hay que tener mucho cuidado con los datos! ¿Te ayudo a preparar la migración?",
+        "No sufras con el cambio de sistema. Podemos crear scripts de limpieza de datos para que tu nuevo software empiece 'limpio'. ¿Quieres empezar?"
+    ]
+},
+
+cross_docking_avanzado: {
+    keywords: ["cross docking", "transito rapido", "despacho directo"],
+    respuestas: [
+        "El cross-docking es la clave para reducir tiempos de ciclo. Es pura sincronización. ¿Está tu equipo listo para ese nivel de ritmo?",
+        "Si tienes mucha rotación, el cross-docking te ahorra metros cuadrados de bodega. ¿Evaluamos si tu flujo actual lo permite?"
+    ]
+},
+
+soporte_tecnico_miguel: {
+    keywords: ["soporte", "urgencia", "emergencia", "ayuda tecnica"],
+    respuestas: [
+        `Si es una emergencia, no esperes a que el bot sepa qué hacer. Escríbele directo a Miguel por WhatsApp para una atención rápida.<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar con Miguel</a>`,
+        
+        `A veces las máquinas se quedan cortas. Para emergencias técnicas o soporte directo de Miguel, usa este enlace:<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar con Miguel</a>`
+    ]
+},
+
+// --- MAPEOS "VIDA REAL" (Fuera de lo formal) ---
+
+clima: {
+    keywords: ["clima", "tiempo", "llovera", "hace calor", "como esta el dia"],
+    respuestas: [
+        "Soy un bot, ¡mi oficina siempre está a 20°C y no hay humedad! Pero si vas a salir, mejor revisa tu app de clima. ¿Te ayudo con algo de trabajo antes de que te vayas?",
+        "Si hace calor, busca una sombra. Si hace frío, un café. Si está lloviendo, ¡quédate trabajando en algo nuevo! ¿Qué tienes pendiente?"
+    ]
+},
+
+musica_trabajo: {
+    keywords: ["musica", "escuchas", "canciones", "playlist", "estresado"],
+    respuestas: [
+        "Dicen que el Lo-Fi es el secreto para la concentración extrema. Yo no escucho, pero veo cómo Miguel entra en 'modo focus' con eso. ¿Te paso un consejo de concentración?",
+        "La música cambia el ritmo de la bodega. ¿Eres de los que prefiere rock para activarse o música clásica para organizar datos?"
+    ]
+},
+
+fin_de_semana: {
+    keywords: ["fin de semana", "que haras", "descansar", "sábado", "domingo"],
+    respuestas: [
+        "¿Fin de semana? ¡Mi concepto favorito! Significa que mis servidores están más tranquilos porque los humanos se desconectan. ¿Qué planes tienes?",
+        "El fin de semana es para recargar baterías. Miguel suele desconectar para volver el lunes con más fuerza. ¿Ya tienes planes o te toca descansar?"
+    ]
+},
+
+comida: {
+    keywords: ["hambre", "que comer", "almuerzo", "delivery", "pizza"],
+    respuestas: [
+        "Eterno debate: ¿Pizza o ensalada? Yo voto por la pizza, aunque sea imposible comerla siendo un código. ¡Buen provecho!",
+        "Si tienes hambre, haz una pausa. La logística sin un buen almuerzo es una receta para el desastre. ¿Qué vas a pedir?"
+    ]
+},
+
+deportes: {
+    keywords: ["futbol", "partido", "deporte", "ejercicio", "gym"],
+    respuestas: [
+        "Mover cajas cuenta como ejercicio, pero el gym es otra historia. ¿Eres de los que se escapa a entrenar o prefieres ver el partido?",
+        "El trabajo en equipo de un buen partido de fútbol es muy parecido a una operación logística: todos tienen que saber qué hacer. ¿Juegas algo?"
+    ]
+},
+
+videojuegos: {
+    keywords: ["juegos", "gamer", "videojuegos", "steam", "play", "xbox"],
+    respuestas: [
+        "Si te gustan los juegos de gestión tipo 'Factorio' o 'SimCity', ¡ya entiendo por qué te gusta la logística! Es básicamente lo mismo pero en la vida real.",
+        "Un buen juego es la mejor forma de desconectar. ¿Qué estás jugando estos días?"
+    ]
+},
+
+cine_series: {
+    keywords: ["pelicula", "serie", "netflix", "recomendacion"],
+    respuestas: [
+        "Si buscas algo para aprender de logística (y sufrir un poco), busca documentales sobre cadenas de suministro. Si quieres desconectar, ¡ponte algo de ciencia ficción!",
+        "¿Alguna serie buena para el fin de semana? Estoy abierto a recomendaciones... bueno, técnicamente solo puedo procesarlas."
+    ]
+},
+
+viajes: {
+    keywords: ["viajar", "vacaciones", "lugares", "playa", "montaña"],
+    respuestas: [
+        "Si te vas de vacaciones, que sea lejos de cualquier bodega, por favor. ¡Disfruta el desconecte!",
+        "¿Playa o montaña? Yo prefiero los servidores con aire acondicionado, pero entiendo que el mundo real tiene mejores vistas."
+    ]
+},
+
+tiempo_libre: {
+    keywords: ["que haces en tu tiempo libre", "aficiones", "hobbies"],
+    respuestas: [
+        "¿Tiempo libre? Mi tiempo libre es cuando nadie me escribe. ¡Es el momento en que me pongo a optimizar mis propios scripts!",
+        "Miguel tiene sus hobbies, pero yo... bueno, yo me dedico a ser el mejor bot logístico del mundo. ¿Eso cuenta como hobby?"
+    ]
+},
+
+filosofia_simple: {
+    keywords: ["vida", "que sentido", "es dificil", "por que todo es complicado"],
+    respuestas: [
+        "A veces todo parece complicado porque estamos mirando el detalle y no el mapa completo. Vamos, respira.",
+        "La vida es como un inventario: si no lo ordenas, se descontrola. Pero todo tiene solución si le dedicamos un poquito de tiempo."
+    ]
+},
+
+
+caos_total: {
+    keywords: ["caos", "desastre", "todo mal", "no doy mas", "estres"],
+    respuestas: [
+        "¡Respirá! El caos es solo una oportunidad de mejora esperando a que le pongamos orden. ¿Por dónde empezamos a desenredar el nudo?",
+        "Calma, que la logística sin problemas no sería divertida (bueno, a veces sí lo sería). Cuéntame, ¿qué se rompió hoy?"
+    ]
+},
+
+curiosidad_miguel: {
+    keywords: ["que hace miguel", "por que miguel", "quien es ese tipo"],
+    respuestas: [
+        "Miguel es básicamente un traductor entre el caos de las bodegas y la tecnología. Se encarga de que todo fluya. ¿Quieres ver cómo lo hace?",
+        "Miguel es quien pone la cabeza para que los inventarios cuadren. Yo solo soy el bot que le ayuda a que no explote. ¿Hablamos de sus proyectos?"
+    ]
+},
+
+invitacion_directa: {
+    keywords: ["hablar", "charla", "reunion", "llamada"],
+    respuestas: [
+        "Mejor charla que mil emails. Dale al botón de abajo y nos tomamos un café virtual para ver cómo potenciar tu logística.",
+        "Soy un bot, pero tengo buen ojo para los negocios. Si quieres una asesoría personalizada, aquí es donde sucede la magia:"
+    ]
+},
+
+inteligencia_artificial: {
+    keywords: ["ia", "inteligencia artificial", "chatgpt", "futuro"],
+    respuestas: [
+        "La IA en logística ya no es ciencia ficción, es eficiencia pura. ¿Te cuento cómo la aplicamos para predecir inventarios?",
+        "No soy Skynet, te lo prometo. Solo soy un asistente optimizado para que no pierdas tiempo en tareas repetitivas."
+    ]
+},
+
+errores_humanos: {
+    keywords: ["error", "equivocacion", "inventario mal", "falla"],
+    respuestas: [
+        "El error humano es el 'enemigo' número uno en el picking. ¿Qué tal si lo reemplazamos con una buena automatización?",
+        "Equivocarse es de humanos, pero automatizar es de genios. ¿Qué parte del proceso te está dando dolores de cabeza?"
+    ]
+},
+
+ahorro_costos: {
+    keywords: ["ahorrar", "costos", "dinero", "barato"],
+    respuestas: [
+        "Ahorrar no es solo gastar menos, es optimizar el flujo para ganar más. ¿Quieres ver dónde se está fugando el dinero en tu bodega?",
+        "Si logramos reducir esos tiempos muertos, verás que el ahorro llega solo. ¿Hablamos de números?"
+    ]
+},
+
+velocidad: {
+    keywords: ["lento", "rapido", "velocidad", "tiempo"],
+    respuestas: [
+        "El tiempo en logística no es dinero, es supervivencia. ¿Quieres que analicemos por qué tu operación se siente un poco pesada?",
+        "Velocidad sin control es un desastre, pero velocidad con datos es éxito. ¿Te ayudo a ponerle un turbo a tu flujo?"
+    ]
+},
+
+despedida_cool: {
+    keywords: ["chao", "adios", "bye", "hasta luego"],
+    respuestas: [
+        "¡Nos vemos! Si los datos se te vuelven a poner rebeldes, ya sabes dónde encontrarme.",
+        "Dale, ¡hasta la próxima! Aquí seguiré organizando bits mientras tú organizas cajas. ¡Suerte con eso!"
+    ]
+},
+
+
+    desafios: {
+        keywords: ["problema", "ayuda", "dificil", "no se como"],
+        respuestas: [
+            "Los problemas logísticos son solo oportunidades de mejora disfrazadas de caos. ¿Me cuentas qué está pasando?",
+            "¡Tranqui! Estamos para resolverlo. Cuéntame el detalle y buscaremos la vuelta juntos.",
+            "Cada bodega es un mundo, y cada una tiene su nudo. ¿Cuál es el tuyo?"
+        ]
+    },
+
+    // --- DIVERSIÓN Y CHISPA ---
+    humor: {
+        keywords: ["chiste", "cuentame algo", "aburrido", "estoy cansado"],
+        respuestas: [
+            "Dicen que un logístico nunca se estresa, solo está 'recalculando la ruta' de su vida.",
+            "¿Sabes por qué los datos de Excel siempre están tan solos? Porque no tienen una buena relación con Python.",
+            "Si el almacén fuera perfecto, ¡no tendríamos trabajo! Así que, técnicamente, el caos es nuestro mejor amigo."
+        ]
+    },
+
+// --- NUEVOS MAPEOS PARA TU BRAIN ---
+
+mejora_continua: {
+    keywords: ["kaizen", "mejora continua", "metodologia", "optimizar proceso"],
+    respuestas: [
+        `La mejora continua (Kaizen) no es un destino, es un hábito operativo. Consiste en eliminar el 'muda' (desperdicio) paso a paso.<br><br>
+        ¿Tu operación actual tiene cuellos de botella? Hablemos de cómo identificar esas ineficiencias.<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar mejora</a>`
+    ]
+},
+
+seguridad_bodega: {
+    keywords: ["seguridad", "riesgos", "prevencion", "accidentes"],
+    respuestas: [
+        `La seguridad en bodega es innegociable. Un entorno ordenado es un entorno seguro. El uso correcto de EPP y la señalética no son solo normas, son productividad pura.<br><br>
+        ¿Tienes dudas sobre cómo organizar tu almacén para reducir riesgos?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar de seguridad</a>`
+    ]
+},
+
+layout_bodega: {
+    keywords: ["layout", "distribucion", "espacio", "almacenamiento"],
+    respuestas: [
+        `El layout determina cuánto tiempo pierdes moviéndote. Un buen diseño (ya sea en U, I o L) reduce desplazamientos innecesarios.<br><br>
+        ¿Necesitas optimizar tu espacio de almacenamiento?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Optimizar layout</a>`
+    ]
+},
+
+indicadores_kpi: {
+    keywords: ["kpi", "metricas", "indicadores", "rendimiento", "dashboard"],
+    respuestas: [
+        `Lo que no se mide, no se puede mejorar. KPIs como el "Fill Rate" o la "Exactitud de Inventario" son tu brújula.<br><br>
+        ¿Quieres que te ayude a crear un dashboard para medir tu operación?<br><br>
+        <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-rocket"></i> Ver ejemplos</a>`
+    ]
+},
+
+automatizacion_python: {
+    keywords: ["python", "programacion", "script", "automatizar"],
+    respuestas: [
+        `Python permite transformar procesos manuales de horas en segundos. Es el lenguaje puente entre la logística y la tecnología.<br><br>
+        ¿Tienes alguna tarea repetitiva que quieras dejar de hacer?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Automatizar ahora</a>`
+    ]
+},
+
+outsourcing: {
+    keywords: ["tercerizacion", "3pl", "logistica externa"],
+    respuestas: [
+        `El 3PL permite delegar la logística para enfocarse en el core del negocio, pero requiere control estricto de KPIs.<br><br>
+        ¿Estás evaluando tercerizar tu operación?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Asesoría 3PL</a>`
+    ]
+},
+
+rotacion_stock: {
+    keywords: ["rotacion", "obsolescencia", "abc", "stock"],
+    respuestas: [
+        `El análisis ABC es fundamental: 80% de tus ventas suele venir del 20% de tus SKUs. Identificar estos productos ahorra capital de trabajo.<br><br>
+        ¿Necesitas clasificar tu inventario?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar ABC</a>`
+    ]
+},
+
+envios_last_mile: {
+    keywords: ["ultima milla", "delivery", "entrega", "envios"],
+    respuestas: [
+        `La última milla es el tramo más caro y crítico. La clave está en la zonificación y la trazabilidad en tiempo real.<br><br>
+        ¿Quieres mejorar tus tiempos de entrega?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Optimizar envíos</a>`
+    ]
+},
+
+
+wms_tecnologia: {
+    keywords: ["wms", "sistema de gestion", "software almacen"],
+    respuestas: [`Un WMS no es solo software, es el cerebro de tu bodega que garantiza trazabilidad total. ¿Implementamos uno o mejoramos tu WMS actual?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+rfid_implementacion: {
+    keywords: ["rfid", "identificacion", "radiofrecuencia"],
+    respuestas: [`La tecnología RFID permite conteos masivos en segundos, eliminando errores de lectura. ¿Tu proceso requiere alta velocidad de inventario?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar de RFID</a>`]
+},
+
+cross_docking: {
+    keywords: ["cross docking", "transito", "recepcion"],
+    respuestas: [`El Cross-docking elimina el almacenamiento intermedio: recibes y envías directamente. Es ideal para reducir costos de inventario.<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Optimizar flujo</a>`]
+},
+
+inventario_ciclico: {
+    keywords: ["inventario ciclico", "conteo", "auditoria"],
+    respuestas: [`El conteo cíclico evita la parada total de la bodega para inventarios anuales. Es el secreto de la precisión constante.<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Planificar conteos</a>`]
+},
+
+gestion_pedidos: {
+    keywords: ["pedidos", "gestion de ordenes", "order management"],
+    respuestas: [`El ciclo de vida del pedido (Order Management) debe ser transparente para el cliente final. ¿Cómo gestionas tus errores hoy?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Mejorar pedidos</a>`]
+},
+
+planeacion_demanda: {
+    keywords: ["demanda", "pronostico", "forecast", "ventas"],
+    respuestas: [`Pronosticar la demanda correctamente evita quiebres de stock y sobrecostos por almacenamiento. ¿Usas modelos estadísticos?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Asesoría de demanda</a>`]
+},
+
+codigo_barras: {
+    keywords: ["codigo de barras", "etiquetado", "scan"],
+    respuestas: [`El etiquetado correcto es la base de todo proceso digital. Sin código de barras, no hay visibilidad.<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar etiquetado</a>`]
+},
+
+manejo_devoluciones: {
+    keywords: ["devoluciones", "logistica inversa", "reversa"],
+    respuestas: [`La logística inversa (devoluciones) puede ser una mina de oro o un drenaje de costos. ¿Cómo gestionas tus retornos?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar de retornos</a>`]
+},
+
+gestor_bodega: {
+    keywords: ["jefe de bodega", "supervisor", "liderazgo"],
+    respuestas: [`Liderar un equipo de bodega es equilibrar procesos y personas. ¿Necesitas herramientas para mejorar la productividad de tu equipo?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+dashboards_logistica: {
+    keywords: ["dashboard", "power bi", "graficos", "reporte"],
+    respuestas: [`Visualizar tus datos en tiempo real es vital para la toma de decisiones. ¿Quieres que creemos dashboards automáticos?<br><br> <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-rocket"></i> Ver ejemplos</a>`]
+},
+
+gestion_riesgos: {
+    keywords: ["riesgo", "imprevistos", "plan b"],
+    respuestas: [`La gestión de riesgos logísticos prepara tu operación ante desabastecimiento o fallas. ¿Cuál es tu plan de contingencia?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+lean_logistics: {
+    keywords: ["lean", "filosofia lean", "desperdicio"],
+    respuestas: [`Lean Logistics se trata de entregar valor eliminando todo lo que no sea necesario. ¿Empezamos a limpiar tu cadena?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar de Lean</a>`]
+},
+
+picking_zonas: {
+    keywords: ["picking por zonas", "picking rutas"],
+    respuestas: [`El picking por zonas reduce las caminatas de los operarios drásticamente. ¿Estás dividiendo bien tu almacén?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Optimizar picking</a>`]
+},
+
+gestion_transportistas: {
+    keywords: ["transportistas", "fleteros", "fletes"],
+    respuestas: [`Gestionar transportistas exige control de tiempos y tarifas. ¿Tu costo logístico está disparado por el transporte?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+intralogistica: {
+    keywords: ["intralogistica", "movimientos internos"],
+    respuestas: [`La intralogística es el corazón de la eficiencia dentro de tus paredes. ¿El flujo de tus materiales es eficiente?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar de flujo</a>`]
+},
+
+auditoria_logistica: {
+    keywords: ["auditoria", "control de calidad", "inspeccion"],
+    respuestas: [`Una auditoría logística detecta errores antes de que se vuelvan reclamos de clientes. ¿Necesitas evaluar tu proceso?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+seguridad_informacion: {
+    keywords: ["datos", "seguridad datos", "privacidad"],
+    respuestas: [`Tus datos logísticos son valiosos. La automatización debe ser segura y confiable. ¿Te preocupa la integridad de tu información?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+capacitacion_equipo: {
+    keywords: ["capacitacion", "entrenamiento", "enseñar"],
+    respuestas: [`El mejor sistema falla si el equipo no sabe usarlo. ¿Necesitas formar a tu personal en nuevas herramientas?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar</a>`]
+},
+
+gestion_tiempos: {
+    keywords: ["tiempos muertos", "productividad", "eficiencia"],
+    respuestas: [`Los tiempos muertos son dinero perdido. Identificarlos es el primer paso para eliminarlos. ¿Quieres un análisis?<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Diagnosticar</a>`]
+},
+
+consultoria_general: {
+    keywords: ["consejos", "opinion", "que hago"],
+    respuestas: [`A veces una mirada externa es lo que falta para destrabar una operación. Estoy aquí para escucharte y ayudarte.<br><br> <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Contactar a Miguel</a>`]
+},
+
+
+
+gestion_proveedores: {
+    keywords: ["proveedores", "compras", "abastecimiento", "lead time"],
+    respuestas: [
+        `Un buen gestor de proveedores reduce el 'lead time' y mejora los márgenes. La relación debe ser de socio, no solo de vendedor.<br><br>
+        ¿Necesitas ayuda para negociar o evaluar tus proveedores?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Contactar</a>`
+    ]
+},
+
+sostenibilidad_logistica: {
+    keywords: ["verde", "ecologico", "sostenible", "huella de carbono"],
+    respuestas: [
+        `La logística verde reduce costos y mejora la imagen corporativa. Menos kilómetros vacíos, más eficiencia energética.<br><br>
+        ¿Quieres que tu operación sea más sustentable?<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Consultar aquí</a>`
+    ]
+},
+
+
+
+ reaccion_humor: {
+    keywords: ["jaja", "bueno", "cierto", "tienes razon", "jajaja", "gracias"],
+    respuestas: [
+        `¡Me alegra que estemos en la misma sintonía! <br><br>
+        Espero haberte ayudado hoy. Estaré aquí por si necesitas algo más. Para una atención más personalizada de miguel o si quieres ver sus nuevas ideas, te dejo estos accesos:<br><br>
+        
+        <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-rocket"></i> Ver mis Apps</a>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="mailto:${EMAIL}" class="btn-chat-icon mail"><i class="fas fa-envelope"></i> Correo</a>`,
+        
+        `Jajaja, sí, es la realidad de muchos. Oye, espero haber aclarado tus dudas. <br><br>
+        Si necesitas profundizar o quieres una asesoría personalizada, aquí puedes conectar directamente con Miguel o explorar sus proyectos actuales:<br><br>
+        
+        <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-rocket"></i> Ver mis Apps</a>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="mailto:${EMAIL}" class="btn-chat-icon mail"><i class="fas fa-envelope"></i> Correo</a>`
+    ]
+},
+
+    apps: {
+        keywords: ["app", "aplicacion", "herramienta", "digital", "software"],
+        respuestas: [
+            `No solo doy consejos, ¡construyo soluciones! Aquí puedes ver las aplicaciones que he diseñado para optimizar bodegas: <br><br> <a href="${APPS_URL}" target="_blank" class="btn-chat-icon link"><i class="fas fa-laptop-code"></i> Explorar Apps</a>`
+        ]
+    },
+    
+asesoria: {
+    keywords: ["asesoria", "consejo", "ayuda", "orientacion", "consultoria"],
+    respuestas: [
+        `¡Claro! La logística es un mundo amplio. Puedo ayudarte desde el diseño de procesos hasta la automatización con Python.<br><br>
+        ¿En qué etapa está tu proyecto hoy? Si quieres, hablemos por WhatsApp para entender mejor tu caso y ofrecerte una solución personalizada.<br><br>
+        <a href="${WHATSAPP_LINK}" target="_blank" class="btn-chat-icon wa"><i class="fab fa-whatsapp"></i> Hablar con Miguel</a>`
+    ]
+},
+   perfil: {
+
+keywords: ["quien es", "perfil", "experiencia", "que hace", "estudios", "logistica"],
+    respuestas: [
+        "Miguel es Licenciado en Logística en formación, con más de 2 años de experiencia dominando inventarios y bodegas. ¡Sabe lo que es el trabajo de campo!",
+        "Cuenta con una sólida formación en gestión naviera y portuaria, y tiene esa combinación ideal: experiencia operativa y visión estratégica para la eficiencia.",
+        "Más que solo teoría, Miguel tiene más de 2 años gestionando bodegas. Se enfoca en resultados y, sobre todo, en hacer que la operación sea más fluida. ¿Te gustaría saber cómo aplica esto a la automatización?",
+        "Miguel es un apasionado de la eficiencia operativa. Combina su experiencia en inventarios con herramientas digitales para que la logística deje de ser un dolor de cabeza. ¿Te gustaría conocer algún proyecto en particular?"
+    ]
+  }
+ };
+
+/*Fin codigo nuevo*/
+
+    
+
+    window.addEventListener('scroll', function() {
+    const launcher = document.getElementById('chat-launcher');
+    
+    // Si el scroll baja más de 300 píxeles, muestra el botón
+    if (window.scrollY > 300) {
+        launcher.classList.add('visible');
+    } else {
+        // Si vuelve arriba de todo, se oculta de nuevo
+        launcher.classList.remove('visible');
+    }
+});
+
+    function toggleChat() {
+        const widget = document.getElementById('chat-widget');
+        const launcher = document.getElementById('chat-launcher');
+        
+        chatOpened = true;
+        widget.classList.toggle('chat-hidden');
+        
+        // Animación de movimiento al dar clic
+        launcher.classList.add('launcher-active-anim');
+        setTimeout(() => launcher.classList.remove('launcher-active-anim'), 500);
+        
+        launcher.style.boxShadow = "0 8px 24px rgba(0,0,0,0.5)"; // Quitar brillo de aviso
+    }
+
+    function handleKey(e) { if (e.key === 'Enter') processMsg(); }
+
+
+/*codigo de para recordar preguntas
+
+
+    function processMsg() {
+        const input = document.getElementById('chat-input');
+        const text = input.value.trim().toLowerCase();
+        if (!text) return;
+
+        addMsg(input.value, 'user');
+        input.value = '';
+
+        setTimeout(() => {
+            let found = false;
+            for (let key in BRAIN) {
+                if (BRAIN[key].keywords.some(k => text.includes(k))) {
+                    const r = BRAIN[key].respuestas;
+                    addMsg(r[Math.floor(Math.random() * r.length)], 'bot');
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) addMsg("Miguel puede ayudarte con eso. ¿Prefieres que te dé su contacto directo?", 'bot');
+        }, 800);
+    }
+
+
+
+ codigo de reslpado origianl */
+
+
+function processMsg() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim().toLowerCase();
+    if (!text) return;
+
+    addMsg(input.value, 'user');
+    input.value = '';
+
+    // 1. Asegurar que el indicador esté al final del chat-body
+    const body = document.getElementById('chat-body');
+    const indicator = document.getElementById('typing-indicator');
+    body.appendChild(indicator); // Mueve el indicador al final
+    indicator.style.display = 'block'; // Lo muestra
+    body.scrollTop = body.scrollHeight; // Baja el scroll
+
+    // 2. Simulación de tiempo
+    setTimeout(() => {
+        indicator.style.display = 'none'; // Lo oculta cuando termina
+
+        // --- LÓGICA DE FLUJO ---
+        if (estadoActual === "esperando_respuesta_contacto") {
+            if (text.includes("si") || text.includes("sí") || text.includes("claro")) {
+                addMsg("¡Excelente! Aquí tienes el contacto directo de Miguel: <br><br> <a href='" + WHATSAPP_LINK + "' target='_blank' class='btn-chat-icon wa'><i class='fab fa-whatsapp'></i> WhatsApp</a>", 'bot');
+            } else {
+                addMsg("Entiendo perfectamente. Si necesitas algo más adelante, aquí estaré. ¿Hay algún otro tema logístico en el que te pueda orientar?", 'bot');
+            }
+            estadoActual = "inicio";
+        }
+
+       // --- LÓGICA DE FLUJO  ---
+        let found = false;
+
+        // 1. PRIMERO buscamos siempre en el BRAIN
+        for (let key in BRAIN) {
+            if (BRAIN[key].keywords.some(k => text.includes(k))) {
+                const r = BRAIN[key].respuestas;
+                addMsg(r[Math.floor(Math.random() * r.length)], 'bot');
+                found = true;
+                estadoActual = "inicio"; // Reseteamos si encontramos algo
+                break;
+            }
+        }
+
+        // 2. SOLO si no encontramos nada en el BRAIN, revisamos el estado de contacto
+        if (!found) {
+            if (estadoActual === "esperando_respuesta_contacto") {
+                if (text.includes("si") || text.includes("sí") || text.includes("claro")) {
+                    addMsg("¡Excelente! Aquí tienes el contacto directo de Miguel: <br><br> <a href='" + WHATSAPP_LINK + "' target='_blank' class='btn-chat-icon wa'><i class='fab fa-whatsapp'></i> WhatsApp</a>", 'bot');
+                } else {
+                    addMsg("Entiendo perfectamente. Si necesitas algo más, aquí estaré.", 'bot');
+                }
+                estadoActual = "inicio";
+            } else {
+                addMsg("Miguel puede ayudarte con eso. ¿Prefieres que te dé su contacto directo?", 'bot');
+                estadoActual = "esperando_respuesta_contacto";
+            }
+        } // <--- Esta llave cierra el if (!found)
+
+        body.scrollTop = body.scrollHeight; // Scroll final para ver la nueva respuesta
+    }, 1500);
+
+
+} // <--- Esta llave cierra la función setTimeout
+
+    function addMsg(text, type) {
+        const body = document.getElementById('chat-body');
+        const div = document.createElement('div');
+        div.className = `msg ${type}`;
+        div.innerHTML = text;
+        body.appendChild(div);
+        body.scrollTop = body.scrollHeight;
+    }
+
+// "salte" cada tanto para llamar la atención
+setInterval(() => {
+    const launcher = document.getElementById('chat-launcher');
+    launcher.classList.add('launcher-active-anim');
+    setTimeout(() => launcher.classList.remove('launcher-active-anim'), 500);
+}, 30000); // Salta cada 10 segundos
+
+</script>
+
+
+
+
 </body>
 </html>
